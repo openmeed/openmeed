@@ -1,0 +1,11 @@
+
+\.idea/
+
+*.class
+
+target/classes/
+node_modules/
+
+*.log
+
+*.gz
