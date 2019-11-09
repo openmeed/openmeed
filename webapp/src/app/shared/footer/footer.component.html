@@ -1,0 +1,32 @@
+<footer class="px-5 pt-5 footer">
+  <div class="row">
+    <div class="col">
+      <div class="my-3 footer-logo"></div>
+
+      <div class="social-media">
+        <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer"><i class="fa fa-facebook" aria-label="true"></i></a>
+        <a href="https://twitter.com/" target="_blank" rel="noopener noreferrer"><i class="fa fa-facebook" aria-label="true"></i></a>
+        <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer"><i class="fa fa-facebook" aria-label="true"></i></a>
+        <a href="https://www.linkedin.com/company/" target="_blank" rel="noopener noreferrer"><i class="fa fa-facebook" aria-label="true"></i></a>
+      </div>
+    </div>
+
+    <div class="col">
+      <p>Subscribe</p>
+      <form class="subscribe-form success-none" id="contact">
+        <div class="input-group mb-3">
+          <input name="email"[(ngModel)]="email" type="email" class="" placeholder="Subscribe" aria-label="Subscriber" aria-describedby="basic-addon2">
+          <div class="input-group-append">
+            <button type="submit" class="input-group-text" id="basic-addon2"><i class="fa fa-arrow-right font-weight-light float-right" aria-hidden="true"></i></button>
+          </div>
+        </div>
+      </form>
+      <p class="subscribe-message">Get Exclusive updates straight to your mail</p>
+      <div class="back-to-top float-right" *ngIf="isShow" (click)="gotoTop()"><i class="fa fa-arrow-up" aria-hidden="true"></i></div>
+    </div>
+  </div>
+  <div class="copyright">
+
+    <p class="float-left">© {{date()}} Copyright. All Rights Reserved</p><p class="float-right"  >Privacy and Terms</p>
+  </div>
+</footer>

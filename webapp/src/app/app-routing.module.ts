@@ -1,20 +1,20 @@
 import {NgModule} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
-import {LoginComponent} from "./login/login.component";
-import {DashboardComponent} from "./dashboard/dashboard.component";
-import {NotFoundComponent} from "./not-found/not-found.component";
-import {AdminComponent} from "./admin/admin.component";
-import {AuthGuard} from "./services/auth.guard";
-import {RegistrationComponent} from "./registration/registration.component";
-import {UnauthorizedComponent} from "./shared/unauthorized/unauthorized.component";
+import {NotFoundComponent} from "./pages/not-found/not-found.component";
+import {AuthGuard} from "./core/auth.guard";
+import {AdminComponent} from "./pages/admin/admin.component";
+import {LoginComponent} from "./pages/login/login.component";
+import {DashboardComponent} from "./pages/dashboard/dashboard.component";
+import {ProfileComponent} from "./pages/profile/profile.component";
+
 
 const routes: Routes = [
   {path: '', component: LoginComponent},
-  {path: 'login', component: LoginComponent },
-  {path: 'register', component: RegistrationComponent},
-  {path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
-  {path: 'admin', component: AdminComponent, canActivate: [AuthGuard] },
-  {path: 'unauthorized', component: UnauthorizedComponent },
+  {path: 'login', component: LoginComponent},
+  {path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard]},
+  {path: 'admin', component: AdminComponent, canActivate: [AuthGuard]},
+  {path: 'profile', component: ProfileComponent, canActivate: [AuthGuard]},
+  {path: 'unauthorized', component: NotFoundComponent},
   {path: '**', component: NotFoundComponent}
 ];
 

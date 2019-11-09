@@ -1,0 +1,29 @@
+<openmeed-navbar>
+</openmeed-navbar>
+
+<div style="vh: 100%" class="container m-5 px-5">
+  <div class="row">
+    <main class="col-9">
+      <div class="row">
+        <section class="col-6">
+          <div class="form-group">
+            <h1>Upload Code</h1>
+          </div>
+
+          <div *ngIf="currentFileUpload" class="progress">
+            <div id="snippet" class="progress-bar progress-bar-info progress-bar-striped"
+                 role="progressbar" attr.aria-valuenow="{{progress.percentage}}"
+                 aria-valuemin="0" aria-valuemax="100"
+                 [ngStyle]="{width:progress.percentage+'%'}">
+              {{progress.percentage}}%</div><br>
+          </div>
+
+          <label class="btn btn-full">
+            <input type="file" (change)="selectFile($event)">
+          </label>
+
+        </section>
+      </div>
+    </main>
+  </div>
+</div>

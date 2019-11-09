@@ -29,13 +29,9 @@ CREATE TABLE `user_roles` (
   CONSTRAINT `fk_user_roles_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `rewards` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `issue_id` varchar(40) NOT NULL,
-  `type_of_reward` varchar(15) NOT NULL,
-  `value` varchar(40) NOT NULL,
-  `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_rewards_issue_id` (`issue_id`),
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE rewards (
+  id SMALLSERIAL PRIMARY KEY,
+  issue_id VARCHAR(45) NULL DEFAULT NULL,
+  type_of_reward VARCHAR(45) NOT NULL,
+  value VARCHAR(45) NOT NULL,
+  );

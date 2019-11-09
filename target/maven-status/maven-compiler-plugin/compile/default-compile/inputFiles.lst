@@ -3,12 +3,10 @@ C:\Users\ebene\Documents\Honours Project\incentivization-platform\src\main\java\
 C:\Users\ebene\Documents\Honours Project\incentivization-platform\src\main\java\me\ebenezergraham\honours\platform\repository\StatsRepository.java
 C:\Users\ebene\Documents\Honours Project\incentivization-platform\src\main\java\me\ebenezergraham\honours\platform\PlatformApplication.java
 C:\Users\ebene\Documents\Honours Project\incentivization-platform\src\main\java\me\ebenezergraham\honours\platform\payload\LoginRequest.java
-C:\Users\ebene\Documents\Honours Project\incentivization-platform\src\main\java\me\ebenezergraham\honours\platform\security\JwtAuthenticationFilter.java
 C:\Users\ebene\Documents\Honours Project\incentivization-platform\src\main\java\me\ebenezergraham\honours\platform\services\RecentLogin.java
 C:\Users\ebene\Documents\Honours Project\incentivization-platform\src\main\java\me\ebenezergraham\honours\platform\model\RoleName.java
 C:\Users\ebene\Documents\Honours Project\incentivization-platform\src\main\java\me\ebenezergraham\honours\platform\payload\JwtAuthenticationResponse.java
 C:\Users\ebene\Documents\Honours Project\incentivization-platform\src\main\java\me\ebenezergraham\honours\platform\model\TwoFactor.java
-C:\Users\ebene\Documents\Honours Project\incentivization-platform\src\main\java\me\ebenezergraham\honours\platform\security\JwtTokenProvider.java
 C:\Users\ebene\Documents\Honours Project\incentivization-platform\src\main\java\me\ebenezergraham\honours\platform\exception\ResourceNotFoundException.java
 C:\Users\ebene\Documents\Honours Project\incentivization-platform\src\main\java\me\ebenezergraham\honours\platform\model\User.java
 C:\Users\ebene\Documents\Honours Project\incentivization-platform\src\main\java\me\ebenezergraham\honours\platform\repository\Stat.java
@@ -26,11 +24,9 @@ C:\Users\ebene\Documents\Honours Project\incentivization-platform\src\main\java\
 C:\Users\ebene\Documents\Honours Project\incentivization-platform\src\main\java\me\ebenezergraham\honours\platform\services\ReportService.java
 C:\Users\ebene\Documents\Honours Project\incentivization-platform\src\main\java\me\ebenezergraham\honours\platform\services\FileService.java
 C:\Users\ebene\Documents\Honours Project\incentivization-platform\src\main\java\me\ebenezergraham\honours\platform\configuration\ApplicationConfiguration.java
-C:\Users\ebene\Documents\Honours Project\incentivization-platform\src\main\java\me\ebenezergraham\honours\platform\configuration\SecurityProperties.java
 C:\Users\ebene\Documents\Honours Project\incentivization-platform\src\main\java\me\ebenezergraham\honours\platform\services\AuthenticationListener.java
 C:\Users\ebene\Documents\Honours Project\incentivization-platform\src\main\java\me\ebenezergraham\honours\platform\services\CustomUserDetailsService.java
 C:\Users\ebene\Documents\Honours Project\incentivization-platform\src\main\java\me\ebenezergraham\honours\platform\exception\AppException.java
-C:\Users\ebene\Documents\Honours Project\incentivization-platform\src\main\java\me\ebenezergraham\honours\platform\security\CurrentUser.java
 C:\Users\ebene\Documents\Honours Project\incentivization-platform\src\main\java\me\ebenezergraham\honours\platform\repository\AuthenticationRepository.java
 C:\Users\ebene\Documents\Honours Project\incentivization-platform\src\main\java\me\ebenezergraham\honours\platform\controller\ApplicationController.java
 C:\Users\ebene\Documents\Honours Project\incentivization-platform\src\main\java\me\ebenezergraham\honours\platform\services\RewardService.java
@@ -39,4 +35,3 @@ C:\Users\ebene\Documents\Honours Project\incentivization-platform\src\main\java\
 C:\Users\ebene\Documents\Honours Project\incentivization-platform\src\main\java\me\ebenezergraham\honours\platform\configuration\WebMvcConfig.java
 C:\Users\ebene\Documents\Honours Project\incentivization-platform\src\main\java\me\ebenezergraham\honours\platform\payload\ApiResponse.java
 C:\Users\ebene\Documents\Honours Project\incentivization-platform\src\main\java\me\ebenezergraham\honours\platform\services\EmailService.java
-C:\Users\ebene\Documents\Honours Project\incentivization-platform\src\main\java\me\ebenezergraham\honours\platform\security\JwtAuthenticationEntryPoint.java

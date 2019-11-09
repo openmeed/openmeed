@@ -11,23 +11,28 @@ import me.ebenezergraham.honours.platform.payload.SignUpRequest;
 import me.ebenezergraham.honours.platform.repository.AuthenticationRepository;
 import me.ebenezergraham.honours.platform.repository.RoleRepository;
 import me.ebenezergraham.honours.platform.repository.UserRepository;
-import me.ebenezergraham.honours.platform.security.JwtTokenProvider;
 import me.ebenezergraham.honours.platform.services.EmailService;
 import me.ebenezergraham.honours.platform.services.RecentLogin;
 import me.ebenezergraham.honours.platform.exception.AppException;
+import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
+import org.springframework.security.oauth2.client.annotation.RegisteredOAuth2AuthorizedClient;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
+import java.security.Principal;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -43,7 +48,6 @@ public class UserController {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtTokenProvider tokenProvider;
     private final EmailService emailService;
     private final AuthenticationRepository authenticationRepository;
 
@@ -51,7 +55,6 @@ public class UserController {
                           UserRepository userRepository,
                           RoleRepository roleRepository,
                           PasswordEncoder passwordEncoder,
-                          JwtTokenProvider tokenProvider,
                           EmailService emailService,
                           AuthenticationRepository authenticationRepository
     ) {
@@ -59,30 +62,27 @@ public class UserController {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
-        this.tokenProvider = tokenProvider;
         this.emailService = emailService;
         this.authenticationRepository = authenticationRepository;
     }
 
+    @RequestMapping("/user")
+    public Principal user(Principal principal) {
+        return principal;
+    }
+
     @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, HttpServletRequest request) {
+    public ResponseEntity<?> authenticateUser(@RegisteredOAuth2AuthorizedClient OAuth2AuthorizedClient authorizedClient,
+                                              @AuthenticationPrincipal OAuth2User oauth2User,@Valid @RequestBody LoginRequest loginRequest, HttpServletRequest request) {
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getUsernameOrEmail(),
-                        loginRequest.getPassword()
-                )
-        );
-
-        if (authentication.isAuthenticated()) {
+        /*if (oauth2User.getAttributes().get("id") != null) {
             RecentLogin recentLogin = new RecentLogin("Recent Login", request, loginRequest, userRepository, emailService, request.getRemoteAddr(), authenticationRepository);
             recentLogin.start();
         }
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = tokenProvider.generateToken(authentication);
+        SecurityContextHolder.getContext().setAuthentication(authentication);*/
 
 
-        return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
+        return ResponseEntity.ok(authorizedClient);
     }
 
     @PostMapping("/register")
@@ -128,8 +128,4 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
-    @GetMapping("/code")
-    public ResponseEntity<String> justATest() {
-        return ResponseEntity.ok("Test Response");
-    }
 }

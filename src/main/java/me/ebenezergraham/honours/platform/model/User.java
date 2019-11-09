@@ -1,7 +1,6 @@
 package me.ebenezergraham.honours.platform.model;
 
 import me.ebenezergraham.honours.platform.model.audit.DateAudit;
-import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -36,7 +35,6 @@ public class User extends DateAudit {
     @Size(max = 15)
     private String username;
 
-    @NaturalId
     @NotBlank
     @Size(max = 40)
     @Email

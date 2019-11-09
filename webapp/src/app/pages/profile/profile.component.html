@@ -1,0 +1,28 @@
+<openmeed-navbar></openmeed-navbar>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-3">
+      <div class="profile-card my-4 fixed-m">
+        <img class="img-thumbnail rounded mx-auto d-block "
+             src="https://ui-avatars.com/api/?name={{user.name}}&size=150">
+
+        <p class="text-center">{{user.name}}</p>
+        <p class="text-center">{{user.location}}</p>
+        <p class="text-center">{{user.company}}</p>
+        <p class="text-center">{{user.hireable ? "Hireable" : "Not looking for hires"}}</p>
+        <p class="text-center">{{user.email}}</p>
+      </div>
+    </div>
+    <div class="col-7">
+      <div *ngFor="let issue of issues" class="card  secondary-colour m-4">
+        <div class="row">
+          <div class="col-4">
+            <h2>{{issue.title}}</h2>
+            <a target="_blank" href="{{issue.html_url}}">View Issue</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

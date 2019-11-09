@@ -1,6 +1,5 @@
 package me.ebenezergraham.honours.platform.model;
 
-import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 
@@ -16,7 +15,6 @@ public class Role {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @NaturalId
     @Column(length = 60)
     private RoleName name;
 

@@ -1,5 +1,6 @@
 package me.ebenezergraham.honours.platform.controller;
 
+import me.ebenezergraham.honours.platform.model.User;
 import me.ebenezergraham.honours.platform.services.EmailService;
 import me.ebenezergraham.honours.platform.services.FileService;
 import me.ebenezergraham.honours.platform.services.ReportService;
@@ -7,7 +8,12 @@ import me.ebenezergraham.honours.platform.services.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
+import org.springframework.security.oauth2.client.annotation.RegisteredOAuth2AuthorizedClient;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,8 +24,7 @@ import java.util.List;
  Created on 9/30/19
  */
 @Controller
-@RequestMapping("/api")
-//@PreAuthorize("hasRole('ROLE_USER')")
+@RequestMapping("/api/v1")
 public class ApplicationController {
 	
 	private final FileService fileAnalyzer;
@@ -48,4 +53,16 @@ public class ApplicationController {
 				.body(report);*/
 		return ResponseEntity.ok().body("Sent");
 	}
+
+
+	@RequestMapping("/securedPage")
+	public String securedPage(Model model,
+							  @RegisteredOAuth2AuthorizedClient OAuth2AuthorizedClient authorizedClient,
+							  @AuthenticationPrincipal OAuth2User oauth2User) {
+		model.addAttribute("userName", authorizedClient.getAccessToken().getTokenValue());
+		model.addAttribute("clientName", authorizedClient.getClientRegistration().getClientName());
+		model.addAttribute("userAttributes", oauth2User.getAttributes());
+		return "securedPage";
+	}
+
 }

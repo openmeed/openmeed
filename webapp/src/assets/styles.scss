@@ -1,0 +1,374 @@
+/* You can add global styles to this file, and also import other style files */
+//@import "~bootstrap/dist/css/bootstrap.css";
+$primary-colour: #F6B33B;
+$secondary-colour: #F6B33B;
+$primary-accent-colour: rgba(169, 20, 28, 0.9);
+$secondary-accent-colour: rgba(15, 15, 39, 0.9);
+$white-colour: #fff;
+$grey-colour: #212529;
+$black-colour: #000;
+$box-shadow: rgba(0, 0, 0, 0.2) 2px 2px 4px;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Futura";
+}
+
+html {
+  font-size: 18px;
+}
+
+.card {
+  width: 100%;
+  height: 200px;
+  max-height: 200px;
+  background-color: white;
+  border-radius: 0;
+  padding: 2rem;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.signin-card {
+  width: 100%;
+  height: fit-content;
+  background-color: white;
+  border-radius: 0;
+  padding: 2rem;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.footer {
+  background-color: $grey-colour;
+  color: white;
+}
+
+#loginbg{
+  width: 100vw;
+  height: 100vh;
+  background: url('img/background.jpeg') no-repeat;
+}
+.secondary-colour {
+  background-color: $secondary-colour;
+}
+
+.vertical-divider{
+  border-left: 1px solid #333;
+}
+
+.secondary-colour-text {
+  color: $secondary-colour !important;
+}
+
+/*HTML tags styling*/
+@font-face {
+  font-family: Futura;
+  src: url(fonts/futura/futura.ttf);
+}
+
+h1 {
+  font-size: 1.4em;
+  color: white;
+  margin: 1.5em 0;
+  letter-spacing: 1px;
+  word-spacing: 4px;
+}
+
+h2 {
+  font-size: 1.2em;
+  word-spacing: 2px;
+  text-align: center;
+  letter-spacing: 1px;
+  margin: 1em 0;
+  width: 100%;
+  font-weight: bold;
+  color: $white-colour;
+}
+
+h3 {
+  font-size: 1.1em;
+  margin-bottom: 15px;
+  color: $black-colour;
+  font-weight: 700;
+  border: 1px rgba(0, 0, 0, 0.9);
+}
+
+h4 {
+  font-size: 1.2em;
+  word-spacing: 2px;
+  text-align: center;
+  letter-spacing: 1px;
+  margin: 1em 0;
+  width: 100%;
+  font-weight: bold;
+  color: black;
+}
+
+h6 {
+  font-size: 0.9rem;
+  width: 100%;
+  font-weight: bold;
+  color: #19181b;
+}
+
+.profile-card{
+  width: 100%;
+  height: 85vh;
+  background-color: white;
+  padding: 10%;
+  border-radius: 0;
+  border-bottom: 3px solid $secondary-colour;
+  box-shadow: $box-shadow;
+}
+
+.btn {
+  display: inline-block;
+  padding: 8px 1rem;
+  margin: 8px 0 20px 0;
+  border-radius: 0;
+  font-weight: 300;
+  text-decoration: none;
+  font-size: medium;
+  color: $white-colour;
+  box-shadow: rgba(0, 0, 0, 0.2) 2px 2px 4px;
+}
+
+.btn-full {
+  color: $white-colour;
+  background-color: $primary-colour;
+  border: 1px solid $primary-colour;
+}
+
+.btn-empty {
+  font-size: 0.9rem;
+  border: 1px solid $primary-colour;
+  color: $secondary-colour;
+}
+
+.btn-empty:hover {
+  border: 1px solid $secondary-colour;
+  color: white;
+  transition: all 0.5s;
+  background: $secondary-colour;
+  box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 8px;
+}
+
+.btn-full:hover {
+  color: $white-colour;
+  box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 8px;
+}
+
+.avatar {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+}
+
+.back-to-top {
+  position: relative;
+  top: -2rem;
+}
+
+.back-to-top i {
+  font-weight: lighter;
+  font-size: 1rem;
+}
+
+#notfound {
+  position: relative;
+  height: 100vh;
+
+}
+
+#notfound .notfound {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+.notfound {
+  max-width: 410px;
+  width: 100%;
+
+  text-align: center;
+
+}
+
+.notfound .notfound-404 {
+  height: 280px;
+
+  position: relative;
+  z-index: -1;
+
+}
+
+.notfound .notfound-404 h1 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 230px;
+  margin: 0px;
+  font-weight: 900;
+
+  position: absolute;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  transform: translateX(-50%);
+  background: url('img/bg.jpg') no-repeat;
+
+  -webkit-background-clip: text;
+
+  -webkit-text-fill-color: transparent;
+
+  background-size: cover;
+
+  background-position: center;
+
+}
+
+
+.notfound h2 {
+  font-family: 'Montserrat', sans-serif;
+  color: #000;
+  font-size: 24px;
+  font-weight: 700;
+
+  text-transform: uppercase;
+  margin-top: 0;
+
+}
+
+.notfound p {
+  font-family: 'Montserrat', sans-serif;
+  color: #000;
+  font-size: 14px;
+  font-weight: 400;
+  margin-bottom: 20px;
+  margin-top: 0px;
+
+}
+
+.notfound a {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  text-decoration: none;
+  text-transform: uppercase;
+  background: $secondary-colour;
+  display: inline-block;
+  padding: 15px 30px;
+  border-radius: 40px;
+  color: #fff;
+  font-weight: 700;
+  -webkit-box-shadow: 0px 4px 15px -5px $secondary-accent-colour;
+  box-shadow: 0px 4px 15px -5px $secondary-colour;
+
+}
+
+
+@media only screen and (max-width: 767px) {
+  .notfound .notfound-404 {
+    height: 142px;
+
+  }
+  .notfound .notfound-404 h1 {
+    font-size: 112px;
+  }
+}
+
+.form-group {
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.form-group input {
+  height: auto;
+  border-radius: 0;
+  border: 1px $secondary-colour solid;
+}
+
+.form-group textarea {
+  height: auto;
+  border-radius: 1rem;
+  border: 1px $secondary-colour solid;
+}
+
+
+.form-group > input,
+.form-group > label {
+  padding: var(--input-padding-y) var(--input-padding-x);
+}
+
+.form-group > textarea,
+.form-group > label {
+  padding: var(--input-padding-y) var(--input-padding-x);
+}
+
+.form-group > label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  width: 100%;
+  margin-bottom: 0;
+  line-height: 1.5;
+  color: #495057;
+  border: 1px solid transparent;
+  border-radius: .25rem;
+  transition: all .1s ease-in-out;
+}
+
+.form-group input::-webkit-input-placeholder {
+  color: transparent;
+}
+
+.form-group input:-ms-input-placeholder {
+  color: transparent;
+}
+
+.form-group input::-ms-input-placeholder {
+  color: transparent;
+}
+
+.form-group input::-moz-placeholder {
+  color: transparent;
+}
+
+.form-group input::placeholder {
+  color: transparent;
+}
+
+.form-group textarea::placeholder {
+  color: transparent;
+}
+
+.form-group input:not(:placeholder-shown) {
+  padding-top: calc(var(--input-padding-y) + var(--input-padding-y) * (2 / 3));
+  padding-bottom: calc(var(--input-padding-y) / 3);
+}
+
+.form-group input:not(:placeholder-shown) ~ label {
+  padding-top: calc(var(--input-padding-y) / 3);
+  padding-bottom: calc(var(--input-padding-y) / 3);
+  font-size: 15px;
+  color: #777;
+}
+
+.form-group textarea:not(:placeholder-shown) {
+  padding-top: calc(var(--input-padding-y) + var(--input-padding-y) * (2 / 3));
+  padding-bottom: calc(var(--input-padding-y) / 3);
+}
+
+.form-group textarea:not(:placeholder-shown) ~ label {
+  padding-top: calc(var(--input-padding-y) / 3);
+  padding-bottom: calc(var(--input-padding-y) / 3);
+  font-size: 15px;
+  color: #777;
+}
+
+:root {
+  --input-padding-x: 1.3rem;
+  --input-padding-y: .65rem;
+}

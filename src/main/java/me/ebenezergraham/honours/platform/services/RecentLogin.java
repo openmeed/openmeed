@@ -6,9 +6,9 @@ import me.ebenezergraham.honours.platform.payload.LoginRequest;
 import me.ebenezergraham.honours.platform.repository.AuthenticationRepository;
 import me.ebenezergraham.honours.platform.repository.UserRepository;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.jetbrains.annotations.NotNull;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.NotNull;
 import java.util.Optional;
 
 public class RecentLogin extends Thread {

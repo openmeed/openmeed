@@ -1,39 +1,41 @@
-import {BrowserModule} from '@angular/platform-browser';
-import {NgModule} from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
 
-import {AppRoutingModule} from './app-routing.module';
-import {AppComponent} from './app.component';
-import {LoginComponent} from './login/login.component';
-import {DashboardComponent} from './dashboard/dashboard.component';
-import {NotFoundComponent} from './not-found/not-found.component';
-import {AdminComponent} from './admin/admin.component';
-import {MenuComponent} from './shared/menu/menu.component';
-import {HttpClientModule} from "@angular/common/http";
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import {LoginComponent} from "./pages/login/login.component";
+import {ProfileComponent} from "./pages/profile/profile.component";
+import {AdminComponent} from "./pages/admin/admin.component";
+import {NotFoundComponent} from "./pages/not-found/not-found.component";
+import {NavbarComponent} from "./shared/navbar/navbar.component";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import { RegistrationComponent } from './registration/registration.component';
-import { UnauthorizedComponent } from './shared/unauthorized/unauthorized.component';
-
+import {ModalModule, TooltipModule} from "ngx-bootstrap";
+import {CommonModule} from "@angular/common";
+import {HttpClientModule} from "@angular/common/http";
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent,
     DashboardComponent,
-    NotFoundComponent,
+    LoginComponent,
+    ProfileComponent,
     AdminComponent,
-    MenuComponent,
-    RegistrationComponent,
-    UnauthorizedComponent
+    NotFoundComponent,
+    NavbarComponent,
   ],
   imports: [
     BrowserModule,
-    ReactiveFormsModule,
     FormsModule,
-    HttpClientModule,
+    ReactiveFormsModule,
     AppRoutingModule,
+    HttpClientModule,
+    CommonModule,
+    TooltipModule.forRoot(),
+    AppRoutingModule,
+    ModalModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule {
-}
+export class AppModule { }
