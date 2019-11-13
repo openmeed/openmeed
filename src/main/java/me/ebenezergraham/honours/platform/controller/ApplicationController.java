@@ -1,10 +1,9 @@
 package me.ebenezergraham.honours.platform.controller;
 
-import me.ebenezergraham.honours.platform.model.User;
+import me.ebenezergraham.honours.platform.security.CustomUserDetailsService;
 import me.ebenezergraham.honours.platform.services.EmailService;
 import me.ebenezergraham.honours.platform.services.FileService;
 import me.ebenezergraham.honours.platform.services.ReportService;
-import me.ebenezergraham.honours.platform.services.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.ResponseEntity;

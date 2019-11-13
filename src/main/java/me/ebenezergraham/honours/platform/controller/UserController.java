@@ -1,27 +1,25 @@
 package me.ebenezergraham.honours.platform.controller;
 
+import me.ebenezergraham.honours.platform.exception.ResourceNotFoundException;
 import me.ebenezergraham.honours.platform.model.Role;
 import me.ebenezergraham.honours.platform.model.RoleName;
 import me.ebenezergraham.honours.platform.model.TwoFactor;
 import me.ebenezergraham.honours.platform.model.User;
 import me.ebenezergraham.honours.platform.payload.ApiResponse;
-import me.ebenezergraham.honours.platform.payload.JwtAuthenticationResponse;
 import me.ebenezergraham.honours.platform.payload.LoginRequest;
 import me.ebenezergraham.honours.platform.payload.SignUpRequest;
 import me.ebenezergraham.honours.platform.repository.AuthenticationRepository;
 import me.ebenezergraham.honours.platform.repository.RoleRepository;
 import me.ebenezergraham.honours.platform.repository.UserRepository;
+import me.ebenezergraham.honours.platform.security.CurrentUser;
+import me.ebenezergraham.honours.platform.security.UserPrincipal;
 import me.ebenezergraham.honours.platform.services.EmailService;
-import me.ebenezergraham.honours.platform.services.RecentLogin;
 import me.ebenezergraham.honours.platform.exception.AppException;
-import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.annotation.RegisteredOAuth2AuthorizedClient;
@@ -32,7 +30,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
-import java.security.Principal;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -66,9 +63,11 @@ public class UserController {
         this.authenticationRepository = authenticationRepository;
     }
 
-    @RequestMapping("/user")
-    public Principal user(Principal principal) {
-        return principal;
+    @GetMapping("/user/me")
+    @PreAuthorize("hasRole('USER')")
+    public User getCurrentUser(@CurrentUser UserPrincipal userPrincipal) {
+        return userRepository.findById(userPrincipal.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
     }
 
     @PostMapping("/login")

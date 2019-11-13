@@ -23,6 +23,14 @@ export class ApiService {
   readonly v3 = 'v3'
   readonly githubbase = `https://api.github.com`;
 
+  readonly API_BASE_URL = 'http://localhost:8080';
+  readonly ACCESS_TOKEN = 'accessToken';
+
+  readonly OAUTH2_REDIRECT_URI = 'http://localhost:4200/oauth2/redirect';
+
+  readonly GOOGLE_AUTH_URL = this.API_BASE_URL + '/oauth2/authorize/google?redirect_uri=' + this.OAUTH2_REDIRECT_URI;
+  readonly GITHUB_AUTH_URL = this.API_BASE_URL + '/oauth2/authorize/github?redirect_uri=' + this.OAUTH2_REDIRECT_URI;
+
   constructor(private http: HttpClient) {
   }
 
@@ -77,6 +85,13 @@ export class ApiService {
   }
 
   loginWithOauth(): Observable<any> {
+    return this.http.post<any>(this.GITHUB_AUTH_URL,{}).pipe(
+      tap(x => console.log(`posted login data`)),
+      catchError(this.handleError('login', []))
+    );
+  }
+
+  loginOauth(): Observable<any> {
     const endpoint = `http://localhost:8080/api/v1/auth/login`;
     return this.http.post<any>(endpoint,{}).pipe(
       tap(x => console.log(`posted login data`)),
