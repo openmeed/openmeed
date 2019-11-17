@@ -1,5 +1,6 @@
 package me.ebenezergraham.honours.platform.repository;
 
+import me.ebenezergraham.honours.platform.model.Reward;
 import me.ebenezergraham.honours.platform.model.Role;
 import me.ebenezergraham.honours.platform.model.RoleName;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,6 +13,7 @@ import java.util.Optional;
  Created on 9/30/19
  */
 @Repository
-public interface RoleRepository extends JpaRepository<Role, Long> {
-    Optional<Role> findByName(RoleName roleName);
+public interface RewardRepository extends JpaRepository<Reward, Long> {
+
+    Optional<Reward> findByIssueIdAndRepositoryId(String issueId, String repositoryId);
 }

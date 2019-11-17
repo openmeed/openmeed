@@ -26,4 +26,8 @@ export class DashboardComponent implements OnInit {
 
   }
 
+  workOnIssue(id){
+
+  }
+
 }

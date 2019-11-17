@@ -8,7 +8,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-
+/**
+ * @author Ebenezer Graham
+ * Created on 9/30/19
+ */
 @Service
 public class TokenProvider {
 

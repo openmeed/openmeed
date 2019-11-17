@@ -1,9 +1,9 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import {AppRoutingModule} from './app-routing.module';
+import {AppComponent} from './app.component';
+import {DashboardComponent} from './pages/dashboard/dashboard.component';
 import {LoginComponent} from "./pages/login/login.component";
 import {ProfileComponent} from "./pages/profile/profile.component";
 import {AdminComponent} from "./pages/admin/admin.component";
@@ -13,6 +13,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {ModalModule, TooltipModule} from "ngx-bootstrap";
 import {CommonModule} from "@angular/common";
 import {HttpClientModule} from "@angular/common/http";
+import {RedirectComponent} from './pages/redirect/redirect.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import {HttpClientModule} from "@angular/common/http";
     AdminComponent,
     NotFoundComponent,
     NavbarComponent,
+    RedirectComponent,
   ],
   imports: [
     BrowserModule,
@@ -38,4 +40,5 @@ import {HttpClientModule} from "@angular/common/http";
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

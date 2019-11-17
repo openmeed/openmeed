@@ -1,8 +1,9 @@
 package me.ebenezergraham.honours.platform.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class PullRequest {
+public class PullRequest implements Serializable {
 
     String url;
     int id;

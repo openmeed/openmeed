@@ -34,11 +34,11 @@ export class ApiService {
   constructor(private http: HttpClient) {
   }
 
-  static headerWithCredentials(): object {
+  static githubHeaderWithCredentials(): object {
     return {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        'Authorization': `Token ${window.sessionStorage.getItem('access_token')}`,
+        'Authorization': `Token ${window.sessionStorage.getItem('github_access_token')}`,
         'Accept': `application/vnd.github.machine-man-preview`
       })
     };
@@ -54,7 +54,7 @@ export class ApiService {
 
   getAuthenticatedUserIssues(): Observable<any> {
     const endpoint = `${this.githubbase}/issues`;
-    return this.http.get(endpoint,ApiService.headerWithCredentials()).pipe(
+    return this.http.get(endpoint,ApiService.githubHeaderWithCredentials()).pipe(
       tap(x => console.log(`fetched user assigned issues data`)),
       catchError(this.handleError('Issues', []))
     );
@@ -62,7 +62,7 @@ export class ApiService {
 
   getUser(): Observable<any> {
     const endpoint = `${this.githubbase}/user`;
-    return this.http.get(endpoint,ApiService.headerWithCredentials()).pipe(
+    return this.http.get(endpoint,ApiService.githubHeaderWithCredentials()).pipe(
       tap(x => console.log(`fetched user profile data`)),
       catchError(this.handleError('Issues', []))
     );

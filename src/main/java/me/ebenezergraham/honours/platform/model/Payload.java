@@ -1,10 +1,14 @@
 package me.ebenezergraham.honours.platform.model;
 
-public class Payload {
+import java.io.Serializable;
+
+public class Payload implements Serializable {
 
     String action;
     int number;
     PullRequest pull_request;
+    GithubRepository repository;
+    GitHubUser sender;
 
     public String getAction() {
         return action;
@@ -28,5 +32,32 @@ public class Payload {
 
     public void setPull_request(PullRequest pull_request) {
         this.pull_request = pull_request;
+    }
+
+    public GithubRepository getRepository() {
+        return repository;
+    }
+
+    public void setRepository(GithubRepository repository) {
+        this.repository = repository;
+    }
+
+    public GitHubUser getSender() {
+        return sender;
+    }
+
+    public void setSender(GitHubUser sender) {
+        this.sender = sender;
+    }
+
+    @Override
+    public String toString() {
+        return "Payload{" +
+                "action='" + action + '\'' +
+                ", number=" + number +
+                ", pull_request=" + pull_request +
+                ", repository=" + repository +
+                ", sender=" + sender +
+                '}';
     }
 }

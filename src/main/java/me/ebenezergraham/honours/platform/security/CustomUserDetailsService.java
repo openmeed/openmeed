@@ -13,9 +13,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Created by rajeevkumarsingh on 02/08/17.
+ * @author Ebenezer Graham
+ * Created on 9/30/19
  */
-
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 

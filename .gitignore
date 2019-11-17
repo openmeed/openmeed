@@ -1,11 +1,6 @@
-
 \.idea/
-
 *.class
-
-target/classes/
+target/
 node_modules/
-
 *.log
-
 *.gz

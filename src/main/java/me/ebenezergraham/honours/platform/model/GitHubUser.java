@@ -1,6 +1,8 @@
 package me.ebenezergraham.honours.platform.model;
 
-public class GitHubUser {
+import java.io.Serializable;
+
+public class GitHubUser implements Serializable {
     int id;
     String type;
     String site_admin;

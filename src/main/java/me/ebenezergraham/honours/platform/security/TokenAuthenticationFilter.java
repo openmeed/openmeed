@@ -15,7 +15,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-
+/**
+ * @author Ebenezer Graham
+ * Created on 9/30/19
+ */
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
     @Autowired

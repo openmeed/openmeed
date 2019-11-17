@@ -6,6 +6,7 @@ import {AdminComponent} from "./pages/admin/admin.component";
 import {LoginComponent} from "./pages/login/login.component";
 import {DashboardComponent} from "./pages/dashboard/dashboard.component";
 import {ProfileComponent} from "./pages/profile/profile.component";
+import {RedirectComponent} from "./pages/redirect/redirect.component";
 
 
 const routes: Routes = [
@@ -15,6 +16,7 @@ const routes: Routes = [
   {path: 'admin', component: AdminComponent, canActivate: [AuthGuard]},
   {path: 'profile', component: ProfileComponent, canActivate: [AuthGuard]},
   {path: 'unauthorized', component: NotFoundComponent},
+  {path: 'oauth2/redirect', component: RedirectComponent},
   {path: '**', component: NotFoundComponent}
 ];
 

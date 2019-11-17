@@ -10,22 +10,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
 import org.springframework.jms.config.JmsListenerContainerFactory;
 import org.springframework.jms.core.JmsTemplate;
 
 import javax.jms.Queue;
 
+import static me.ebenezergraham.honours.platform.util.Constants.PULL_REQUEST;
+
 
 @Configuration
+@EnableJms
 public class JmsConfig {
 
     final String LOGGER_NAME = "command-logger";
     final String SERIALIZER = "command-serializer";
     String COMMAND_SOURCE_TABLE_NAME = "command_source";
-
-    String APPLICATION_NAME_PROP = "spring.application.name";
-    String APPLICATION_NAME_DEFAULT = "command-v1";
 
     String ACTIVEMQ_BROKER_URL_PROP = "activemq.brokerUrl";
     String ACTIVEMQ_BROKER_URL_DEFAULT = "vm://localhost?broker.persistent=false";
@@ -34,7 +35,7 @@ public class JmsConfig {
 
     @Bean
     public Queue queue(){
-        return new ActiveMQQueue("merge-queue");
+        return new ActiveMQQueue("github-events");
     }
 
     @Bean(name = SERIALIZER)
@@ -67,7 +68,7 @@ public class JmsConfig {
 
     @Bean
     public JmsTemplate jmsTemplate(final PooledConnectionFactory jmsFactory) {
-        final ActiveMQTopic activeMQTopic = new ActiveMQTopic("merge-topic");
+        final ActiveMQTopic activeMQTopic = new ActiveMQTopic(PULL_REQUEST);
         final JmsTemplate jmsTemplate = new JmsTemplate();
         jmsTemplate.setPubSubDomain(true);
         jmsTemplate.setConnectionFactory(jmsFactory);

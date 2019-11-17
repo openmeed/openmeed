@@ -1,5 +1,6 @@
 package me.ebenezergraham.honours.platform.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import me.ebenezergraham.honours.platform.model.audit.DateAudit;
 
 import javax.persistence.*;
@@ -17,9 +18,6 @@ import java.util.Set;
 @Entity
 @Table(name = "users", uniqueConstraints = {
         @UniqueConstraint(columnNames = {
-                "username"
-        }),
-        @UniqueConstraint(columnNames = {
                 "email"
         })
 })
@@ -28,30 +26,22 @@ public class User extends DateAudit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    @Size(max = 40)
+    @Column(nullable = false)
     private String name;
 
-    @NotBlank
-    @Size(max = 15)
+    @Email
+    @Column(nullable = false)
+    private String email;
+
     private String username;
 
     private String imageUrl;
 
-    @NotBlank
-    @Size(max = 40)
-    @Email
-    private String email;
+    @Column(nullable = false)
+    private Boolean emailVerified = false;
 
-    @NotBlank
-    @Size(max = 100)
+    @JsonIgnore
     private String password;
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles = new HashSet<>();
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -108,14 +98,6 @@ public class User extends DateAudit {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
     }
 
     public AuthProvider getProvider() {
