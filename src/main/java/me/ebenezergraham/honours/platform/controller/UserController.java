@@ -12,6 +12,7 @@ import me.ebenezergraham.honours.platform.repository.RewardRepository;
 import me.ebenezergraham.honours.platform.repository.UserRepository;
 import me.ebenezergraham.honours.platform.services.EmailService;
 import me.ebenezergraham.honours.platform.exception.AppException;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,48 +27,59 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 /**
- @author Ebenezer Graham
- Created on 9/30/19
+ * @author Ebenezer Graham
+ * Created on 9/30/19
  */
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/api/v1")
 public class UserController {
 
-    private final AuthenticationManager authenticationManager;
-    private final UserRepository userRepository;
-    private final RewardRepository roleRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final EmailService emailService;
-    private final AuthenticationRepository authenticationRepository;
+  private final AuthenticationManager authenticationManager;
+  private final UserRepository userRepository;
+  private final RewardRepository roleRepository;
+  private final PasswordEncoder passwordEncoder;
+  private final EmailService emailService;
+  private final AuthenticationRepository authenticationRepository;
 
-    public UserController(AuthenticationManager authenticationManager,
-                          UserRepository userRepository,
-                          RewardRepository roleRepository,
-                          PasswordEncoder passwordEncoder,
-                          EmailService emailService,
-                          AuthenticationRepository authenticationRepository
-    ) {
-        this.authenticationManager = authenticationManager;
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.emailService = emailService;
-        this.authenticationRepository = authenticationRepository;
-    }
+  public UserController(AuthenticationManager authenticationManager,
+                        UserRepository userRepository,
+                        RewardRepository roleRepository,
+                        PasswordEncoder passwordEncoder,
+                        EmailService emailService,
+                        AuthenticationRepository authenticationRepository
+  ) {
+    this.authenticationManager = authenticationManager;
+    this.userRepository = userRepository;
+    this.roleRepository = roleRepository;
+    this.passwordEncoder = passwordEncoder;
+    this.emailService = emailService;
+    this.authenticationRepository = authenticationRepository;
+  }
 
-    @PostMapping("/code")
-    public ResponseEntity<Boolean> verify(@RequestBody TwoFactor request) {
-        Optional<TwoFactor> twoFactor = authenticationRepository.findTwoFactorByUsername(request.getUsername());
-        if (twoFactor.isPresent()) {
-            if (twoFactor.get().getCode().equals(request.getCode())) {
-                authenticationRepository.deleteById(twoFactor.get().getId());
-                return ResponseEntity.ok(true);
-            }
-        }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+  @PostMapping("/code")
+  public ResponseEntity<Boolean> verify(@RequestBody TwoFactor request) {
+    Optional<TwoFactor> twoFactor = authenticationRepository.findTwoFactorByUsername(request.getUsername());
+    if (twoFactor.isPresent()) {
+      if (twoFactor.get().getCode().equals(request.getCode())) {
+        authenticationRepository.deleteById(twoFactor.get().getId());
+        return ResponseEntity.ok(true);
+      }
     }
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+  }
+
+  @GetMapping("/users")
+  public ResponseEntity<List<User>> findAllUser(@RequestBody String category) {
+    Sort sort = new Sort(category);
+    List<User> result = userRepository.findAll();
+    if (!result.isEmpty()) {
+      return ResponseEntity.ok(result);
+    }
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+  }
 
 }

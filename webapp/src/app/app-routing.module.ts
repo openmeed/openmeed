@@ -7,12 +7,14 @@ import {LoginComponent} from "./pages/login/login.component";
 import {DashboardComponent} from "./pages/dashboard/dashboard.component";
 import {ProfileComponent} from "./pages/profile/profile.component";
 import {RedirectComponent} from "./pages/redirect/redirect.component";
+import {BoardComponent} from "./pages/board/board.component";
 
 
 const routes: Routes = [
   {path: '', component: LoginComponent},
   {path: 'login', component: LoginComponent},
   {path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard]},
+  {path: 'leaderboard', component: BoardComponent, canActivate: [AuthGuard]},
   {path: 'admin', component: AdminComponent, canActivate: [AuthGuard]},
   {path: 'profile', component: ProfileComponent, canActivate: [AuthGuard]},
   {path: 'unauthorized', component: NotFoundComponent},

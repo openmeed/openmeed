@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ApiService} from "../../core/api.service";
+import api from "@fortawesome/fontawesome";
+import {Reward} from "../../shared/model/Model";
 
 @Component({
   selector: 'openmeed-dashboard',
@@ -8,8 +10,9 @@ import {ApiService} from "../../core/api.service";
 })
 export class DashboardComponent implements OnInit {
 
-  issues: any[];
-  assignedIssues: any[];
+  issues: [];
+  repositories = [];
+  assignedIssues = [];
 
   constructor(private http: ApiService) {
   }
@@ -19,15 +22,35 @@ export class DashboardComponent implements OnInit {
       this.assignedIssues = data;
     });
 
-    this.http.getIssues("anoited007", "personalized-tab").subscribe((data) => {
-      this.issues = data;
-    });
+    this.http.getRepositories().subscribe((repos) => {
+      this.repositories = repos;
 
+      this.repositories.forEach(entry => {
+        this.http.getIssues(entry).subscribe((data) => {
+          if (data.length> 0) {
+            if (this.issues !== undefined) {
+              //this.issues.push(data);
+            } else {
+              this.issues = data;
+            }
+          }
+        });
+      })
+    });
 
   }
 
-  workOnIssue(id){
+  workOnIssue(issue) {
+    this.http.setUserIssue(issue.html_url).subscribe(res => {
 
+    })
+  }
+
+  allocatePoint(value) {
+    alert(value);
+    document.getElementById(value.target.id).innerText = "10";
+    var reward = new Reward();
+    reward.value = value.target.value;
   }
 
 }

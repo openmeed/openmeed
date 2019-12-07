@@ -4,7 +4,7 @@ import {Router} from '@angular/router';
 import {AuthenticationService} from '../../core/authentication.service';
 import {ApiService} from '../../core/api.service';
 import {DomSanitizer} from '@angular/platform-browser';
-import {LoginRequest, User} from '../../shared/model/User';
+import {LoginRequest, Model} from '../../shared/model/Model';
 
 @Component({
   selector: 'openmeed-login',

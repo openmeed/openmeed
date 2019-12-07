@@ -6,10 +6,25 @@
   </div>
   <div *ngFor="let issue of issues" class="card m-4">
     <div class="row">
-      <div class="col-4">
-        <h3>{{issue.title}}</h3>
-        <button class="btn btn-full" ><a target="_blank" href="{{issue.html_url}}">View Issue</a></button>
-        <button class="btn btn-empty" (click)="workOnIssue(issue.id)">Work on Issue</button>
+      <h3>{{issue.title}}</h3>
+    </div>
+    <div class="row">
+      <p class="px-3">Reward: 10pts</p>
+    </div>
+    <div class="row">
+      <div class="col">
+        <button class="btn btn-full"><a target="_blank" href="{{issue.html_url}}">View Issue</a></button>
+        <button class="btn btn-empty" (click)="workOnIssue(issue)">Work on Issue</button>
+      </div>
+      <div class="col">
+      <form>
+        <div class="form-group">
+          <label for="reward">Enter Reward</label>
+          <input id="{{issue.id}}" (change)="allocatePoint($event)" type="email" class="form-control" id="reward"
+                 aria-describedby="Enter Reward" placeholder="Enter reward">
+          <small id="emailHelp" class="form-text text-muted">Press enter to submit</small>
+        </div>
+      </form>
       </div>
     </div>
   </div>

@@ -1,29 +1,27 @@
-<openmeed-navbar>
-</openmeed-navbar>
+<openmeed-navbar></openmeed-navbar>
+<div class="container container-fluid">
 
-<div style="vh: 100%" class="container m-5 px-5">
-  <div class="row">
-    <main class="col-9">
-      <div class="row">
-        <section class="col-6">
-          <div class="form-group">
-            <h1>Upload Code</h1>
-          </div>
-
-          <div *ngIf="currentFileUpload" class="progress">
-            <div id="snippet" class="progress-bar progress-bar-info progress-bar-striped"
-                 role="progressbar" attr.aria-valuenow="{{progress.percentage}}"
-                 aria-valuemin="0" aria-valuemax="100"
-                 [ngStyle]="{width:progress.percentage+'%'}">
-              {{progress.percentage}}%</div><br>
-          </div>
-
-          <label class="btn btn-full">
-            <input type="file" (change)="selectFile($event)">
-          </label>
-
-        </section>
-      </div>
-    </main>
-  </div>
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col-6">Repository Name</th>
+      <th scope="col">Activate Repository</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let repo of projects; index as i">
+      <th scope="row">{{ i + 1 }}</th>
+      <td>
+        {{repo.name}}
+      </td>
+      <td>
+        <div class="form-check">
+          <input type="checkbox" (click)="activateRepository(repo.full_name)" class="form-check-input" id="{{repo.name}}" value="{{repo.name}}">
+          <label class="form-check-label" for="{{repo.name}}">Activate</label>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
 </div>

@@ -12,117 +12,127 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- @author Ebenezer Graham
- Created on 9/30/19
+ * @author Ebenezer Graham
+ * Created on 9/30/19
  */
 @Entity
 @Table(name = "users", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {
-                "email"
-        })
+    @UniqueConstraint(columnNames = {
+        "email"
+    })
 })
 public class User extends DateAudit {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @Column(nullable = false)
-    private String name;
+  @Column(nullable = false)
+  private String name;
 
-    @Email
-    @Column(nullable = false)
-    private String email;
+  @Email
+  @Column(nullable = false)
+  private String email;
 
-    private String username;
+  private String username;
 
-    private String imageUrl;
+  private String imageUrl;
 
-    @Column(nullable = false)
-    private Boolean emailVerified = false;
+  @Column(nullable = false)
+  private Boolean emailVerified = false;
 
-    @JsonIgnore
-    private String password;
+  @JsonIgnore
+  private String password;
 
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    private AuthProvider provider;
+  @NotNull
+  @Enumerated(EnumType.STRING)
+  private AuthProvider provider;
 
-    private String providerId;
+  private String providerId;
 
-    public User() {
+  private int points;
 
-    }
+  public User() {
 
-    public User(String name, String username, String email, String password) {
-        this.name = name;
-        this.username = username;
-        this.email = email;
-        this.password = password;
-    }
+  }
 
-    public Long getId() {
-        return id;
-    }
+  public User(String name, String username, String email, String password) {
+    this.name = name;
+    this.username = username;
+    this.email = email;
+    this.password = password;
+  }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public String getUsername() {
-        return username;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+  public String getUsername() {
+    return username;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public void setUsername(String username) {
+    this.username = username;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public String getEmail() {
-        return email;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+  public String getEmail() {
+    return email;
+  }
 
-    public String getPassword() {
-        return password;
-    }
+  public void setEmail(String email) {
+    this.email = email;
+  }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+  public String getPassword() {
+    return password;
+  }
 
-    public AuthProvider getProvider() {
-        return provider;
-    }
+  public void setPassword(String password) {
+    this.password = password;
+  }
 
-    public void setProvider(AuthProvider provider) {
-        this.provider = provider;
-    }
+  public AuthProvider getProvider() {
+    return provider;
+  }
 
-    public String getProviderId() {
-        return providerId;
-    }
+  public void setProvider(AuthProvider provider) {
+    this.provider = provider;
+  }
 
-    public void setProviderId(String providerId) {
-        this.providerId = providerId;
-    }
+  public String getProviderId() {
+    return providerId;
+  }
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
+  public void setProviderId(String providerId) {
+    this.providerId = providerId;
+  }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
+  public String getImageUrl() {
+    return imageUrl;
+  }
+
+  public void setImageUrl(String imageUrl) {
+    this.imageUrl = imageUrl;
+  }
+
+  public int getPoints() {
+    return points;
+  }
+
+  public void setPoints(int points) {
+    this.points = points;
+  }
 }
 
 

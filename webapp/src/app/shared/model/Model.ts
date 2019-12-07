@@ -1,8 +1,9 @@
-export class User {
+export class Model {
   name: string = null;
   username: string = null;
   password: string = null;
   career: string = null;
+  points: number = null;
 
   constructor() {
   }
@@ -23,6 +24,14 @@ export class RegisterRequest {
   email: string = null;
   password: string = null;
 
+
+  constructor() {
+  }
+}
+
+export class Reward {
+  value: string = null;
+  type: string = null;
 
   constructor() {
   }

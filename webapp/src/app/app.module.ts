@@ -14,6 +14,7 @@ import {ModalModule, TooltipModule} from "ngx-bootstrap";
 import {CommonModule} from "@angular/common";
 import {HttpClientModule} from "@angular/common/http";
 import {RedirectComponent} from './pages/redirect/redirect.component';
+import { BoardComponent } from './pages/board/board.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import {RedirectComponent} from './pages/redirect/redirect.component';
     NotFoundComponent,
     NavbarComponent,
     RedirectComponent,
+    BoardComponent,
   ],
   imports: [
     BrowserModule,

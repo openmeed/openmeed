@@ -9,25 +9,25 @@ import {ApiService} from '../../core/api.service';
 })
 export class AdminComponent implements OnInit {
 
-
-  selectedFiles: FileList;
-  currentFileUpload: File;
-  progress: { percentage: number } = {percentage: 0};
-  state = 'Upload';
-  email;
+  reposToActivate = [];
+  projects
 
   constructor(private http: ApiService) {
   }
 
   ngOnInit() {
+    this.http.fetchAllRepositories().subscribe( data=>{
+      console.log(data)
+      this.projects = data;
+    })
   }
 
-  selectEmail(event) {
-    this.email = event.target.value;
-  }
-
-  selectFile(event) {
-    this.selectedFiles = event.target.files;
+  activateRepository(value){
+    if(!this.reposToActivate.includes(value)){
+      this.reposToActivate.push(value);
+    }else{
+      this.reposToActivate.splice(this.reposToActivate.indexOf(value))
+    }
   }
 
 
