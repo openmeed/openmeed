@@ -15,5 +15,5 @@ import java.util.Optional;
 @Repository
 public interface RewardRepository extends JpaRepository<Reward, Long> {
 
-    Optional<Reward> findByIssueIdAndRepositoryId(String issueId, String repositoryId);
+    Optional<Reward> findRewardByIssueId(String issueId);
 }

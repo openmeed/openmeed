@@ -29,7 +29,7 @@ public class AuthenticationListener {
             @Override
             public void run() {
                 String username = (String) event.getAuthentication().getPrincipal();
-                Optional<User> user = userRepository.findByUsernameOrEmail(username, username);
+                Optional<User> user = userRepository.findByUsername(username);
                 user.ifPresent((user1) -> {
                     emailService.sendSimpleMessage(user1.getEmail(), "Failed Attempted",
                             "Dear " + user1.getName() + ",\n\nSomeone made an attempt to access your account. If it wasn't you consider strengthening your credentials");

@@ -1,0 +1,70 @@
+"2019-12-09 00:17:32 - Starting PlatformApplicationTests on overdrive with PID 13903 (started by overdrive in /home/overdrive/GitHub/openmeed)
+""2019-12-09 00:17:32 - No active profile set, falling back to default profiles: default
+""2019-12-09 00:17:33 - HikariPool-1 - Starting...
+""2019-12-09 00:17:34 - HikariPool-1 - Start completed.
+""2019-12-09 00:17:36 - Mapped URL path [/v2/api-docs] onto method [public org.springframework.http.ResponseEntity<springfox.documentation.spring.web.json.Json> springfox.documentation.swagger2.web.Swagger2Controller.getDocumentation(java.lang.String,javax.servlet.http.HttpServletRequest)]
+""2019-12-09 00:17:37 - Context refreshed
+""2019-12-09 00:17:37 - Found 1 custom documentation plugin(s)
+""2019-12-09 00:17:37 - Scanning for api listing references
+""2019-12-09 00:17:37 - Generating unique operation named: assignIssueUsingPOST_1
+""2019-12-09 00:17:37 - Loaded the Bouncy Castle security provider.
+""2019-12-09 00:17:37 - Using Persistence Adapter: MemoryPersistenceAdapter
+""2019-12-09 00:17:37 - Failed to start JMX connector Cannot bind to URL [rmi://localhost:1099/jmxrmi]: javax.naming.NameAlreadyBoundException: jmxrmi [Root exception is java.rmi.AlreadyBoundException: jmxrmi]. Will restart management to re-create JMX connector, trying to remedy this issue.
+""2019-12-09 00:17:37 - Apache ActiveMQ 5.15.10 (localhost, ID:overdrive-40063-1575836257709-0:1) is starting
+""2019-12-09 00:17:37 - Apache ActiveMQ 5.15.10 (localhost, ID:overdrive-40063-1575836257709-0:1) started
+""2019-12-09 00:17:37 - For help or more information please see: http://activemq.apache.org
+""2019-12-09 00:17:37 - Connector vm://localhost started
+""2019-12-09 00:17:37 - Started PlatformApplicationTests in 6.236 seconds (JVM running for 6.957)
+""2019-12-09 00:17:38 - Apache ActiveMQ 5.15.10 (localhost, ID:overdrive-40063-1575836257709-0:1) is shutting down
+""2019-12-09 00:17:38 - Connector vm://localhost stopped
+""2019-12-09 00:17:38 - Apache ActiveMQ 5.15.10 (localhost, ID:overdrive-40063-1575836257709-0:1) uptime 0.668 seconds
+""2019-12-09 00:17:38 - Apache ActiveMQ 5.15.10 (localhost, ID:overdrive-40063-1575836257709-0:1) is shutdown
+""2019-12-09 00:17:43 - HikariPool-1 - Shutdown initiated...
+""2019-12-09 00:17:43 - HikariPool-1 - Shutdown completed.
+""2019-12-09 00:50:50 - Starting PlatformApplicationTests on overdrive with PID 15933 (started by overdrive in /home/overdrive/GitHub/openmeed)
+""2019-12-09 00:50:50 - No active profile set, falling back to default profiles: default
+""2019-12-09 00:50:51 - HikariPool-1 - Starting...
+""2019-12-09 00:50:52 - HikariPool-1 - Start completed.
+""2019-12-09 00:50:54 - Mapped URL path [/v2/api-docs] onto method [public org.springframework.http.ResponseEntity<springfox.documentation.spring.web.json.Json> springfox.documentation.swagger2.web.Swagger2Controller.getDocumentation(java.lang.String,javax.servlet.http.HttpServletRequest)]
+""2019-12-09 00:50:55 - Context refreshed
+""2019-12-09 00:50:55 - Found 1 custom documentation plugin(s)
+""2019-12-09 00:50:55 - Scanning for api listing references
+""2019-12-09 00:50:55 - Generating unique operation named: assignIssueUsingPOST_1
+""2019-12-09 00:50:56 - Loaded the Bouncy Castle security provider.
+""2019-12-09 00:50:56 - Using Persistence Adapter: MemoryPersistenceAdapter
+""2019-12-09 00:50:56 - Failed to start JMX connector Cannot bind to URL [rmi://localhost:1099/jmxrmi]: javax.naming.NameAlreadyBoundException: jmxrmi [Root exception is java.rmi.AlreadyBoundException: jmxrmi]. Will restart management to re-create JMX connector, trying to remedy this issue.
+""2019-12-09 00:50:56 - Apache ActiveMQ 5.15.10 (localhost, ID:overdrive-46467-1575838256188-0:1) is starting
+""2019-12-09 00:50:56 - Apache ActiveMQ 5.15.10 (localhost, ID:overdrive-46467-1575838256188-0:1) started
+""2019-12-09 00:50:56 - For help or more information please see: http://activemq.apache.org
+""2019-12-09 00:50:56 - Connector vm://localhost started
+""2019-12-09 00:50:56 - Started PlatformApplicationTests in 6.679 seconds (JVM running for 7.44)
+""2019-12-09 00:51:07 - Apache ActiveMQ 5.15.10 (localhost, ID:overdrive-46467-1575838256188-0:1) is shutting down
+""2019-12-09 00:51:07 - Connector vm://localhost stopped
+""2019-12-09 00:51:07 - Apache ActiveMQ 5.15.10 (localhost, ID:overdrive-46467-1575838256188-0:1) uptime 11.528 seconds
+""2019-12-09 00:51:07 - Apache ActiveMQ 5.15.10 (localhost, ID:overdrive-46467-1575838256188-0:1) is shutdown
+""2019-12-09 00:51:07 - HikariPool-1 - Shutdown initiated...
+""2019-12-09 00:51:07 - HikariPool-1 - Shutdown completed.
+""2019-12-09 01:07:07 - Starting PlatformApplicationTests on overdrive with PID 17361 (started by overdrive in /home/overdrive/GitHub/openmeed)
+""2019-12-09 01:07:07 - No active profile set, falling back to default profiles: default
+""2019-12-09 01:07:09 - HikariPool-1 - Starting...
+""2019-12-09 01:07:09 - HikariPool-1 - Start completed.
+""2019-12-09 01:07:11 - Mapped URL path [/v2/api-docs] onto method [public org.springframework.http.ResponseEntity<springfox.documentation.spring.web.json.Json> springfox.documentation.swagger2.web.Swagger2Controller.getDocumentation(java.lang.String,javax.servlet.http.HttpServletRequest)]
+""2019-12-09 01:07:12 - Context refreshed
+""2019-12-09 01:07:12 - Found 1 custom documentation plugin(s)
+""2019-12-09 01:07:12 - Scanning for api listing references
+""2019-12-09 01:07:12 - Generating unique operation named: assignIssueUsingPOST_1
+""2019-12-09 01:07:12 - Loaded the Bouncy Castle security provider.
+""2019-12-09 01:07:12 - Using Persistence Adapter: MemoryPersistenceAdapter
+""2019-12-09 01:07:12 - Failed to start JMX connector Cannot bind to URL [rmi://localhost:1099/jmxrmi]: javax.naming.NameAlreadyBoundException: jmxrmi [Root exception is java.rmi.AlreadyBoundException: jmxrmi]. Will restart management to re-create JMX connector, trying to remedy this issue.
+""2019-12-09 01:07:12 - Apache ActiveMQ 5.15.10 (localhost, ID:overdrive-39455-1575839232719-0:1) is starting
+""2019-12-09 01:07:12 - Apache ActiveMQ 5.15.10 (localhost, ID:overdrive-39455-1575839232719-0:1) started
+""2019-12-09 01:07:12 - For help or more information please see: http://activemq.apache.org
+""2019-12-09 01:07:12 - Connector vm://localhost started
+""2019-12-09 01:07:12 - Started PlatformApplicationTests in 6.007 seconds (JVM running for 6.896)
+""2019-12-09 01:07:13 - Apache ActiveMQ 5.15.10 (localhost, ID:overdrive-39455-1575839232719-0:1) is shutting down
+""2019-12-09 01:07:13 - Connector vm://localhost stopped
+""2019-12-09 01:07:13 - Apache ActiveMQ 5.15.10 (localhost, ID:overdrive-39455-1575839232719-0:1) uptime 0.836 seconds
+""2019-12-09 01:07:13 - Apache ActiveMQ 5.15.10 (localhost, ID:overdrive-39455-1575839232719-0:1) is shutdown
+""2019-12-09 01:07:18 - HikariPool-1 - Shutdown initiated...
+""2019-12-09 01:07:18 - HikariPool-1 - Shutdown completed.
+"

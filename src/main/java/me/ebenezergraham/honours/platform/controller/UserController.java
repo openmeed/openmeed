@@ -10,13 +10,17 @@ import me.ebenezergraham.honours.platform.payload.SignUpRequest;
 import me.ebenezergraham.honours.platform.repository.AuthenticationRepository;
 import me.ebenezergraham.honours.platform.repository.RewardRepository;
 import me.ebenezergraham.honours.platform.repository.UserRepository;
+import me.ebenezergraham.honours.platform.security.CurrentUser;
+import me.ebenezergraham.honours.platform.security.UserPrincipal;
 import me.ebenezergraham.honours.platform.services.EmailService;
 import me.ebenezergraham.honours.platform.exception.AppException;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.annotation.RegisteredOAuth2AuthorizedClient;
@@ -27,6 +31,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -73,13 +78,22 @@ public class UserController {
   }
 
   @GetMapping("/users")
-  public ResponseEntity<List<User>> findAllUser(@RequestBody String category) {
-    Sort sort = new Sort(category);
+  public ResponseEntity<List<User>> findAllUser() {
     List<User> result = userRepository.findAll();
     if (!result.isEmpty()) {
       return ResponseEntity.ok(result);
     }
-    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+  }
+
+  @GetMapping("/user/points")
+  public ResponseEntity<Integer> fetchPoint(Authentication authentication) {
+    Optional<User> user = userRepository.findByEmail(((UserPrincipal)authentication.getPrincipal()).getEmail());
+
+    if (user.isPresent()) {
+      return ResponseEntity.ok(user.get().getPoints());
+    }
+    return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
   }
 
 }

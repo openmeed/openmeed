@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class GitHubUser implements Serializable {
     int id;
+    String login;
     String type;
     String site_admin;
     String url;
@@ -12,8 +13,16 @@ public class GitHubUser implements Serializable {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(int id){
         this.id = id;
+    };
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
     }
 
     public String getType() {

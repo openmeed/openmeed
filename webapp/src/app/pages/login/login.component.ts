@@ -38,18 +38,6 @@ export class LoginComponent implements OnInit {
     return this.loginForm.controls;
   }
 
-  verifyTFA() {
-    this.http.verifyTwoFA(this.code).subscribe((res) => {
-      if (res === true) {
-        this.router.navigate(['/dashboard']);
-      } else if (res === 401) {
-        window.location.reload();
-        window.sessionStorage.removeItem('access_token');
-
-      }
-    });
-  }
-
   set2FA(event) {
     this.code.code = event.target.value;
     this.code.username = this.user.usernameOrEmail;
@@ -57,7 +45,6 @@ export class LoginComponent implements OnInit {
 
   login() {
     if(this.sso){
-      //window.sessionStorage.setItem('access_token', 'b75d9136587b20d0293dd265ba1eea930c362490');
       this.http.loginWithOauth().subscribe((response) => {
         console.log(response)
       });

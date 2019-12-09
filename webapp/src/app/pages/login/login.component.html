@@ -33,8 +33,8 @@
               </div>
             </form>
 
-            <div class="center-block form-signin">
-              <button class="btn btn-full text-uppercase center-block" type="button" value="Log in" ><a href="http://localhost:8080/oauth2/authorize/github?redirect_uri=http://localhost:4200/oauth2/redirect">Sign in with Github</a></button>
+            <div class="text-center form-signin">
+              <a class="btn btn-full" href="http://localhost:8080/oauth2/authorize/github?redirect_uri=http://localhost:4200/oauth2/redirect">Sign in with Github</a>
             </div>
 
             <form *ngIf="twoFA" class="form-signin" (ngSubmit)="verifyTFA()">

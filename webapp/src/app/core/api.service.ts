@@ -113,6 +113,14 @@ export class ApiService {
     );
   }
 
+  getUserProfile(email): Observable<any> {
+    const endpoint = `${this.base}/user/points`;
+    return this.http.get(endpoint,ApiService.backendHeaderWithCredentials()).pipe(
+      tap(x => console.log(`fetched user profile data`)),
+      catchError(this.handleError('Issues', []))
+    );
+  }
+
 
   register(data: RegisterRequest): Observable<any> {
     const endpoint = `${this.base}/auth/register`;
@@ -130,6 +138,14 @@ export class ApiService {
     );
   }
 
+  assignReward(reward): Observable<any> {
+    const endpoint = `${this.base}/issue/incentive`;
+      return this.http.post<any>(endpoint, reward, ApiService.backendHeaderWithCredentials()).pipe(
+      tap(x => console.log(`posted issue incentive`)),
+      catchError(this.handleError('PostIncentive', []))
+    );
+  }
+
   login(body: LoginRequest): Observable<any> {
     const endpoint = `${this.base}/auth/login`;
     return this.http.post<any>(endpoint, body).pipe(
@@ -142,21 +158,6 @@ export class ApiService {
     return this.http.post<any>(this.GITHUB_AUTH_URL,{}).pipe(
       tap(x => console.log(`posted login data`)),
       catchError(this.handleError('login', []))
-    );
-  }
-
-  loginOauth(): Observable<any> {
-    const endpoint = `http://localhost:8080/api/v1/auth/login`;
-    return this.http.post<any>(endpoint,{}).pipe(
-      tap(x => console.log(`posted login data`)),
-      catchError(this.handleError('login', []))
-    );
-  }
-
-  verifyTwoFA(data): Observable<any> {
-    const endpoint = `${this.base}/auth/code`;
-    return this.http.post<any>(endpoint, data).pipe(
-      catchError(this.handleError('2FA', status)),
     );
   }
 

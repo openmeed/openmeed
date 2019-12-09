@@ -1,6 +1,7 @@
 package me.ebenezergraham.honours.platform.controller;
 
 import me.ebenezergraham.honours.platform.model.Payload;
+import me.ebenezergraham.honours.platform.services.RewardEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -10,29 +11,39 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.jms.Queue;
 
+import static me.ebenezergraham.honours.platform.util.Constants.CLOSED_EVENT;
+import static me.ebenezergraham.honours.platform.util.Constants.OPENED_EVENT;
 import static me.ebenezergraham.honours.platform.util.Constants.PULL_REQUEST;
 
 @RestController
 @RequestMapping("/api/v1/")
-public class MessageController {
+public class EventsController {
 
   private Queue queue;
   private JmsTemplate jmsTemplate;
+  private RewardEngine rewardEngine;
 
-  public MessageController(Queue queue, JmsTemplate jmsTemplate) {
+  public EventsController(final RewardEngine rewardEngine,
+                          final Queue queue,
+                          final JmsTemplate jmsTemplate) {
+    this.rewardEngine = rewardEngine;
     this.queue = queue;
     this.jmsTemplate = jmsTemplate;
   }
 
-  private final Logger logger = LoggerFactory.getLogger(MessageController.class);
+  private final Logger logger = LoggerFactory.getLogger(EventsController.class);
 
   @PostMapping("github/events")
   public ResponseEntity<String> publish(@RequestBody final Payload payload) {
-
     switch (payload.getAction()) {
-      case "opened":
+      case OPENED_EVENT:
         logger.info("Sending Opened Message", payload.getPull_request().toString());
         jmsTemplate.convertAndSend(PULL_REQUEST, payload);
+        break;
+      case CLOSED_EVENT:
+        logger.info("Sending Closed Message", payload.getPull_request().toString());
+        jmsTemplate.convertAndSend(PULL_REQUEST, payload);
+        rewardEngine.processClosedIssue(payload);
         break;
       default:
         return new ResponseEntity(HttpStatus.NOT_MODIFIED);
@@ -40,10 +51,4 @@ public class MessageController {
     return new ResponseEntity(HttpStatus.OK);
   }
 
-  public void processPayload(Payload payload){
-    if(payload.getPull_request().getState().equals("closed")){
-
-    }
-
-  }
 }

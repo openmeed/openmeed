@@ -16,11 +16,13 @@ public class PullRequest implements Serializable {
     Date created_at;
     Date updated_at;
     Date closed_at;
+    String issue_url;
     Date merged_at;
     String merge_commit_sha;
     String assignee;
     String[] assignees;
     String [] labels;
+    boolean merged;
     GithubRepository repo;
     GitHubUser sender;
 
@@ -166,5 +168,21 @@ public class PullRequest implements Serializable {
 
     public void setSender(GitHubUser sender) {
         this.sender = sender;
+    }
+
+    public String getIssue_url() {
+        return issue_url;
+    }
+
+    public void setIssue_url(String issue_url) {
+        this.issue_url = issue_url;
+    }
+
+    public boolean isMerged() {
+        return merged;
+    }
+
+    public void setMerged(boolean merged) {
+        this.merged = merged;
     }
 }

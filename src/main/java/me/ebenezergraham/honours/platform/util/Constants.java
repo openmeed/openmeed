@@ -1,7 +1,8 @@
 package me.ebenezergraham.honours.platform.util;
 
 public interface Constants {
-    String DESTINATION = "github-events";
+    String CLOSED_EVENT = "closed";
+    String OPENED_EVENT = "opened";
     String SELECTOR_NAME = "action";
 
     String PULL_REQUEST = "pull-request";

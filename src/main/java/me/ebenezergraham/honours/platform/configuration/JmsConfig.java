@@ -35,7 +35,7 @@ public class JmsConfig {
 
     @Bean
     public Queue queue(){
-        return new ActiveMQQueue("github-events");
+        return new ActiveMQQueue(PULL_REQUEST);
     }
 
     @Bean(name = SERIALIZER)

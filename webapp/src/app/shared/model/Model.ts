@@ -30,8 +30,9 @@ export class RegisterRequest {
 }
 
 export class Reward {
+  issueId: string = null;
   value: string = null;
-  type: string = null;
+  type: string = "pts";
 
   constructor() {
   }

@@ -40,12 +40,8 @@ import static me.ebenezergraham.honours.platform.security.oauth2.HttpCookieOAuth
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private TokenProvider tokenProvider;
-
     private AppProperties appProperties;
-
     private HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
-
-    private String getAccessToken = "https://github.com/login/oauth/access_token";
 
     @Value("${spring.security.oauth2.client.registration.github.client-id}")
     private String clientId;

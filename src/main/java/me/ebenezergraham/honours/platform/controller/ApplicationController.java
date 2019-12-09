@@ -1,19 +1,24 @@
 package me.ebenezergraham.honours.platform.controller;
 
+import io.swagger.annotations.Example;
 import me.ebenezergraham.honours.platform.model.Issue;
 import me.ebenezergraham.honours.platform.model.Project;
 import me.ebenezergraham.honours.platform.model.Reward;
+import me.ebenezergraham.honours.platform.model.User;
 import me.ebenezergraham.honours.platform.payload.LoginRequest;
 import me.ebenezergraham.honours.platform.repository.ActivatedRepository;
 import me.ebenezergraham.honours.platform.repository.AllocatedIssueRepository;
 import me.ebenezergraham.honours.platform.repository.RewardRepository;
 import me.ebenezergraham.honours.platform.security.CustomUserDetailsService;
+import me.ebenezergraham.honours.platform.security.UserPrincipal;
 import me.ebenezergraham.honours.platform.services.EmailService;
 import me.ebenezergraham.honours.platform.services.FileService;
+import me.ebenezergraham.honours.platform.services.IncentiveService;
 import me.ebenezergraham.honours.platform.services.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.annotation.RegisteredOAuth2AuthorizedClient;
@@ -37,17 +42,17 @@ import java.util.Optional;
 @RequestMapping("/api/v1")
 public class ApplicationController {
 
-  private final EmailService emailService;
-  private final CustomUserDetailsService userService;
-  private final ReportService reportService;
   private final RewardRepository rewardRepository;
   private final AllocatedIssueRepository allocatedIssueRepository;
   private final ActivatedRepository activatedRepository;
+  private final IncentiveService incentiveService;
 
-  public ApplicationController(ActivatedRepository activatedRepository, RewardRepository rewardRepository, AllocatedIssueRepository allocatedIssueRepository, EmailService emailService, CustomUserDetailsService userService, ReportService reportService) {
-    this.emailService = emailService;
-    this.userService = userService;
-    this.reportService = reportService;
+  public ApplicationController(ActivatedRepository activatedRepository,
+                               RewardRepository rewardRepository,
+                               AllocatedIssueRepository allocatedIssueRepository,
+                               IncentiveService incentiveService,
+                               CustomUserDetailsService userService) {
+    this.incentiveService = incentiveService;
     this.rewardRepository = rewardRepository;
     this.allocatedIssueRepository = allocatedIssueRepository;
     this.activatedRepository = activatedRepository;
@@ -55,11 +60,11 @@ public class ApplicationController {
   }
 
   @PostMapping("/issue")
-  public ResponseEntity<?> assignIssue(@Valid @RequestBody String url) {
-    List<String> issue1 = Arrays.asList(url.split("/"));
+  public ResponseEntity<?> assignIssue(@Valid @RequestBody String url, Authentication authentication) {
+
     Issue issue = new Issue();
     issue.setIssue(url);
-    issue.setContributor("ebenezergraham");
+    issue.setContributor(((UserPrincipal) authentication.getPrincipal()).getUsername());
     Issue res = allocatedIssueRepository.save(issue);
     return ResponseEntity.ok(res);
   }
@@ -78,11 +83,11 @@ public class ApplicationController {
     return ResponseEntity.of(Optional.of(activatedRepository.findAll()));
   }
 
-  @PostMapping("/reward")
-  public ResponseEntity<?> saveReward(@Valid @RequestBody Reward reward) {
-    Reward res = rewardRepository.save(reward);
-    return ResponseEntity.ok(res);
+  @PostMapping("issue/incentive")
+  public ResponseEntity<?> assignIncentive(@Valid @RequestBody Reward reward) {
+    if (incentiveService.storeIncentive(reward) != null) {
+      return ResponseEntity.ok().build();
+    }
+    return ResponseEntity.noContent().build();
   }
-
-
 }

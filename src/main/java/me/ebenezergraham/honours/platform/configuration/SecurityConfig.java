@@ -88,8 +88,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-    http.cors().disable()
-
+    http.cors().and()
         .sessionManagement()
         .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
         .and()
@@ -110,8 +109,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers("/swagger-ui.html**").permitAll()
         .antMatchers("/h2-console**").permitAll()
         .antMatchers("/auth/**", "/oauth2/**").permitAll()
-        .antMatchers("/api/v1/**")
-        .permitAll()
         .anyRequest()
         .authenticated()
         .and()

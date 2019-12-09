@@ -11,16 +11,23 @@ export class ProfileComponent implements OnInit {
 
   user = new Profile();
   issues = [];
+  total_points;
   constructor(private http:ApiService) { }
 
   ngOnInit() {
     this.http.getAuthenticatedUserIssues().subscribe((data) => {
       this.issues = data;
+      sessionStorage.setItem("username",data.login);
     });
 
     this.http.getUser().subscribe((data) => {
       this.user = data;
+      this.http.getUserProfile(this.user.email).subscribe((data) => {
+        this.total_points = data;
+      });
     });
+
+
   }
 
 }

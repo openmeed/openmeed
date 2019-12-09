@@ -27,12 +27,8 @@ export class DashboardComponent implements OnInit {
 
       this.repositories.forEach(entry => {
         this.http.getIssues(entry).subscribe((data) => {
-          if (data.length> 0) {
-            if (this.issues !== undefined) {
-              //this.issues.push(data);
-            } else {
-              this.issues = data;
-            }
+          if (data.length > 0) {
+            this.issues = data;
           }
         });
       })
@@ -42,15 +38,19 @@ export class DashboardComponent implements OnInit {
 
   workOnIssue(issue) {
     this.http.setUserIssue(issue.html_url).subscribe(res => {
-
     })
   }
 
-  allocatePoint(value) {
-    alert(value);
-    document.getElementById(value.target.id).innerText = "10";
+  allocateIncentiveToIssue(event) {
     var reward = new Reward();
-    reward.value = value.target.value;
+    reward.value = event.target.value;
+    reward.issueId = event.target.dataset.url;
+    reward.type = "pts";
+
+    this.http.assignReward(reward).subscribe(result => {
+        document.getElementById(event.target.id.concat("-reward")).innerText = reward.value.concat(" pts");
+      }
+    )
   }
 
 }

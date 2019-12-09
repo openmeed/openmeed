@@ -9,7 +9,7 @@
       <h3>{{issue.title}}</h3>
     </div>
     <div class="row">
-      <p class="px-3">Reward: 10pts</p>
+      Reward: <p class="px-3" id="{{issue.id}}-reward">No Incentive</p>
     </div>
     <div class="row">
       <div class="col">
@@ -19,10 +19,11 @@
       <div class="col">
       <form>
         <div class="form-group">
-          <label for="reward">Enter Reward</label>
-          <input id="{{issue.id}}" (change)="allocatePoint($event)" type="email" class="form-control" id="reward"
+          <input id="{{issue.id}}" [attr.data-url]=issue.html_url (change)="allocateIncentiveToIssue($event)" type="text" class="form-control"
                  aria-describedby="Enter Reward" placeholder="Enter reward">
-          <small id="emailHelp" class="form-text text-muted">Press enter to submit</small>
+          <label for="{{issue.id}}">Enter Reward</label>
+
+          <small id="help" class="form-text text-muted">Press enter to submit</small>
         </div>
       </form>
       </div>
