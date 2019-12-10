@@ -20,7 +20,6 @@ const httpOptions = {
 export class ApiService {
   readonly api = 'http://localhost:8080/api/v1';
   readonly base = `${this.api}`;
-  readonly v3 = 'v3'
   readonly githubbase = `https://api.github.com`;
 
   readonly API_BASE_URL = 'http://localhost:8080';
@@ -121,15 +120,6 @@ export class ApiService {
     );
   }
 
-
-  register(data: RegisterRequest): Observable<any> {
-    const endpoint = `${this.base}/auth/register`;
-    return this.http.post<any>(endpoint, data).pipe(
-      tap(x => console.log(`posted registration data`)),
-      catchError(this.handleError('Register', []))
-    );
-  }
-
   setUserIssue(repositoryId): Observable<any> {
     const endpoint = `${this.base}/issue`;
     return this.http.post<any>(endpoint, repositoryId, ApiService.backendHeaderWithCredentials()).pipe(
@@ -143,14 +133,6 @@ export class ApiService {
       return this.http.post<any>(endpoint, reward, ApiService.backendHeaderWithCredentials()).pipe(
       tap(x => console.log(`posted issue incentive`)),
       catchError(this.handleError('PostIncentive', []))
-    );
-  }
-
-  login(body: LoginRequest): Observable<any> {
-    const endpoint = `${this.base}/auth/login`;
-    return this.http.post<any>(endpoint, body).pipe(
-      tap(x => console.log(`posted login data`)),
-      catchError(this.handleError('login', []))
     );
   }
 

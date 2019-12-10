@@ -15,6 +15,7 @@ import {CommonModule} from "@angular/common";
 import {HttpClientModule} from "@angular/common/http";
 import {RedirectComponent} from './pages/redirect/redirect.component';
 import { BoardComponent } from './pages/board/board.component';
+import {FooterComponent} from "./shared/footer/footer.component";
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { BoardComponent } from './pages/board/board.component';
     NavbarComponent,
     RedirectComponent,
     BoardComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,
