@@ -1,5 +1,6 @@
 package me.ebenezergraham.honours.platform.services;
 
+import me.ebenezergraham.honours.platform.model.Issue;
 import me.ebenezergraham.honours.platform.model.Payload;
 import me.ebenezergraham.honours.platform.model.Reward;
 import me.ebenezergraham.honours.platform.model.User;
@@ -43,7 +44,7 @@ public class RewardEngine {
    * If a reward is present for the specific pull request's issue,
    * Reward the user who submitted the pull request
    */
-  public void processClosedIssue(Payload payload) {
+  public void processClosedPullRequest(Payload payload) {
     if (payload.getPull_request().isMerged()) {
       Optional<Reward> result = rewardRepository.findRewardByIssueId(payload.getPull_request().getIssue_url());
       result.ifPresent(reward -> {
@@ -51,6 +52,25 @@ public class RewardEngine {
           Optional<User> user = userRepository.findByUsername(payload.getSender().getLogin());
           user.get().setPoints(Integer.parseInt(result.get().getValue()));
           userRepository.save(user.get());
+          Map<String, String> notificationDetails = new HashMap<>();
+          notificationDetails.put("EMAIL", user.get().getEmail());
+          notificationDetails.put("PR_TITLE", payload.getPull_request().getTitle());
+          notificationDetails.put("ISSUE_URL", payload.getPull_request().getIssue_url());
+          notificationDetails.put("NAME", user.get().getName());
+          notifyContributor(notificationDetails);
+        }
+      });
+
+      rewardRepository.delete(result.get());
+    }
+  }
+
+  public void processOpenedPullRequest(Payload payload) {
+    if (!payload.getPull_request().isMerged()) {
+      Optional<Issue> result = allocatedIssueRepository.findIssueByIssue(payload.getPull_request().getIssue_url());
+      result.ifPresent(issue -> {
+        if (issue.getContributor().equalsIgnoreCase(payload.getPull_request().getIssue_url())) {
+          Optional<User> user = userRepository.findByUsername(payload.getSender().getLogin());
           Map<String, String> notificationDetails = new HashMap<>();
           notificationDetails.put("EMAIL", user.get().getEmail());
           notificationDetails.put("PR_TITLE", payload.getPull_request().getTitle());
@@ -68,6 +88,6 @@ public class RewardEngine {
         details.get("PR_TITLE"),
         "Congratulations " + details.get("NAME") +
             ",\n\nYou have been award the prize for issue: " + details.get("ISSUE_URL")
-            + "Regards,\nOpenMeed");
+            + "\n\nRegards,\nOpenMeed");
   }
 }

@@ -23,7 +23,7 @@ public class TokenProvider {
         this.appProperties = appProperties;
     }
 
-    public String createToken(Authentication authentication) {
+    public String createJwtToken(Authentication authentication, Object [] roles) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
 
         Date now = new Date();
@@ -33,6 +33,7 @@ public class TokenProvider {
                 .setSubject(Long.toString(userPrincipal.getId()))
                 .setIssuedAt(new Date())
                 .setExpiration(expiryDate)
+                .claim("roles", roles)
                 .signWith(SignatureAlgorithm.HS512, appProperties.getAuth().getTokenSecret())
                 .compact();
     }

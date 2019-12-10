@@ -1,33 +1,27 @@
 package me.ebenezergraham.honours.platform;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import me.ebenezergraham.honours.platform.model.*;
 import me.ebenezergraham.honours.platform.repository.AllocatedIssueRepository;
 import me.ebenezergraham.honours.platform.repository.RewardRepository;
 import me.ebenezergraham.honours.platform.repository.UserRepository;
+import me.ebenezergraham.honours.platform.services.IncentiveService;
 import me.ebenezergraham.honours.platform.services.RewardEngine;
 import net.minidev.json.JSONObject;
-import org.apache.tomcat.util.net.SSLContext;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.core.io.Resource;
 import org.springframework.http.*;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
 
-import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -39,12 +33,11 @@ public class PlatformApplicationTests {
 	AllocatedIssueRepository allocatedIssueRepository;
 	@Autowired
 	UserRepository userRepository;
+	@Autowired
+	IncentiveService incentiveService;
 
 	@Autowired
 	RewardEngine rewardEngine;
-
-	private final ObjectMapper objectMapper = new ObjectMapper();
-
 
 	@BeforeClass
 	public static void setUp() {
@@ -59,16 +52,18 @@ public class PlatformApplicationTests {
 	@After
 	public void tearDown() {
 		rewardRepository.deleteById(rewardRepository.findRewardByIssueId(testIssue).get().getId());
-		userRepository.deleteById(userRepository.findByUsername(testUser).get().getId());
+		Optional<User> user = userRepository.findByUsername("ebenezergraham");
+		userRepository.deleteAll();
+		userRepository.save(user.get());
 		allocatedIssueRepository.deleteById(allocatedIssueRepository.findIssueByIssue(testIssue).get().getId());
 	}
 
 	@Test
-	public void shouldIncentiveContributor() {
+	public void shouldRewardContributor() {
 		User sampleOAuth2User = new User();
 		sampleOAuth2User.setName("Hermes Ananse");
 		sampleOAuth2User.setEmail("hermes@openmeed.com");
-		sampleOAuth2User.setUsername("hermes");
+		sampleOAuth2User.setUsername(testUser);
 		sampleOAuth2User.setProvider(AuthProvider.github);
 
 		userRepository.save(sampleOAuth2User);
@@ -106,8 +101,84 @@ public class PlatformApplicationTests {
 		HttpEntity<String> request = new HttpEntity<String>(payloadJsonObject.toString(), headers);
 		ResponseEntity<String> response = restTemplate.postForEntity(githubEventEndpoint, request,String.class);
 
-		Optional<User> user = userRepository.findByUsername("hermes");
+		Optional<User> user = userRepository.findByUsername(testUser);
 		assertEquals(response.getStatusCode(), HttpStatus.OK);
+		assertEquals(user.get().getPoints(), rewardValue);
+
+		// The incentive should exist after it has been transferred to the contributor
+		Optional<Reward> redeemReward = rewardRepository.findRewardByIssueId(issueResult.getIssue_url());
+		System.out.println(redeemReward.get().getValue());
+		assertNull(redeemReward.get());
+
+	}
+
+	@Test
+	public void shouldNotRewardRejectedContribution() {
+		User sampleOAuth2User = new User();
+		sampleOAuth2User.setName("Nana Ananse");
+		sampleOAuth2User.setEmail("ananse@openmeed.com");
+		sampleOAuth2User.setUsername("ananse");
+		sampleOAuth2User.setProvider(AuthProvider.github);
+
+		userRepository.save(sampleOAuth2User);
+		String rewardValue = "1000";
+		// Allocate incentive to issue
+		Reward reward = new Reward();
+		reward.setIssueId(testIssue);
+		reward.setValue(rewardValue);
+		reward.setType("pts");
+		Reward res = rewardRepository.save(reward);
+		assertNotNull(res);
+		assertEquals(res.getValue(), rewardValue);
+
+		//Simulate user selecting issue
+		Issue issue = new Issue();
+		issue.setIssue(testIssue);
+		issue.setContributor(testUser);
+		Issue issueResult = allocatedIssueRepository.save(issue);
+		assertNotNull(issueResult);
+
+		RestTemplate restTemplate = new RestTemplate();
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		JSONObject payloadJsonObject = new JSONObject();
+		JSONObject prJsonObject = new JSONObject();
+		prJsonObject.put("merged",false); // Meaning solution wasn't accepted into the codebase
+		prJsonObject.put("issue_url",testIssue);
+		JSONObject senderJsonObject = new JSONObject();
+		senderJsonObject.put("login","ananse");
+		payloadJsonObject.put("pull_request",prJsonObject);
+		payloadJsonObject.put("sender",senderJsonObject);
+		payloadJsonObject.put("action","closed");
+
+		HttpEntity<String> request = new HttpEntity<String>(payloadJsonObject.toString(), headers);
+		ResponseEntity<String> response = restTemplate.postForEntity(githubEventEndpoint, request,String.class);
+
+		Optional<User> user = userRepository.findByUsername("ananse");
+		assertEquals(response.getStatusCode(), HttpStatus.OK);
+		assertEquals(user.get().getPoints(), 0);
+
+	}
+
+	@Test
+	public void verifyIncentiveAccuracy() {
+		String rewardValue = "1000";
+
+		Issue issue = new Issue();
+		issue.setIssue(testIssue);
+		Issue issueResult = allocatedIssueRepository.save(issue);
+
+		// Assign incentive to issue
+		Reward reward = new Reward();
+		reward.setIssueId(issueResult.getIssue_url());
+		reward.setValue(rewardValue);
+		reward.setType("pts");
+		incentiveService.storeIncentive(reward);
+
+		Optional<Reward> result = rewardRepository.findRewardByIssueId(issueResult.getIssue_url());
+		assertNotNull(result);
+		assertEquals(result.get().getValue(),rewardValue);
 	}
 
 }

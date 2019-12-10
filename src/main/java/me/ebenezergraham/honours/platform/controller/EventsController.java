@@ -9,25 +9,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.web.bind.annotation.*;
 
-import javax.jms.Queue;
-
-import static me.ebenezergraham.honours.platform.util.Constants.CLOSED_EVENT;
-import static me.ebenezergraham.honours.platform.util.Constants.OPENED_EVENT;
-import static me.ebenezergraham.honours.platform.util.Constants.PULL_REQUEST;
+import static me.ebenezergraham.honours.platform.util.Constants.*;
 
 @RestController
 @RequestMapping("/api/v1/")
 public class EventsController {
 
-  private Queue queue;
   private JmsTemplate jmsTemplate;
   private RewardEngine rewardEngine;
 
   public EventsController(final RewardEngine rewardEngine,
-                          final Queue queue,
                           final JmsTemplate jmsTemplate) {
     this.rewardEngine = rewardEngine;
-    this.queue = queue;
     this.jmsTemplate = jmsTemplate;
   }
 
@@ -38,12 +31,11 @@ public class EventsController {
     switch (payload.getAction()) {
       case OPENED_EVENT:
         logger.info("Sending Opened Message", payload.getPull_request().toString());
-        jmsTemplate.convertAndSend(PULL_REQUEST, payload);
+        jmsTemplate.convertAndSend(OPENED_PULL_REQUEST, payload);
         break;
       case CLOSED_EVENT:
         logger.info("Sending Closed Message", payload.getPull_request().toString());
-        jmsTemplate.convertAndSend(PULL_REQUEST, payload);
-        rewardEngine.processClosedIssue(payload);
+        jmsTemplate.convertAndSend(CLOSED_PULL_REQUEST, payload);
         break;
       default:
         return new ResponseEntity(HttpStatus.NOT_MODIFIED);
