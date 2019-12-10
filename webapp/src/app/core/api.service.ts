@@ -3,9 +3,6 @@ import {Observable, of, throwError} from 'rxjs';
 import {HttpClient, HttpErrorResponse, HttpHeaders, HttpRequest} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {catchError, retry, tap} from 'rxjs/operators';
-import {Team} from '../shared/model/Team';
-import {LoginRequest, RegisterRequest, Model} from '../shared/model/Model';
-import {Router} from '@angular/router';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -18,17 +15,10 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class ApiService {
-  readonly api = 'http://localhost:8080/api/v1';
+
+  readonly api = `${environment.api}/api/v1`;
   readonly base = `${this.api}`;
   readonly githubbase = `https://api.github.com`;
-
-  readonly API_BASE_URL = 'http://localhost:8080';
-  readonly ACCESS_TOKEN = 'accessToken';
-
-  readonly OAUTH2_REDIRECT_URI = 'http://localhost:4200/oauth2/redirect';
-
-  readonly GOOGLE_AUTH_URL = this.API_BASE_URL + '/oauth2/authorize/google?redirect_uri=' + this.OAUTH2_REDIRECT_URI;
-  readonly GITHUB_AUTH_URL = this.API_BASE_URL + '/oauth2/authorize/github?redirect_uri=' + this.OAUTH2_REDIRECT_URI;
 
   constructor(private http: HttpClient) {
   }
@@ -78,11 +68,11 @@ export class ApiService {
   }
 
   getRepositories(): Observable<any[]> {
-    var repo = [];
+    /*var repo = [];
     repo.push("anoited007/personalized-tab");
-    return of(repo);
+    return of(repo);*/
     const endpoint = `${this.base}/projects`;
-    return this.http.get<any[]>(endpoint).pipe(
+    return this.http.get<any[]>(endpoint, ApiService.backendHeaderWithCredentials()).pipe(
       tap(x => console.log(`fetched repositories data`)),
       catchError(this.handleError('ActivatedProjects', []))
     );
@@ -92,6 +82,13 @@ export class ApiService {
     const endpoint = `${this.githubbase}/issues`;
     return this.http.get(endpoint,ApiService.githubHeaderWithCredentials()).pipe(
       tap(x => console.log(`fetched user assigned issues data`)),
+      catchError(this.handleError('Issues', []))
+    );
+  }
+  getIssuesIncentives(): Observable<any[]> {
+    const endpoint = `${this.base}/issues`;
+    return this.http.get<any[]>(endpoint,ApiService.backendHeaderWithCredentials()).pipe(
+      tap(x => console.log(`fetched issues incentive data`)),
       catchError(this.handleError('Issues', []))
     );
   }
@@ -113,7 +110,7 @@ export class ApiService {
   }
 
   getUserProfile(email): Observable<any> {
-    const endpoint = `${this.base}/user/points`;
+    const endpoint = `${this.base}/user`;
     return this.http.get(endpoint,ApiService.backendHeaderWithCredentials()).pipe(
       tap(x => console.log(`fetched user profile data`)),
       catchError(this.handleError('Issues', []))
@@ -128,6 +125,14 @@ export class ApiService {
     );
   }
 
+  storeActivatedRepository(activatedRepositories): Observable<any> {
+    const endpoint = `${this.base}/projects`;
+    return this.http.post<any>(endpoint, activatedRepositories, ApiService.backendHeaderWithCredentials()).pipe(
+      tap(x => console.log(`posted set issue for user`)),
+      catchError(this.handleError('SetIssue', []))
+    );
+  }
+
   assignReward(reward): Observable<any> {
     const endpoint = `${this.base}/issue/incentive`;
       return this.http.post<any>(endpoint, reward, ApiService.backendHeaderWithCredentials()).pipe(
@@ -136,19 +141,9 @@ export class ApiService {
     );
   }
 
-  loginWithOauth(): Observable<any> {
-    return this.http.post<any>(this.GITHUB_AUTH_URL,{}).pipe(
-      tap(x => console.log(`posted login data`)),
-      catchError(this.handleError('login', []))
-    );
-  }
-
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.log(`${operation} failed: ${error.message}`);
-      if (operation === '2FA') {
-        alert('Wrong 2FA');
-      }
       return of(result);
     };
   }

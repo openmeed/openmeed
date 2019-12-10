@@ -21,6 +21,8 @@ public class PullRequest implements Serializable {
     String merge_commit_sha;
     String assignee;
     String[] assignees;
+    String[] requested_reviewers;
+    String[] requested_teams;
     String [] labels;
     boolean merged;
     GithubRepository repo;
@@ -184,5 +186,21 @@ public class PullRequest implements Serializable {
 
     public void setMerged(boolean merged) {
         this.merged = merged;
+    }
+
+    public String[] getRequested_reviewers() {
+        return requested_reviewers;
+    }
+
+    public void setRequested_reviewers(String[] requested_reviewers) {
+        this.requested_reviewers = requested_reviewers;
+    }
+
+    public String[] getRequested_teams() {
+        return requested_teams;
+    }
+
+    public void setRequested_teams(String[] requested_teams) {
+        this.requested_teams = requested_teams;
     }
 }

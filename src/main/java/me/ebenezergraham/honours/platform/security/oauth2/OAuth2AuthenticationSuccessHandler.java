@@ -97,6 +97,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 .queryParam("token", token)
                 .queryParam("access_token", accessToken)
                 .queryParam("roles", roles)
+                .queryParam("username", ((UserPrincipal) authentication.getPrincipal()).getUsername())
                 .build().toUriString();
     }
 

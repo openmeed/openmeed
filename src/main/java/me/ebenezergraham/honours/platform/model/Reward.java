@@ -1,8 +1,10 @@
 package me.ebenezergraham.honours.platform.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import me.ebenezergraham.honours.platform.model.audit.DateAudit;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * @author Ebenezer Graham
@@ -20,12 +22,15 @@ public class Reward extends DateAudit {
   private Long id;
 
   @Column(nullable = false)
+  @JoinColumn(name = "issue_url")
   private String issueId;
 
-  @Column(nullable = false)
   private String type;
-
+  @Column(nullable = false)
   private String value;
+
+  @ElementCollection
+  private List<String> authorizer;
 
   public Reward() {
 
@@ -63,6 +68,13 @@ public class Reward extends DateAudit {
     this.value = value;
   }
 
+  public List<String> getAuthorizer() {
+    return authorizer;
+  }
+
+  public void setAuthorizer(List<String> authorizer) {
+    this.authorizer = authorizer;
+  }
 }
 
 

@@ -15,18 +15,18 @@
       </div>
     </div>
     <div class="col-7">
-      <div *ngFor="let issue of issues" class="card  secondary-colour m-4">
+      <div *ngFor="let issueEntity of issues" class="card  secondary-colour m-4">
         <div class="row">
-            <h2>{{issue.title}}</h2>
-            <a target="_blank" href="{{issue.html_url}}">View Issue</a>
+            <h2>{{issueEntity.title}}</h2>
+            <a target="_blank" href="{{issueEntity.html_url}}">View Issue</a>
         </div>
       </div>
     </div>
     <!--<div class="col-7">
-      <div *ngFor="let issue of issues" class="card  secondary-colour m-4">
+      <div *ngFor="let issueEntity of issues" class="card  secondary-colour m-4">
         <div class="row">
-            <h2>{{issue.title}}</h2>
-            <a target="_blank" href="{{issue.html_url}}">View Issue</a>
+            <h2>{{issueEntity.title}}</h2>
+            <a target="_blank" href="{{issueEntity.html_url}}">View IssueEntity</a>
         </div>
       </div>
     </div>-->

@@ -55,7 +55,7 @@ public class PlatformApplicationTests {
 		Optional<User> user = userRepository.findByUsername("ebenezergraham");
 		userRepository.deleteAll();
 		userRepository.save(user.get());
-		allocatedIssueRepository.deleteById(allocatedIssueRepository.findIssueByIssue(testIssue).get().getId());
+		allocatedIssueRepository.delete(allocatedIssueRepository.findIssueByUrl(testIssue).get());
 	}
 
 	@Test
@@ -68,7 +68,7 @@ public class PlatformApplicationTests {
 
 		userRepository.save(sampleOAuth2User);
 		String rewardValue = "1000";
-		// Allocate incentive to issue
+		// Allocate incentive to issueEntity
 		Reward reward = new Reward();
 		reward.setIssueId(testIssue);
 		reward.setValue(rewardValue);
@@ -77,12 +77,12 @@ public class PlatformApplicationTests {
 		assertNotNull(res);
 		assertEquals(res.getValue(), rewardValue);
 
-		//Simulate user selecting issue
+		//Simulate user selecting issueEntity
 		Issue issue = new Issue();
-		issue.setIssue(testIssue);
-		issue.setContributor(testUser);
-		Issue issueResult = allocatedIssueRepository.save(issue);
-		assertNotNull(issueResult);
+    issue.setUrl(testIssue);
+    issue.getAssignee().setLogin(testUser);
+		Issue issueEntityResult = allocatedIssueRepository.save(issue);
+		assertNotNull(issueEntityResult);
 
 		RestTemplate restTemplate = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders();
@@ -106,7 +106,7 @@ public class PlatformApplicationTests {
 		assertEquals(user.get().getPoints(), rewardValue);
 
 		// The incentive should exist after it has been transferred to the contributor
-		Optional<Reward> redeemReward = rewardRepository.findRewardByIssueId(issueResult.getIssue_url());
+		Optional<Reward> redeemReward = rewardRepository.findRewardByIssueId(issueEntityResult.getUrl());
 		System.out.println(redeemReward.get().getValue());
 		assertNull(redeemReward.get());
 
@@ -122,7 +122,7 @@ public class PlatformApplicationTests {
 
 		userRepository.save(sampleOAuth2User);
 		String rewardValue = "1000";
-		// Allocate incentive to issue
+		// Allocate incentive to issueEntity
 		Reward reward = new Reward();
 		reward.setIssueId(testIssue);
 		reward.setValue(rewardValue);
@@ -131,12 +131,12 @@ public class PlatformApplicationTests {
 		assertNotNull(res);
 		assertEquals(res.getValue(), rewardValue);
 
-		//Simulate user selecting issue
-		Issue issue = new Issue();
-		issue.setIssue(testIssue);
-		issue.setContributor(testUser);
-		Issue issueResult = allocatedIssueRepository.save(issue);
-		assertNotNull(issueResult);
+    //Simulate user selecting issueEntity
+    Issue issue = new Issue();
+    issue.setUrl(testIssue);
+    issue.getAssignee().setLogin(testUser);
+    Issue issueEntityResult = allocatedIssueRepository.save(issue);
+		assertNotNull(issueEntityResult);
 
 		RestTemplate restTemplate = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders();
@@ -165,18 +165,20 @@ public class PlatformApplicationTests {
 	public void verifyIncentiveAccuracy() {
 		String rewardValue = "1000";
 
-		Issue issue = new Issue();
-		issue.setIssue(testIssue);
-		Issue issueResult = allocatedIssueRepository.save(issue);
+    //Simulate user selecting issueEntity
+    Issue issue = new Issue();
+    issue.setUrl(testIssue);
+    issue.getAssignee().setLogin(testUser);
+    Issue issueEntityResult = allocatedIssueRepository.save(issue);
 
-		// Assign incentive to issue
+		// Assign incentive to issueEntity
 		Reward reward = new Reward();
-		reward.setIssueId(issueResult.getIssue_url());
+		reward.setIssueId(issueEntityResult.getUrl());
 		reward.setValue(rewardValue);
 		reward.setType("pts");
 		incentiveService.storeIncentive(reward);
 
-		Optional<Reward> result = rewardRepository.findRewardByIssueId(issueResult.getIssue_url());
+		Optional<Reward> result = rewardRepository.findRewardByIssueId(issueEntityResult.getUrl());
 		assertNotNull(result);
 		assertEquals(result.get().getValue(),rewardValue);
 	}

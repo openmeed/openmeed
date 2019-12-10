@@ -1,10 +1,10 @@
 package me.ebenezergraham.honours.platform.repository;
 
 import me.ebenezergraham.honours.platform.model.Issue;
-import me.ebenezergraham.honours.platform.model.Reward;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -14,5 +14,7 @@ import java.util.Optional;
 @Repository
 public interface AllocatedIssueRepository extends JpaRepository<Issue, Long> {
 
-    Optional<Issue> findIssueByIssue(String issueUrl);
+    Optional<Issue> findIssueByUrl(String issueUrl);
+
+    Optional<List<Issue>> findIssuesByAssigneeName(String assignee);
 }

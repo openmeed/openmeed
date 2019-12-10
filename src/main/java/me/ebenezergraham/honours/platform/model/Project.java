@@ -9,7 +9,11 @@ import javax.persistence.*;
  Created on 9/30/19
  */
 @Entity
-@Table(name = "projects")
+@Table(name = "projects", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {
+        "full_name"
+    })
+})
 public class Project extends DateAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

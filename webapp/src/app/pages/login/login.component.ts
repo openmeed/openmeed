@@ -4,7 +4,7 @@ import {Router} from '@angular/router';
 import {AuthenticationService} from '../../core/authentication.service';
 import {ApiService} from '../../core/api.service';
 import {DomSanitizer} from '@angular/platform-browser';
-import {LoginRequest, Model} from '../../shared/model/Model';
+import {environment} from "../../../environments/environment";
 
 @Component({
   selector: 'openmeed-login',
@@ -13,25 +13,14 @@ import {LoginRequest, Model} from '../../shared/model/Model';
 })
 export class LoginComponent implements OnInit {
   errorMessage;
-  user = new LoginRequest();
   title;
   sso = true;
+  url = `${environment.api}/oauth2/authorize/github?redirect_uri=${environment.webapp}/oauth2/redirect`
 
-  constructor(private domSanitizer: DomSanitizer,
-              private authService: AuthenticationService,
-              private http: ApiService, private router: Router) {
+  constructor() {
   }
 
   ngOnInit() {
   }
 
-  login() {
-    if(this.sso){
-      this.http.loginWithOauth().subscribe((response) => {
-        console.log(response)
-      });
-      this.router.navigateByUrl("/dashboard")
-      return;
-    }
-  }
 }

@@ -7,6 +7,7 @@ public class Payload implements Serializable {
     String action;
     int number;
     PullRequest pull_request;
+    Issue issue;
     GithubRepository repository;
     GitHubUser sender;
 
@@ -48,6 +49,14 @@ public class Payload implements Serializable {
 
     public void setSender(GitHubUser sender) {
         this.sender = sender;
+    }
+
+    public Issue getIssue() {
+        return issue;
+    }
+
+    public void setIssue(Issue issue) {
+        this.issue = issue;
     }
 
     @Override

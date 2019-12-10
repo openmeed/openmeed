@@ -32,16 +32,10 @@ export class RegisterRequest {
 export class Reward {
   issueId: string = null;
   value: string = null;
+  reviewer: string = null;
   type: string = "pts";
 
   constructor() {
   }
 }
 
-export class TwoFactor {
-  code: string = null;
-  username: string = null;
-
-  constructor() {
-  }
-}

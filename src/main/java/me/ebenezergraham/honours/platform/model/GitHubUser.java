@@ -9,6 +9,9 @@ public class GitHubUser implements Serializable {
     String site_admin;
     String url;
 
+    public GitHubUser() {
+    }
+
     public int getId() {
         return id;
     }

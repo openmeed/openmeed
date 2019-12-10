@@ -29,6 +29,10 @@ public class EventsController {
   @PostMapping("github/events")
   public ResponseEntity<String> publish(@RequestBody final Payload payload) {
     switch (payload.getAction()) {
+      case ASSIGNED_EVENT:
+        logger.info("Sending Assigned Message", payload.getIssue().toString());
+        jmsTemplate.convertAndSend(ASSIGNED_EVENT, payload);
+        break;
       case OPENED_EVENT:
         logger.info("Sending Opened Message", payload.getPull_request().toString());
         jmsTemplate.convertAndSend(OPENED_PULL_REQUEST, payload);

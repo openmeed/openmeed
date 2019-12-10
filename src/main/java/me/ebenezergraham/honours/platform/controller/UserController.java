@@ -1,12 +1,10 @@
 package me.ebenezergraham.honours.platform.controller;
 
-import me.ebenezergraham.honours.platform.model.Role;
-import me.ebenezergraham.honours.platform.model.RoleName;
-import me.ebenezergraham.honours.platform.model.TwoFactor;
-import me.ebenezergraham.honours.platform.model.User;
+import me.ebenezergraham.honours.platform.model.*;
 import me.ebenezergraham.honours.platform.payload.ApiResponse;
 import me.ebenezergraham.honours.platform.payload.LoginRequest;
 import me.ebenezergraham.honours.platform.payload.SignUpRequest;
+import me.ebenezergraham.honours.platform.repository.AllocatedIssueRepository;
 import me.ebenezergraham.honours.platform.repository.AuthenticationRepository;
 import me.ebenezergraham.honours.platform.repository.RewardRepository;
 import me.ebenezergraham.honours.platform.repository.UserRepository;
@@ -32,7 +30,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -49,13 +49,15 @@ public class UserController {
   private final PasswordEncoder passwordEncoder;
   private final EmailService emailService;
   private final AuthenticationRepository authenticationRepository;
+  private final AllocatedIssueRepository allocatedIssueRepository;
 
   public UserController(AuthenticationManager authenticationManager,
                         UserRepository userRepository,
                         RewardRepository roleRepository,
                         PasswordEncoder passwordEncoder,
                         EmailService emailService,
-                        AuthenticationRepository authenticationRepository
+                        AuthenticationRepository authenticationRepository,
+                        AllocatedIssueRepository allocatedIssueRepository
   ) {
     this.authenticationManager = authenticationManager;
     this.userRepository = userRepository;
@@ -63,6 +65,7 @@ public class UserController {
     this.passwordEncoder = passwordEncoder;
     this.emailService = emailService;
     this.authenticationRepository = authenticationRepository;
+    this.allocatedIssueRepository = allocatedIssueRepository;
   }
 
   @PostMapping("/code")
@@ -86,12 +89,18 @@ public class UserController {
     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
   }
 
-  @GetMapping("/user/points")
-  public ResponseEntity<Integer> fetchPoint(Authentication authentication) {
+  @GetMapping("/user")
+  public ResponseEntity<Map<String,Object>> fetchPoint(Authentication authentication) {
     Optional<User> user = userRepository.findByEmail(((UserPrincipal)authentication.getPrincipal()).getEmail());
 
     if (user.isPresent()) {
-      return ResponseEntity.ok(user.get().getPoints());
+      Optional<List<Issue>> issues = allocatedIssueRepository.findIssuesByAssigneeName(user.get().getUsername());
+      HashMap<String,Object> response = new HashMap<>();
+      response.put("points",user.get().getPoints());
+      if(issues.isPresent()){
+        response.put("issues",issues);
+      };
+      return ResponseEntity.ok(response);
     }
     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
   }

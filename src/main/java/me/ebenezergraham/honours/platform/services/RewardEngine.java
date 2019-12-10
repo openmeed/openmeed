@@ -1,5 +1,6 @@
 package me.ebenezergraham.honours.platform.services;
 
+import com.google.common.collect.Lists;
 import me.ebenezergraham.honours.platform.model.Issue;
 import me.ebenezergraham.honours.platform.model.Payload;
 import me.ebenezergraham.honours.platform.model.Reward;
@@ -9,11 +10,7 @@ import me.ebenezergraham.honours.platform.repository.RewardRepository;
 import me.ebenezergraham.honours.platform.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-
-import static org.apache.poi.hslf.record.RecordTypes.List;
+import java.util.*;
 
 /**
  * @author Ebenezer Graham
@@ -49,6 +46,19 @@ public class RewardEngine {
       Optional<Reward> result = rewardRepository.findRewardByIssueId(payload.getPull_request().getIssue_url());
       result.ifPresent(reward -> {
         if (reward.getIssueId().equalsIgnoreCase(payload.getPull_request().getIssue_url())) {
+
+          // Verify that the necessary authorities have reviewed submission
+          ArrayList<String> requestedReviewers = Lists.newArrayList(payload.getPull_request().getRequested_reviewers());
+          reward.getAuthorizer().forEach(authority -> {
+            if (!requestedReviewers.contains(authority)) return;
+          });
+
+          reward.getAuthorizer().contains(payload.getPull_request().getAssignee());
+
+          // Verify contributor was assigned the responsibility to resolve issue
+          Optional<Issue> issue = allocatedIssueRepository.findIssueByUrl(payload.getPull_request().getIssue_url());
+          if (!payload.getSender().getLogin().equals(issue.get().getAssigneeName())) return;
+
           Optional<User> user = userRepository.findByUsername(payload.getSender().getLogin());
           user.get().setPoints(Integer.parseInt(result.get().getValue()));
           userRepository.save(user.get());
@@ -67,9 +77,9 @@ public class RewardEngine {
 
   public void processOpenedPullRequest(Payload payload) {
     if (!payload.getPull_request().isMerged()) {
-      Optional<Issue> result = allocatedIssueRepository.findIssueByIssue(payload.getPull_request().getIssue_url());
+      Optional<Issue> result = allocatedIssueRepository.findIssueByUrl(payload.getPull_request().getIssue_url());
       result.ifPresent(issue -> {
-        if (issue.getContributor().equalsIgnoreCase(payload.getPull_request().getIssue_url())) {
+        if (issue.getUrl().equalsIgnoreCase(payload.getPull_request().getIssue_url())) {
           Optional<User> user = userRepository.findByUsername(payload.getSender().getLogin());
           Map<String, String> notificationDetails = new HashMap<>();
           notificationDetails.put("EMAIL", user.get().getEmail());

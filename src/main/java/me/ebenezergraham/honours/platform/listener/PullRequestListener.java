@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 
+import static me.ebenezergraham.honours.platform.util.Constants.ASSIGNED_EVENT;
 import static me.ebenezergraham.honours.platform.util.Constants.CLOSED_PULL_REQUEST;
 import static me.ebenezergraham.honours.platform.util.Constants.OPENED_PULL_REQUEST;
 
@@ -23,6 +24,11 @@ public class PullRequestListener {
     public void closedPrListener( Payload message){
         logger.info("Processing {} event from GitHub", message.getAction());
         rewardEngine.processClosedPullRequest(message);
+    }
+
+    @JmsListener(destination = ASSIGNED_EVENT)
+    public void assignedIssueListener( Payload message){
+        logger.info("Processing {} event from GitHub", message.getAction());
     }
 
     @JmsListener(destination = OPENED_PULL_REQUEST)
