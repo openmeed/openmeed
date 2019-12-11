@@ -13,6 +13,8 @@ export class RedirectComponent implements OnInit {
 
   ngOnInit() {
     alert("we are in");
+    this.router.navigateByUrl('/dashboard')
+
     const token = this.activatedRoutes.snapshot.queryParamMap.get("token");
     const access_token = this.activatedRoutes.snapshot.queryParamMap.get("access_token");
     const roles = this.activatedRoutes.snapshot.queryParamMap.get("roles");
@@ -25,7 +27,7 @@ export class RedirectComponent implements OnInit {
       localStorage.setItem('username', username);
       this.router.navigateByUrl('/dashboard')
     } else {
-      this.router.navigateByUrl('/login')
+      //this.router.navigateByUrl('/login')
     }
   }
 
