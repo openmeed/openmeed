@@ -12,6 +12,7 @@ export class RedirectComponent implements OnInit {
   }
 
   ngOnInit() {
+    alert("we are in");
     const token = this.activatedRoutes.snapshot.queryParamMap.get("token");
     const access_token = this.activatedRoutes.snapshot.queryParamMap.get("access_token");
     const roles = this.activatedRoutes.snapshot.queryParamMap.get("roles");
