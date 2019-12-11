@@ -12,7 +12,7 @@ import {AppComponent} from "./app.component";
 
 
 const routes: Routes = [
-  {path: '', component: DashboardComponent, canActivate: [AuthGuard]},
+  {path: '', component: RedirectComponent, canActivate: [AuthGuard]},
   {path: 'login', component: LoginComponent},
   {path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard]},
   {path: 'leaderboard', component: BoardComponent, canActivate: [AuthGuard]},
