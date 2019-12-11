@@ -1,5 +1,5 @@
-/oauth2/redirect  /                             302
-/*                https://openmeed.netlify.com
-/*                /index.html
+/oauth2/redirect  /index.html                   302
 /testa            /dashboard
 /*                /index.html                   200
+/*                https://openmeed.netlify.com
+
