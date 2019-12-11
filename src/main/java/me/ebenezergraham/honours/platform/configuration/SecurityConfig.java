@@ -54,12 +54,12 @@ import javax.net.ssl.SSLContext;
 )
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-
+/*
   @Value("${trust.store}")
   private Resource trustStore;
 
   @Value("${trust.store.password}")
-  private String trustStorePassword;
+  private String trustStorePassword;*/
 
   @Autowired
   private CustomUserDetailsService customUserDetailsService;
@@ -157,7 +157,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
   }
 
-  @Bean
+/*  @Bean
   RestTemplate restTemplate() throws Exception {
     SSLContext sslContext = new SSLContextBuilder()
         .loadTrustMaterial(trustStore.getURL(), trustStorePassword.toCharArray())
@@ -169,5 +169,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     HttpComponentsClientHttpRequestFactory factory =
         new HttpComponentsClientHttpRequestFactory(httpClient);
     return new RestTemplate(factory);
-  }
+  }*/
 }
