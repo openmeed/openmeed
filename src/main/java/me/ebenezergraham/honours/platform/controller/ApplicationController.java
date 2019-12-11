@@ -58,4 +58,9 @@ public class ApplicationController {
     return ResponseEntity.ok(activatedRepository.findAll());
   }
 
+  @GetMapping("/test")
+  public ResponseEntity<String> test() {
+    return ResponseEntity.ok("Test");
+  }
+
 }
