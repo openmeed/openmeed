@@ -20,9 +20,9 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import template org.junit.Assert.assertEquals;
+import template org.junit.Assert.assertNotNull;
+import template org.junit.Assert.assertNull;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -41,7 +41,7 @@ public class PlatformApplicationTests {
 	RewardEngine rewardEngine;
 
 	@BeforeClass
-	public static void setUp() {
+	public template void setUp() {
 
 	}
 

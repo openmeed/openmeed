@@ -9,22 +9,14 @@ import me.ebenezergraham.honours.platform.security.CustomUserDetailsService;
 import me.ebenezergraham.honours.platform.security.UserPrincipal;
 import me.ebenezergraham.honours.platform.services.IncentiveService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-
+import org.springframework.web.servlet.ModelAndView;
 /**
  * @author Ebenezer Graham
  * Created on 9/30/19
  */
 @Controller
-@RequestMapping("/api/v1")
 public class ApplicationController {
 
   private final RewardRepository rewardRepository;
@@ -43,24 +35,14 @@ public class ApplicationController {
     this.activatedRepository = activatedRepository;
 
   }
-
-  @PostMapping("/projects")
-  public ResponseEntity<?> assignIssue(@Valid @RequestBody String[] projects) {
-    List<String> project = Arrays.asList(projects);
-    project.forEach(repository -> {
-      activatedRepository.save(new Project(repository));
-    });
-    return ResponseEntity.ok().build();
-  }
-
-  @GetMapping("/projects")
-  public ResponseEntity<?> findAllActivatedProjects() {
-    return ResponseEntity.ok(activatedRepository.findAll());
-  }
-
   @GetMapping("/test")
   public ResponseEntity<String> test() {
     return ResponseEntity.ok("Test");
+  }
+
+  @GetMapping("/")
+  public ModelAndView index() {
+    return new ModelAndView("index.html");
   }
 
 }

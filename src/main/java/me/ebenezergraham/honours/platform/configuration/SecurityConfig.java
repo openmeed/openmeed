@@ -54,13 +54,6 @@ import javax.net.ssl.SSLContext;
 )
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-/*
-  @Value("${trust.store}")
-  private Resource trustStore;
-
-  @Value("${trust.store.password}")
-  private String trustStorePassword;*/
-
   @Autowired
   private CustomUserDetailsService customUserDetailsService;
 
@@ -120,9 +113,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .disable()
         .formLogin()
         .disable()
-        .requiresChannel()
-        .anyRequest().requiresInsecure()
-        .and()
         .httpBasic()
         .disable()
         .exceptionHandling()
@@ -156,18 +146,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     // Add our custom Token based authentication filter
     http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
   }
-
-/*  @Bean
-  RestTemplate restTemplate() throws Exception {
-    SSLContext sslContext = new SSLContextBuilder()
-        .loadTrustMaterial(trustStore.getURL(), trustStorePassword.toCharArray())
-        .build();
-    SSLConnectionSocketFactory socketFactory = new SSLConnectionSocketFactory(sslContext);
-    HttpClient httpClient = HttpClients.custom()
-        .setSSLSocketFactory(socketFactory)
-        .build();
-    HttpComponentsClientHttpRequestFactory factory =
-        new HttpComponentsClientHttpRequestFactory(httpClient);
-    return new RestTemplate(factory);
-  }*/
 }
