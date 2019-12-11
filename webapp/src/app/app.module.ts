@@ -12,10 +12,11 @@ import {NavbarComponent} from "./shared/navbar/navbar.component";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {ModalModule, TooltipModule} from "ngx-bootstrap";
 import {CommonModule} from "@angular/common";
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {RedirectComponent} from './pages/redirect/redirect.component';
 import { BoardComponent } from './pages/board/board.component';
 import {FooterComponent} from "./shared/footer/footer.component";
+import {Interceptor} from "./core/Interceptor";
 
 @NgModule({
   declarations: [
@@ -41,7 +42,7 @@ import {FooterComponent} from "./shared/footer/footer.component";
     AppRoutingModule,
     ModalModule.forRoot(),
   ],
-  providers: [],
+  providers: [{ provide: HTTP_INTERCEPTORS, useClass: Interceptor, multi: true }  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

@@ -10,6 +10,18 @@
 
 </head>
 <body>
+  <script>
+    alert(document.location.href);
+    (function() {
+      var url = new Url(document.location.href);
+      sessionStorage.setItem('github_access_token', url.searchParams.get('access_token'));
+      sessionStorage.setItem('access_token', url.searchParams.get('token'));
+      sessionStorage.setItem('roles', url.searchParams.get('roles'));
+      sessionStorage.setItem('username', url.searchParams.get('username'));
+      alert(document.location.href);
+    })();
+
+  </script>
   <openmeed-root></openmeed-root>
 </body>
 </html>
