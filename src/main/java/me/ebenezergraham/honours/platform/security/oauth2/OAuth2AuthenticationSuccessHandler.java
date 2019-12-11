@@ -86,9 +86,9 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         Optional<String> redirectUri = CookieUtils.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)
                 .map(Cookie::getValue);
 
-        if(redirectUri.isPresent() && !isAuthorizedRedirectUri(redirectUri.get())) {
+        /*if(redirectUri.isPresent() && !isAuthorizedRedirectUri(redirectUri.get())) {
             throw new BadRequestException("Sorry! Unauthorized Redirect URI");
-        }
+        }*/
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
 
         Object [] roles = ((UserPrincipal)authentication.getPrincipal()).getAuthorities().toArray();

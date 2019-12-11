@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  api: 'https://openmeed.centralus.cloudapp.azure.com:8443',
+  api: 'https://openmeed.herokuapp.com',
   webapp: 'http://openmeed.centralus.cloudapp.azure.com'
 };
