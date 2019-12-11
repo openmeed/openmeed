@@ -12,7 +12,7 @@ import {AppComponent} from "./app.component";
 
 
 const routes: Routes = [
-  {path: '', component: AppComponent},
+  {path: '', component: RedirectComponent},
   {path: 'login', component: LoginComponent},
   {path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard]},
   {path: 'leaderboard', component: BoardComponent, canActivate: [AuthGuard]},
@@ -20,7 +20,7 @@ const routes: Routes = [
   {path: 'profile', component: ProfileComponent, canActivate: [AuthGuard]},
   {path: 'unauthorized', component: NotFoundComponent},
   {path: 'oauth2/redirect', component: RedirectComponent},
-  {path: 'oauth2', component: RedirectComponent},
+  {path: 'index.html', component: RedirectComponent},
   {path: '**', component: NotFoundComponent}
 ];
 
