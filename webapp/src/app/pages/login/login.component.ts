@@ -15,7 +15,8 @@ export class LoginComponent implements OnInit {
   errorMessage;
   title;
   sso = true;
-  url = `${environment.api}/oauth2/authorize/github?redirect_uri=${environment.webapp}/oauth2/redirect`
+  // url = `${environment.api}/oauth2/authorize/github?redirect_uri=${environment.webapp}/oauth2/redirect`
+  url = `${environment.api}/oauth2/authorize/github`
 
   constructor() {
   }

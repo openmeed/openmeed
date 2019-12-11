@@ -23,8 +23,7 @@ export class RedirectComponent implements OnInit {
       sessionStorage.setItem('username', username);
       this.router.navigateByUrl('/dashboard')
     } else {
-      this.router.navigateByUrl('/')
-
+      this.router.navigateByUrl('/login')
     }
   }
 

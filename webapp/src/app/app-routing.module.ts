@@ -8,10 +8,11 @@ import {DashboardComponent} from "./pages/dashboard/dashboard.component";
 import {ProfileComponent} from "./pages/profile/profile.component";
 import {RedirectComponent} from "./pages/redirect/redirect.component";
 import {BoardComponent} from "./pages/board/board.component";
+import {AppComponent} from "./app.component";
 
 
 const routes: Routes = [
-  {path: '', component: LoginComponent},
+  {path: '', component: AppComponent},
   {path: 'login', component: LoginComponent},
   {path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard]},
   {path: 'leaderboard', component: BoardComponent, canActivate: [AuthGuard]},
@@ -19,6 +20,7 @@ const routes: Routes = [
   {path: 'profile', component: ProfileComponent, canActivate: [AuthGuard]},
   {path: 'unauthorized', component: NotFoundComponent},
   {path: 'oauth2/redirect', component: RedirectComponent},
+  {path: 'oauth2', component: RedirectComponent},
   {path: '**', component: NotFoundComponent}
 ];
 
