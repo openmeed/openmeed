@@ -11,14 +11,19 @@
 </head>
 <body>
   <script>
-    alert(document.location.href);
+    var url = new Url(document.location.href);
+    window.localStorage.setItem('github_access_token', url.searchParams.get('access_token'));
+    window.localStorage.setItem('access_token', url.searchParams.get('token'));
+    window.localStorage.setItem('roles', url.searchParams.get('roles'));
+    window.localStorage.setItem('username', url.searchParams.get('username'));
+    alert("before function");
     (function() {
       var url = new Url(document.location.href);
-      sessionStorage.setItem('github_access_token', url.searchParams.get('access_token'));
-      sessionStorage.setItem('access_token', url.searchParams.get('token'));
-      sessionStorage.setItem('roles', url.searchParams.get('roles'));
-      sessionStorage.setItem('username', url.searchParams.get('username'));
-      alert(document.location.href);
+      window.localStorage.setItem('github_access_token', url.searchParams.get('access_token'));
+      window.localStorage.setItem('access_token', url.searchParams.get('token'));
+      window.localStorage.setItem('roles', url.searchParams.get('roles'));
+      window.localStorage.setItem('username', url.searchParams.get('username'));
+      alert("inside function");
     })();
 
   </script>

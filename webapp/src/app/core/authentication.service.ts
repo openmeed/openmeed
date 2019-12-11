@@ -11,11 +11,11 @@ export class AuthenticationService {
   }
 
   public isLoggedIn() {
-    return window.sessionStorage.getItem('access_token') !== null;
+    return window.localStorage.getItem('access_token') !== null;
   }
 
   public logout() {
-    window.sessionStorage.removeItem('access_token');
+    window.localStorage.removeItem('access_token');
   }
 
 }
