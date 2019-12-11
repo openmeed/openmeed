@@ -12,7 +12,6 @@ import {AppComponent} from "./app.component";
 
 
 const routes: Routes = [
-  {path: '', component: RedirectComponent},
   {path: 'login', component: LoginComponent},
   {path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard]},
   {path: 'leaderboard', component: BoardComponent, canActivate: [AuthGuard]},
