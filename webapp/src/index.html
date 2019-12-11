@@ -13,11 +13,10 @@
     <script>
     var url = new URL(document.location.href);
     if(url.searchParams.get('access_token')!=null){
-      window.localStorage.setItem('github_access_token', url.searchParams.get('access_token'));
-      window.localStorage.setItem('access_token', url.searchParams.get('token'));
-      window.localStorage.setItem('roles', url.searchParams.get('roles'));
-      window.localStorage.setItem('username', url.searchParams.get('username'));
-      alert("before function");
+      window.sessionStorage.setItem('github_access_token', url.searchParams.get('access_token'));
+      window.sessionStorage.setItem('access_token', url.searchParams.get('token'));
+      window.sessionStorage.setItem('roles', url.searchParams.get('roles'));
+      window.sessionStorage.setItem('username', url.searchParams.get('username'));
     }
   </script>
   <openmeed-root></openmeed-root>

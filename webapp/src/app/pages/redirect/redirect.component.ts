@@ -21,10 +21,10 @@ export class RedirectComponent implements OnInit {
     const username = this.activatedRoutes.snapshot.queryParamMap.get("username");
     console.log(token,access_token,roles,username)
     if (access_token != null) {
-      localStorage.setItem('github_access_token', access_token);
-      localStorage.setItem('access_token', token);
-      localStorage.setItem('roles', roles);
-      localStorage.setItem('username', username);
+      window.sessionStorage.setItem('github_access_token', access_token);
+      window.sessionStorage.setItem('access_token', token);
+      window.sessionStorage.setItem('roles', roles);
+      window.sessionStorage.setItem('username', username);
       this.router.navigateByUrl('/dashboard')
     } else {
       //this.router.navigateByUrl('/login')

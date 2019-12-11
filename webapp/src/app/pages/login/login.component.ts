@@ -11,7 +11,7 @@ import {environment} from "../../../environments/environment";
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
   errorMessage;
   title;
   sso = true;
@@ -19,26 +19,6 @@ export class LoginComponent implements OnInit {
   //url = `${environment.api}/oauth2/authorize/github?redirect_uri=${environment.webapp}/index.html`
 
   constructor(private router: Router, private activatedRoutes: ActivatedRoute) {
-  }
-
-  ngOnInit() {
-    alert("we are in");
-    console.log(history.state);
-    console.log(history);
-    const token = this.activatedRoutes.snapshot.queryParamMap.get("token");
-    const access_token = this.activatedRoutes.snapshot.queryParamMap.get("access_token");
-    const roles = this.activatedRoutes.snapshot.queryParamMap.get("roles");
-    const username = this.activatedRoutes.snapshot.queryParamMap.get("username");
-    console.log(token,access_token,roles,username)
-    if (access_token != null) {
-      localStorage.setItem('github_access_token', access_token);
-      localStorage.setItem('access_token', token);
-      localStorage.setItem('roles', roles);
-      localStorage.setItem('username', username);
-      this.router.navigateByUrl('/dashboard')
-    } else {
-      this.router.navigateByUrl('/login')
-    }
   }
 
 }
