@@ -7,13 +7,19 @@ import me.ebenezergraham.honours.platform.security.oauth2.CustomOAuth2UserServic
 import me.ebenezergraham.honours.platform.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
 import me.ebenezergraham.honours.platform.security.oauth2.OAuth2AuthenticationFailureHandler;
 import me.ebenezergraham.honours.platform.security.oauth2.OAuth2AuthenticationSuccessHandler;
+import org.apache.http.client.HttpClient;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.TrustStrategy;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.ssl.SSLContextBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.jms.annotation.EnableJms;
@@ -27,14 +33,13 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.OAuth2ClientContext;
+import org.springframework.security.oauth2.client.OAuth2RestTemplate;
+import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.client.RestTemplate;
 
 import javax.net.ssl.SSLContext;
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.X509Certificate;
 
 /**
  * @author Ebenezer Graham
@@ -48,6 +53,13 @@ import java.security.cert.X509Certificate;
     prePostEnabled = true
 )
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+
+  @Value("${trust.store}")
+  private Resource trustStore;
+
+  @Value("${trust.store.password}")
+  private String trustStorePassword;
 
   @Autowired
   private CustomUserDetailsService customUserDetailsService;
@@ -146,25 +158,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   }
 
   @Bean
-  public RestTemplate restTemplate()
-      throws KeyStoreException, NoSuchAlgorithmException, KeyManagementException {
-    TrustStrategy acceptingTrustStrategy = (X509Certificate[] chain, String authType) -> true;
-
-    SSLContext sslContext = org.apache.http.ssl.SSLContexts.custom()
-        .loadTrustMaterial(null, acceptingTrustStrategy)
+  RestTemplate restTemplate() throws Exception {
+    SSLContext sslContext = new SSLContextBuilder()
+        .loadTrustMaterial(trustStore.getURL(), trustStorePassword.toCharArray())
         .build();
-
-    SSLConnectionSocketFactory csf = new SSLConnectionSocketFactory(sslContext);
-
-    CloseableHttpClient httpClient = HttpClients.custom()
-        .setSSLSocketFactory(csf)
+    SSLConnectionSocketFactory socketFactory = new SSLConnectionSocketFactory(sslContext);
+    HttpClient httpClient = HttpClients.custom()
+        .setSSLSocketFactory(socketFactory)
         .build();
-
-    HttpComponentsClientHttpRequestFactory requestFactory =
-        new HttpComponentsClientHttpRequestFactory();
-
-    requestFactory.setHttpClient(httpClient);
-    RestTemplate restTemplate = new RestTemplate(requestFactory);
-    return restTemplate;
+    HttpComponentsClientHttpRequestFactory factory =
+        new HttpComponentsClientHttpRequestFactory(httpClient);
+    return new RestTemplate(factory);
   }
 }

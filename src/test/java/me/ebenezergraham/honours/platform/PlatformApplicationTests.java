@@ -1,3 +1,4 @@
+/*
 package me.ebenezergraham.honours.platform;
 
 import me.ebenezergraham.honours.platform.model.*;
@@ -184,3 +185,4 @@ public class PlatformApplicationTests {
 	}
 
 }
+*/

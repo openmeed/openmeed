@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  api: 'http://openmeed.centralus.cloudapp.azure.com:8080',
+  api: 'https://openmeed.centralus.cloudapp.azure.com:8443',
   webapp: 'http://openmeed.centralus.cloudapp.azure.com'
 };
