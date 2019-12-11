@@ -24,6 +24,7 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     alert("we are in");
     console.log(history.state);
+    console.log(history);
     const token = this.activatedRoutes.snapshot.queryParamMap.get("token");
     const access_token = this.activatedRoutes.snapshot.queryParamMap.get("access_token");
     const roles = this.activatedRoutes.snapshot.queryParamMap.get("roles");
