@@ -9,6 +9,8 @@ import me.ebenezergraham.honours.platform.model.User;
 import me.ebenezergraham.honours.platform.repository.AllocatedIssueRepository;
 import me.ebenezergraham.honours.platform.repository.RewardRepository;
 import me.ebenezergraham.honours.platform.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +32,7 @@ public class RewardEngine implements IRewardEngine {
   private final UserRepository userRepository;
   private final JmsTemplate jmsTemplate;
   private Map<String, Boolean> validationCriteria;
-
+  private Logger logger = LoggerFactory.getLogger(RewardEngine.class.getName());
 
   public RewardEngine(UserRepository userRepository,
                       RewardRepository rewardRepository,
@@ -44,6 +46,7 @@ public class RewardEngine implements IRewardEngine {
     this.validationCriteria = new HashMap<>();
     this.validationCriteria.put("AUTHORITIES_MUST_BE_REVIEWERS", true);
     this.validationCriteria.put("CONTRIBUTOR_MUST_BE_ASSIGNEE", true);
+    this.validationCriteria.put("AUTHORITIES_CANNOT_BE_ASSIGNEE", false);
   }
 
   @Override
@@ -52,7 +55,11 @@ public class RewardEngine implements IRewardEngine {
       case CLOSED_EVENT:
         closed(payload);
         break;
+      case OPENED_EVENT:
+        opened(payload);
+        break;
       default:
+        logger.info("Option {} is not supported!", payload.getAction());
         break;
     }
   }
@@ -71,12 +78,19 @@ public class RewardEngine implements IRewardEngine {
         if (!requestedReviewers.contains(authority)) return false;
       }
     }
-    if (validationCriteria.get("CONTRIBUTOR_MUST_BE_ASSIGNEE"))
-      reward.getAuthorizer().contains(payload.getPull_request().getAssignee());
+    //Verify that contributor assigned the issue is the same entity that sent the solution
+    if (validationCriteria.get("CONTRIBUTOR_MUST_BE_ASSIGNEE")) {
+      // Verify contributor was assigned the responsibility to resolve issue
+      Optional<Issue> issue = allocatedIssueRepository.findIssueByUrl(payload.getPull_request().getIssue_url());
+      if (issue.isPresent()) {
+        if (!payload.getSender().getLogin().equals(issue.get().getAssigneeName())) return false;
+      }
+    }
+    //Verify that the maintainer who assigned the reward is not redeeming it.
+    if (validationCriteria.get("AUTHORITIES_CANNOT_BE_ASSIGNEE")) {
+      if (reward.getAuthorizer().contains(payload.getPull_request().getAssignee())) return false;
+    }
 
-    // Verify contributor was assigned the responsibility to resolve issue
-    //Optional<Issue> issue = allocatedIssueRepository.findIssueByUrl(payload.getPull_request().getIssue_url());
-    if (!payload.getSender().getLogin().equals(reward.getIssue().getAssigneeName())) return false;
     return true;
   }
 
@@ -93,22 +107,26 @@ public class RewardEngine implements IRewardEngine {
       Optional<Reward> result = rewardRepository.findRewardByIssueId(payload.getPull_request().getIssue_url());
       // If an incentive exists for it then proceed to validate
       result.ifPresent(reward -> {
-        //If the payload satisfies the criteria to transfer incentive
-          if (validate(payload, reward)) {
-            //Fetch the user who has to receive this
-            Optional<User> user = userRepository.findByUsername(payload.getSender().getLogin());
-            user.get().setPoints(Integer.parseInt(result.get().getValue()));
-            userRepository.save(user.get());
-            Map<String, String> notificationDetails = new HashMap<>();
-            notificationDetails.put("EMAIL", user.get().getEmail());
-            notificationDetails.put("PR_TITLE", payload.getPull_request().getTitle());
-            notificationDetails.put("ISSUE_URL", payload.getPull_request().getIssue_url());
-            notificationDetails.put("NAME", user.get().getName());
-            jmsTemplate.convertAndSend(SEND_EMAIL, notificationDetails);
-            rewardRepository.delete(result.get());
-          }
+        // If the payload satisfies the criteria to transfer incentive
+        if (validate(payload, reward)) {
+          // Fetch the user who has to receive this
+          Optional<User> user = userRepository.findByUsername(payload.getSender().getLogin());
+          user.get().setPoints(Integer.parseInt(result.get().getValue()));
+          userRepository.save(user.get());
+          Map<String, String> notificationDetails = new HashMap<>();
+          notificationDetails.put("EMAIL", user.get().getEmail());
+          notificationDetails.put("PR_TITLE", payload.getPull_request().getTitle());
+          notificationDetails.put("ISSUE_URL", payload.getPull_request().getIssue_url());
+          notificationDetails.put("REWARD", reward.getValue());
+          notificationDetails.put("NAME", user.get().getName());
+          jmsTemplate.convertAndSend(SEND_EMAIL, notificationDetails);
+          //rewardRepository.delete(result.get());
+        }
       });
     }
+  }
+
+  private void opened(Payload payload) {
   }
 
 }

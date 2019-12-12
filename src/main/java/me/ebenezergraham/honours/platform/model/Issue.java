@@ -132,7 +132,9 @@ public class Issue implements Serializable {
     }
 
     public void setAssigneeName(String assigneeName) {
-        this.assigneeName = assignee.getLogin();
+        this.assigneeName = assigneeName;
+        if(assignee !=null) this.assigneeName = assignee.getLogin();
+
     }
 
     public void setAssignee(GitHubUser assignee) {

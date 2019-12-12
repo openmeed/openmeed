@@ -24,7 +24,7 @@ public class Reward extends DateAudit {
 
   private String issueId;
 
-  @JoinColumn(name = "issue_url")
+  @Transient
   private Issue issue;
 
   private String type;
@@ -78,6 +78,7 @@ public class Reward extends DateAudit {
     this.authorizer = authorizer;
   }
 
+//  @JoinColumn(name = "issue_url")
   public Issue getIssue() {
     return issue;
   }
