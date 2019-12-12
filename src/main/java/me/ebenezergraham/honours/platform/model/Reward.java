@@ -2,6 +2,7 @@ package me.ebenezergraham.honours.platform.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import me.ebenezergraham.honours.platform.model.audit.DateAudit;
+import org.hamcrest.core.Is;
 
 import javax.persistence.*;
 import java.util.List;
@@ -21,9 +22,10 @@ public class Reward extends DateAudit {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(nullable = false)
-  @JoinColumn(name = "issue_url")
   private String issueId;
+
+  @JoinColumn(name = "issue_url")
+  private Issue issue;
 
   private String type;
   @Column(nullable = false)
@@ -74,6 +76,14 @@ public class Reward extends DateAudit {
 
   public void setAuthorizer(List<String> authorizer) {
     this.authorizer = authorizer;
+  }
+
+  public Issue getIssue() {
+    return issue;
+  }
+
+  public void setIssue(Issue issue) {
+    this.issue = issue;
   }
 }
 
