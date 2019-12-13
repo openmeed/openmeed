@@ -47,7 +47,7 @@ public class PlatformApplicationTests {
 	}
 
 	private String testIssue = "https://github.com/openmeed/rewarder/issues/20";
-	private String githubEventEndpoint = "http://localhost:8080/api/v1/github/events";
+	private String githubEventEndpoint = "http://localhost:8081/api/v1/github/events";
 	private String testUser = "hermes";
 
 	@After
@@ -104,6 +104,7 @@ public class PlatformApplicationTests {
 
 		Optional<User> user = userRepository.findByUsername(testUser);
 		assertEquals(response.getStatusCode(), HttpStatus.OK);
+
 		assertEquals(user.get().getPoints(), rewardValue);
 
 		// The incentive should exist after it has been transferred to the contributor
@@ -182,6 +183,171 @@ public class PlatformApplicationTests {
 		Optional<Reward> result = rewardRepository.findRewardByIssueId(issueEntityResult.getUrl());
 		assertNotNull(result);
 		assertEquals(result.get().getValue(),rewardValue);
+	}
+
+	@Test
+	public void shouldNotRewardIfAuthorityIsTheSameAsContributor() {
+		User sampleOAuth2User = new User();
+		sampleOAuth2User.setName("Hermes Ananse");
+		sampleOAuth2User.setEmail("hermes@openmeed.com");
+		sampleOAuth2User.setUsername(testUser);
+		sampleOAuth2User.setProvider(AuthProvider.github);
+
+		userRepository.save(sampleOAuth2User);
+		String rewardValue = "1000";
+		// Allocate incentive to issueEntity
+		Reward reward = new Reward();
+		reward.setIssueId(testIssue);
+		reward.setValue(rewardValue);
+		reward.setType("pts");
+		Reward res = rewardRepository.save(reward);
+		assertNotNull(res);
+		assertEquals(res.getValue(), rewardValue);
+
+		//Simulate user selecting issueEntity
+		Issue issue = new Issue();
+		issue.setUrl(testIssue);
+		issue.setAssigneeName(testUser);
+		Issue issueEntityResult = allocatedIssueRepository.save(issue);
+		assertNotNull(issueEntityResult);
+
+		RestTemplate restTemplate = new RestTemplate();
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		JSONObject payloadJsonObject = new JSONObject();
+		JSONObject prJsonObject = new JSONObject();
+		prJsonObject.put("merged",true);
+		prJsonObject.put("issue_url",testIssue);
+		JSONObject senderJsonObject = new JSONObject();
+		senderJsonObject.put("login","hermes");
+		payloadJsonObject.put("pull_request",prJsonObject);
+		payloadJsonObject.put("sender",senderJsonObject);
+		payloadJsonObject.put("action","closed");
+
+		HttpEntity<String> request = new HttpEntity<>(payloadJsonObject.toString(), headers);
+		ResponseEntity<String> response = restTemplate.postForEntity(githubEventEndpoint, request,String.class);
+
+		Optional<User> user = userRepository.findByUsername(testUser);
+		assertEquals(response.getStatusCode(), HttpStatus.OK);
+
+		assertEquals(user.get().getPoints(), rewardValue);
+
+		// The incentive should exist after it has been transferred to the contributor
+		Optional<Reward> redeemReward = rewardRepository.findRewardByIssueId(issueEntityResult.getUrl());
+		System.out.println(redeemReward.get().getValue());
+		assertNull(redeemReward.get());
+
+	}
+
+	@Test
+	public void authoritiesMustBePartOfReviewers() {
+		User sampleOAuth2User = new User();
+		sampleOAuth2User.setName("Hermes Ananse");
+		sampleOAuth2User.setEmail("hermes@openmeed.com");
+		sampleOAuth2User.setUsername(testUser);
+		sampleOAuth2User.setProvider(AuthProvider.github);
+
+		userRepository.save(sampleOAuth2User);
+		String rewardValue = "1000";
+		// Allocate incentive to issueEntity
+		Reward reward = new Reward();
+		reward.setIssueId(testIssue);
+		reward.setValue(rewardValue);
+		reward.setType("pts");
+		Reward res = rewardRepository.save(reward);
+		assertNotNull(res);
+		assertEquals(res.getValue(), rewardValue);
+
+		//Simulate user selecting issueEntity
+		Issue issue = new Issue();
+		issue.setUrl(testIssue);
+		issue.setAssigneeName(testUser);
+		Issue issueEntityResult = allocatedIssueRepository.save(issue);
+		assertNotNull(issueEntityResult);
+
+		RestTemplate restTemplate = new RestTemplate();
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		JSONObject payloadJsonObject = new JSONObject();
+		JSONObject prJsonObject = new JSONObject();
+		prJsonObject.put("merged",true);
+		prJsonObject.put("issue_url",testIssue);
+		JSONObject senderJsonObject = new JSONObject();
+		senderJsonObject.put("login","hermes");
+		payloadJsonObject.put("pull_request",prJsonObject);
+		payloadJsonObject.put("sender",senderJsonObject);
+		payloadJsonObject.put("action","closed");
+
+		HttpEntity<String> request = new HttpEntity<>(payloadJsonObject.toString(), headers);
+		ResponseEntity<String> response = restTemplate.postForEntity(githubEventEndpoint, request,String.class);
+
+		Optional<User> user = userRepository.findByUsername(testUser);
+		assertEquals(response.getStatusCode(), HttpStatus.OK);
+
+		assertEquals(user.get().getPoints(), rewardValue);
+
+		// The incentive should exist after it has been transferred to the contributor
+		Optional<Reward> redeemReward = rewardRepository.findRewardByIssueId(issueEntityResult.getUrl());
+		System.out.println(redeemReward.get().getValue());
+		assertNull(redeemReward.get());
+
+	}
+
+	@Test
+	public void issueAssigneeAndSolutionContributorMismatch() {
+		User sampleOAuth2User = new User();
+		sampleOAuth2User.setName("Hermes Ananse");
+		sampleOAuth2User.setEmail("hermes@openmeed.com");
+		sampleOAuth2User.setUsername(testUser);
+		sampleOAuth2User.setProvider(AuthProvider.github);
+
+		userRepository.save(sampleOAuth2User);
+		String rewardValue = "1000";
+		// Allocate incentive to issueEntity
+		Reward reward = new Reward();
+		reward.setIssueId(testIssue);
+		reward.setValue(rewardValue);
+		reward.setType("pts");
+		Reward res = rewardRepository.save(reward);
+		assertNotNull(res);
+		assertEquals(res.getValue(), rewardValue);
+
+		//Simulate user selecting issueEntity
+		Issue issue = new Issue();
+		issue.setUrl(testIssue);
+		issue.setAssigneeName(testUser);
+		Issue issueEntityResult = allocatedIssueRepository.save(issue);
+		assertNotNull(issueEntityResult);
+
+		RestTemplate restTemplate = new RestTemplate();
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		JSONObject payloadJsonObject = new JSONObject();
+		JSONObject prJsonObject = new JSONObject();
+		prJsonObject.put("merged",true);
+		prJsonObject.put("issue_url",testIssue);
+		JSONObject senderJsonObject = new JSONObject();
+		senderJsonObject.put("login","hermes");
+		payloadJsonObject.put("pull_request",prJsonObject);
+		payloadJsonObject.put("sender",senderJsonObject);
+		payloadJsonObject.put("action","closed");
+
+		HttpEntity<String> request = new HttpEntity<>(payloadJsonObject.toString(), headers);
+		ResponseEntity<String> response = restTemplate.postForEntity(githubEventEndpoint, request,String.class);
+
+		Optional<User> user = userRepository.findByUsername(testUser);
+		assertEquals(response.getStatusCode(), HttpStatus.OK);
+
+		assertEquals(user.get().getPoints(), rewardValue);
+
+		// The incentive should exist after it has been transferred to the contributor
+		Optional<Reward> redeemReward = rewardRepository.findRewardByIssueId(issueEntityResult.getUrl());
+		System.out.println(redeemReward.get().getValue());
+		assertNull(redeemReward.get());
+
 	}
 }
 

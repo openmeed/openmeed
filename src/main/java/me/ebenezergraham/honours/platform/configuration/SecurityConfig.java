@@ -47,11 +47,6 @@ import javax.net.ssl.SSLContext;
  */
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(
-    securedEnabled = true,
-    jsr250Enabled = true,
-    prePostEnabled = true
-)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Autowired
@@ -121,7 +116,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .authorizeRequests()
         .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
         .antMatchers("/", "/login**", "/login/oauth2/**").permitAll()
-        .antMatchers("/api/v1/github/events","/api/v1/test").permitAll()
+        .antMatchers("/api/v1/github/events").permitAll()
         .antMatchers("/api/v2**").permitAll()
         .antMatchers("/swagger-ui.html**").permitAll()
         .antMatchers("/h2-console**").permitAll()

@@ -3,11 +3,10 @@ package me.ebenezergraham.honours.platform.configuration;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.firefox.FirefoxBinary;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.firefox.*;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 public class SeleniumConfig {
@@ -19,7 +18,6 @@ public class SeleniumConfig {
     FirefoxBinary firefoxBinary = new FirefoxBinary();
     //firefoxBinary.addCommandLineOptions("--headless");
     //firefoxBinary.addCommandLineOptions("--no-sandbox");
-    //System.setProperty("webdriver.gecko.driver", "geckodriver");
     FirefoxOptions firefoxOptions = new FirefoxOptions();
     firefoxOptions.setBinary(firefoxBinary);
     driver = new FirefoxDriver(firefoxOptions);
