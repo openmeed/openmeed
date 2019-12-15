@@ -28,7 +28,15 @@ public class EventsController {
 
   @PostMapping("github/events")
   public ResponseEntity<String> publish(@RequestBody final Payload payload) {
-    switch (payload.getAction()) {
+
+    if (payload.getPull_request() != null) {
+      logger.info("Sending Assigned Message", payload.getIssue().toString());
+      jmsTemplate.convertAndSend(ASSIGNED_EVENT, payload);
+    } else if (payload.getIssue() != null) {
+      logger.info("Sending Closed Message", payload.getPull_request().toString());
+      jmsTemplate.convertAndSend(CLOSED_PULL_REQUEST, payload);
+    }
+    /*switch (payload.getAction()) {
       case ASSIGNED_EVENT:
         logger.info("Sending Assigned Message", payload.getIssue().toString());
         jmsTemplate.convertAndSend(ASSIGNED_EVENT, payload);
@@ -43,8 +51,8 @@ public class EventsController {
         break;
       default:
         return new ResponseEntity(HttpStatus.NOT_MODIFIED);
-    }
+    }*/
     return new ResponseEntity(HttpStatus.OK);
-  }
+}
 
 }

@@ -71,26 +71,30 @@ public class RewardEngine implements IRewardEngine {
 
   @Override
   public boolean validate(Payload payload, Reward reward) {
-    if (validationCriteria.get("AUTHORITIES_MUST_BE_REVIEWERS")) {
-      // Verify that the necessary authorities have reviewed submission
-      ArrayList<String> requestedReviewers = Lists.newArrayList(payload.getPull_request().getRequested_reviewers());
-      for (String authority : reward.getAuthorizer()) {
-        if (!requestedReviewers.contains(authority)) return false;
+    try {
+      if (validationCriteria.get("AUTHORITIES_MUST_BE_REVIEWERS")) {
+        // Verify that the necessary authorities have reviewed submission
+        ArrayList<String> requestedReviewers = Lists.newArrayList(payload.getPull_request().getRequested_reviewers());
+        for (String authority : reward.getAuthorizer()) {
+          if (!requestedReviewers.contains(authority) || requestedReviewers.size() == 0) return false;
+        }
       }
-    }
-    //Verify that contributor assigned the issue is the same entity that sent the solution
-    if (validationCriteria.get("CONTRIBUTOR_MUST_BE_ASSIGNEE")) {
-      // Verify contributor was assigned the responsibility to resolve issue
-      Optional<Issue> issue = allocatedIssueRepository.findIssueByUrl(payload.getPull_request().getIssue_url());
-      if (issue.isPresent()) {
-        if (!payload.getSender().getLogin().equals(issue.get().getAssigneeName())) return false;
+      //Verify that contributor assigned the issue is the same entity that sent the solution
+      if (validationCriteria.get("CONTRIBUTOR_MUST_BE_ASSIGNEE")) {
+        // Verify contributor was assigned the responsibility to resolve issue
+        Optional<Issue> issue = allocatedIssueRepository.findIssueByUrl(payload.getPull_request().getIssue_url());
+        if (issue.isPresent()) {
+          if (!payload.getSender().getLogin().equals(issue.get().getAssigneeName())) return false;
+        }
       }
+      //Verify that the maintainer who assigned the reward is not redeeming it.
+      if (validationCriteria.get("AUTHORITIES_CANNOT_BE_ASSIGNEE")) {
+        if (reward.getAuthorizer().contains(payload.getPull_request().getAssignee())) return false;
+      }
+    } catch (Exception e) {
+      logger.error("{}", e.getMessage());
+      return false;
     }
-    //Verify that the maintainer who assigned the reward is not redeeming it.
-    if (validationCriteria.get("AUTHORITIES_CANNOT_BE_ASSIGNEE")) {
-      if (reward.getAuthorizer().contains(payload.getPull_request().getAssignee())) return false;
-    }
-
     return true;
   }
 
@@ -111,18 +115,22 @@ public class RewardEngine implements IRewardEngine {
         if (validate(payload, reward)) {
           // Fetch the user who has to receive this
           Optional<User> user = userRepository.findByUsername(payload.getSender().getLogin());
-          user.get().setPoints(Integer.parseInt(result.get().getValue()));
-          userRepository.save(user.get());
-          Map<String, String> notificationDetails = new HashMap<>();
-          notificationDetails.put("EMAIL", user.get().getEmail());
-          notificationDetails.put("PR_TITLE", payload.getPull_request().getTitle());
-          notificationDetails.put("ISSUE_URL", payload.getPull_request().getIssue_url());
-          notificationDetails.put("REWARD", reward.getValue());
-          notificationDetails.put("NAME", user.get().getName());
-          jmsTemplate.convertAndSend(SEND_EMAIL, notificationDetails);
-          //rewardRepository.delete(result.get());
+          user.ifPresent(value -> {
+            value.setPoints(Integer.parseInt(result.get().getValue()));
+            userRepository.save(value);
+            Map<String, String> notificationDetails = new HashMap<>();
+            notificationDetails.put("EMAIL", user.get().getEmail());
+            notificationDetails.put("PR_TITLE", payload.getPull_request().getTitle());
+            notificationDetails.put("ISSUE_URL", payload.getPull_request().getIssue_url());
+            notificationDetails.put("REWARD", reward.getValue());
+            notificationDetails.put("NAME", user.get().getName());
+            jmsTemplate.convertAndSend(SEND_EMAIL, notificationDetails);
+            rewardRepository.delete(result.get());
+          });
         }
       });
+    }else {
+      logger.info("Rejected Pull Request");
     }
   }
 

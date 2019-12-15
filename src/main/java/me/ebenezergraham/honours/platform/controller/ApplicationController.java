@@ -19,22 +19,9 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class ApplicationController {
 
-  private final RewardRepository rewardRepository;
-  private final AllocatedIssueRepository allocatedIssueRepository;
-  private final ActivatedRepository activatedRepository;
-  private final IncentiveService incentiveService;
-
-  public ApplicationController(ActivatedRepository activatedRepository,
-                               RewardRepository rewardRepository,
-                               AllocatedIssueRepository allocatedIssueRepository,
-                               IncentiveService incentiveService,
-                               CustomUserDetailsService userService) {
-    this.incentiveService = incentiveService;
-    this.rewardRepository = rewardRepository;
-    this.allocatedIssueRepository = allocatedIssueRepository;
-    this.activatedRepository = activatedRepository;
-
+  public ApplicationController() {
   }
+
   @GetMapping("/test")
   public ResponseEntity<String> test() {
     return ResponseEntity.ok("Test");

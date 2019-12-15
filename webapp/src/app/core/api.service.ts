@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Observable, of, throwError} from 'rxjs';
-import {HttpClient, HttpErrorResponse, HttpHeaders, HttpRequest} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams, HttpRequest} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {catchError, retry, tap} from 'rxjs/operators';
 
@@ -60,7 +60,7 @@ export class ApiService {
   }
 
   fetchAllRepositories(): Observable<any[]> {
-    const endpoint = `${this.githubbase}/user/repos`;
+    const endpoint = `${this.githubbase}/user/repos?direction=desc`;
     return this.http.get<any[]>(endpoint, ApiService.githubHeaderWithCredentials()).pipe(
       tap(x => console.log(`Lists repositories that the authenticated user has explicit permission`)),
       catchError(this.handleError('Issues', []))
