@@ -51,14 +51,6 @@ export class ApiService {
     );
   }
 
-  getRepoIssues(repo): Observable<any[]> {
-    const endpoint = `${this.githubbase}/repos/${repo}/issues`;
-    return this.http.get<any[]>(endpoint).pipe(
-      tap(x => console.log(`fetched issues data`)),
-      catchError(this.handleError('Issues', []))
-    );
-  }
-
   fetchAllRepositories(): Observable<any[]> {
     const endpoint = `${this.githubbase}/user/repos?direction=desc`;
     return this.http.get<any[]>(endpoint, ApiService.githubHeaderWithCredentials()).pipe(
@@ -68,9 +60,6 @@ export class ApiService {
   }
 
   getRepositories(): Observable<any[]> {
-    /*var repo = [];
-    repo.push("anoited007/personalized-tab");
-    return of(repo);*/
     const endpoint = `${this.base}/projects`;
     return this.http.get<any[]>(endpoint, ApiService.backendHeaderWithCredentials()).pipe(
       tap(x => console.log(`fetched repositories data`)),

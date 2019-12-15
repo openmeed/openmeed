@@ -95,7 +95,7 @@ public class SeleniumTest {
       }
 
       this.config.getDriver().findElement(By.id("admin")).click();
-      this.config.getDriver().findElement(By.id("personalized-tab")).click();
+      this.config.getDriver().findElement(By.id("test")).click();
       this.config.getDriver().findElement(By.id("activate-repositories-btn")).click();
       this.config.getDriver().findElement(By.id("profile")).click();
       this.config.getDriver().findElement(By.id("dashboard")).click();

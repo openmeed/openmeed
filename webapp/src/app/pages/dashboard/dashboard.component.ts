@@ -10,7 +10,7 @@ import {Reward} from "../../shared/model/Model";
 })
 export class DashboardComponent implements OnInit {
 
-  issues: [];
+  issues = [];
   repositories = [];
   assignedIssues = [];
   admin=false;
@@ -26,11 +26,12 @@ export class DashboardComponent implements OnInit {
     this.http.getRepositories().subscribe((repos) => {
       this.repositories = repos;
       console.log(this.repositories)
+      this.repositories.reverse();
 
       this.repositories.forEach(entry => {
         this.http.getIssues(entry.fullName).subscribe((data) => {
           if (data.length > 0) {
-            this.issues = data;
+            this.issues.concat(data);
           }
           this.http.getIssuesIncentives().subscribe(res=>{
             res.forEach(entry=>{
