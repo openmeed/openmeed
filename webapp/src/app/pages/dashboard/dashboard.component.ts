@@ -37,8 +37,8 @@ export class DashboardComponent implements OnInit {
             res.forEach(entry => {
               document.getElementById(entry.issueId).innerText = entry.value.concat('pts')
             })
-          })
-          console.log(this.repositories)
+          });
+          console.log(this.issues)
         });
       })
     });
