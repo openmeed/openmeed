@@ -11,16 +11,21 @@ import static me.ebenezergraham.honours.platform.util.Constants.PROJECT_EVENT_TY
 
 @Component
 public class ProjectConsumer {
-    private final Logger logger = LoggerFactory.getLogger(ProjectConsumer.class);
-    private final ActivatedRepository activatedRepository;
+  private final Logger logger = LoggerFactory.getLogger(ProjectConsumer.class);
+  private final ActivatedRepository activatedRepository;
 
-    public ProjectConsumer(final ActivatedRepository activatedRepository) {
-        this.activatedRepository = activatedRepository;
-    }
+  public ProjectConsumer(final ActivatedRepository activatedRepository) {
+    this.activatedRepository = activatedRepository;
+  }
 
-    @JmsListener(destination = PROJECT_EVENT_TYPE)
-    private void notifyContributor(Payload payload) {
-        logger.info("Sending message");
-        activatedRepository.findProjectByFullName(payload.getRepository().getFull_name());
+  @JmsListener(destination = PROJECT_EVENT_TYPE)
+  private void notifyContributor(Payload payload) {
+    logger.info("Deleting Project Repository");
+    if (payload.getAction().equals("deleted")) {
+      activatedRepository.findProjectByFullName(payload.getRepository().getFull_name());
     }
+    activatedRepository.findProjectByFullName("Pactmart/test").ifPresent( project -> {
+      activatedRepository.delete(project);
+    });
+  }
 }
