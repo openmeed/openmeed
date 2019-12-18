@@ -19,9 +19,9 @@ public class ProjectConsumer {
   }
 
   @JmsListener(destination = PROJECT_EVENT_TYPE)
-  private void notifyContributor(Payload payload) {
-    logger.info("Deleting Project Repository");
+  private void projectEvent(Payload payload) {
     if (payload.getAction().equals("deleted")) {
+      logger.info("Deleting Project Repository");
       activatedRepository.findProjectByFullName(payload.getRepository().getFull_name());
     }
     activatedRepository.findProjectByFullName("Pactmart/test").ifPresent( project -> {

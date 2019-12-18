@@ -36,7 +36,7 @@ public class EventsController {
       logger.info("Sending Closed Message", payload.getPull_request().toString());
       jmsTemplate.convertAndSend(CLOSED_PULL_REQUEST, payload);
     }else if (payload.getRepository() != null && payload.getIssue()==null && payload.getPull_request()==null) {
-      logger.info("Sending Closed Message", payload.getPull_request().toString());
+      logger.info("Project event ", payload.getRepository().getName());
       jmsTemplate.convertAndSend(PROJECT_EVENT_TYPE, payload);
     }
     /*switch (payload.getAction()) {
