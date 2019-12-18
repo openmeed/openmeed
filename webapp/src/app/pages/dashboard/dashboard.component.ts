@@ -13,10 +13,10 @@ export class DashboardComponent implements OnInit {
   issues = [];
   repositories = [];
   assignedIssues = [];
-  admin=false;
+  admin = false;
 
   constructor(private http: ApiService) {
-    if(sessionStorage.getItem("roles")==='ROLE_USER'){
+    if (sessionStorage.getItem("roles") === 'ROLE_USER') {
       this.admin = true;
     }
   }
@@ -33,38 +33,16 @@ export class DashboardComponent implements OnInit {
           if (data.length > 0) {
             this.issues.concat(data);
           }
-          this.http.getIssuesIncentives().subscribe(res=>{
-            res.forEach(entry=>{
-              document.getElementById(entry.issueId).innerText = entry.value.concat( 'pts')
+          this.http.getIssuesIncentives().subscribe(res => {
+            res.forEach(entry => {
+              document.getElementById(entry.issueId).innerText = entry.value.concat('pts')
             })
           })
+          console.log(this.repositories)
         });
       })
     });
-
-/*    this.http.getAuthenticatedUserIssues().subscribe((data) => {
-      this.assignedIssues = data;
-    });
-
-    this.http.getRepositories().subscribe((repos) => {
-      this.repositories = repos;
-
-      this.repositories.forEach(entry => {
-        this.http.getIssues(entry).subscribe((data) => {
-          if (data.length > 0) {
-            this.issues = data;
-          }
-        });
-      })
-    });*/
-
-
-
   }
-  /*workOnIssue(issue) {
-    this.http.setUserIssue(issue.html_url).subscribe(res => {
-    })
-  }*/
 
   allocateIncentiveToIssue(event) {
     var reward = new Reward();

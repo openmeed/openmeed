@@ -1,17 +1,12 @@
 package me.ebenezergraham.honours.platform.services;
 
-import me.ebenezergraham.honours.platform.model.Payload;
 import me.ebenezergraham.honours.platform.model.Reward;
-import me.ebenezergraham.honours.platform.model.User;
 import me.ebenezergraham.honours.platform.repository.AllocatedIssueRepository;
 import me.ebenezergraham.honours.platform.repository.RewardRepository;
 import me.ebenezergraham.honours.platform.repository.UserRepository;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * @author Ebenezer Graham
@@ -39,10 +34,10 @@ public class IncentiveService {
 
 
   public Reward storeIncentive(Reward reward) {
-    try{
+    try {
       Reward res = rewardRepository.save(reward);
       return res;
-    }catch (Exception e){
+    } catch (Exception e) {
       return null;
     }
   }

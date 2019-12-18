@@ -31,94 +31,94 @@ import static me.ebenezergraham.honours.platform.security.oauth2.HttpCookieOAuth
 @Component
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-    private TokenProvider tokenProvider;
-    private AppProperties appProperties;
-    private HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
+  private TokenProvider tokenProvider;
+  private AppProperties appProperties;
+  private HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
 
-    @Value("${spring.security.oauth2.client.registration.github.client-id}")
-    private String clientId;
-    @Value("${spring.security.oauth2.client.registration.github.client-secret}")
-    private String clientSecret;
+  @Value("${spring.security.oauth2.client.registration.github.client-id}")
+  private String clientId;
+  @Value("${spring.security.oauth2.client.registration.github.client-secret}")
+  private String clientSecret;
 
-    OAuth2AuthorizedClientRepository oAuth2ClientRepository;
+  OAuth2AuthorizedClientRepository oAuth2ClientRepository;
 
-    UserRepository userRepository;
+  UserRepository userRepository;
 
-    @Autowired
-    OAuth2AuthenticationSuccessHandler(UserRepository userRepository, OAuth2AuthorizedClientRepository oAuth2ClientRepository,
-                                       TokenProvider tokenProvider, AppProperties appProperties,
-                                       HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository) {
-        this.tokenProvider = tokenProvider;
-        this.userRepository = userRepository;
-        this.oAuth2ClientRepository = oAuth2ClientRepository;
-        this.appProperties = appProperties;
-        this.httpCookieOAuth2AuthorizationRequestRepository = httpCookieOAuth2AuthorizationRequestRepository;
-    }
+  @Autowired
+  OAuth2AuthenticationSuccessHandler(UserRepository userRepository, OAuth2AuthorizedClientRepository oAuth2ClientRepository,
+                                     TokenProvider tokenProvider, AppProperties appProperties,
+                                     HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository) {
+    this.tokenProvider = tokenProvider;
+    this.userRepository = userRepository;
+    this.oAuth2ClientRepository = oAuth2ClientRepository;
+    this.appProperties = appProperties;
+    this.httpCookieOAuth2AuthorizationRequestRepository = httpCookieOAuth2AuthorizationRequestRepository;
+  }
 
-    @Override
-    public void onAuthenticationSuccess(HttpServletRequest request,
-                                        HttpServletResponse response,
-                                        Authentication authentication) throws IOException {
-
-        Optional<User> user = userRepository.findByEmail(((UserPrincipal)authentication.getPrincipal()).getEmail());
-
-        String targetUrl = null;
-        if(user.isPresent()){
-            OAuth2AuthorizedClient client = oAuth2ClientRepository.loadAuthorizedClient(AuthProvider.github.name(),
-                authentication,request);
-            String accessToken = client.getAccessToken().getTokenValue();
-            targetUrl = buildRedirectUrl(request, response, authentication,accessToken);
-        }
-
-        if (response.isCommitted()) {
-            logger.debug("Unable to redirect to " + targetUrl);
-            return;
-        }
-
-        clearAuthenticationAttributes(request, response);
-        getRedirectStrategy().sendRedirect(request, response, targetUrl);
-    }
-
-    private String buildRedirectUrl(HttpServletRequest request,
+  @Override
+  public void onAuthenticationSuccess(HttpServletRequest request,
                                       HttpServletResponse response,
-                                      Authentication authentication,
-                                      String accessToken) {
-        Optional<String> redirectUri = CookieUtils.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)
-                .map(Cookie::getValue);
+                                      Authentication authentication) throws IOException {
 
-        /*if(redirectUri.isPresent() && !isAuthorizedRedirectUri(redirectUri.get())) {
+    Optional<User> user = userRepository.findByEmail(((UserPrincipal) authentication.getPrincipal()).getEmail());
+
+    String targetUrl = null;
+    if (user.isPresent()) {
+      OAuth2AuthorizedClient client = oAuth2ClientRepository.loadAuthorizedClient(AuthProvider.github.name(),
+          authentication, request);
+      String accessToken = client.getAccessToken().getTokenValue();
+      targetUrl = buildRedirectUrl(request, response, authentication, accessToken);
+    }
+
+    if (response.isCommitted()) {
+      logger.debug("Unable to redirect to " + targetUrl);
+      return;
+    }
+
+    clearAuthenticationAttributes(request, response);
+    getRedirectStrategy().sendRedirect(request, response, targetUrl);
+  }
+
+  private String buildRedirectUrl(HttpServletRequest request,
+                                  HttpServletResponse response,
+                                  Authentication authentication,
+                                  String accessToken) {
+    Optional<String> redirectUri = CookieUtils.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)
+        .map(Cookie::getValue);
+
+        if(redirectUri.isPresent() && !isAuthorizedRedirectUri(redirectUri.get())) {
             throw new BadRequestException("Sorry! Unauthorized Redirect URI");
-        }*/
-        String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
+        }
+    String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
 
-        Object [] roles = ((UserPrincipal)authentication.getPrincipal()).getAuthorities().toArray();
-        String token = tokenProvider.createJwtToken(authentication, roles);
-        return UriComponentsBuilder.fromUriString(targetUrl)
-                .queryParam("token", token)
-                .queryParam("access_token", accessToken)
-                .queryParam("roles", roles)
-                .queryParam("username", ((UserPrincipal) authentication.getPrincipal()).getUsername())
-                .build().toUriString();
-    }
+    Object[] roles = ((UserPrincipal) authentication.getPrincipal()).getAuthorities().toArray();
+    String token = tokenProvider.createJwtToken(authentication, roles);
+    return UriComponentsBuilder.fromUriString(targetUrl)
+        .queryParam("token", token)
+        .queryParam("access_token", accessToken)
+        .queryParam("roles", roles)
+        .queryParam("username", ((UserPrincipal) authentication.getPrincipal()).getUsername())
+        .build().toUriString();
+  }
 
-    private void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {
-        super.clearAuthenticationAttributes(request);
-        httpCookieOAuth2AuthorizationRequestRepository.removeAuthorizationRequestCookies(request, response);
-    }
+  private void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {
+    super.clearAuthenticationAttributes(request);
+    httpCookieOAuth2AuthorizationRequestRepository.removeAuthorizationRequestCookies(request, response);
+  }
 
-    private boolean isAuthorizedRedirectUri(String uri) {
-        URI clientRedirectUri = URI.create(uri);
+  private boolean isAuthorizedRedirectUri(String uri) {
+    URI clientRedirectUri = URI.create(uri);
 
-        return appProperties.getOauth2().getAuthorizedRedirectUris()
-                .stream()
-                .anyMatch(authorizedRedirectUri -> {
-                    // Only validate host and port. Let the clients use different paths if they want to
-                    URI authorizedURI = URI.create(authorizedRedirectUri);
-                    if(authorizedURI.getHost().equalsIgnoreCase(clientRedirectUri.getHost())
-                            && authorizedURI.getPort() == clientRedirectUri.getPort()) {
-                        return true;
-                    }
-                    return false;
-                });
-    }
+    return appProperties.getOauth2().getAuthorizedRedirectUris()
+        .stream()
+        .anyMatch(authorizedRedirectUri -> {
+          // Only validate host and port. Let the clients use different paths if they want to
+          URI authorizedURI = URI.create(authorizedRedirectUri);
+          if (authorizedURI.getHost().equalsIgnoreCase(clientRedirectUri.getHost())
+              && authorizedURI.getPort() == clientRedirectUri.getPort()) {
+            return true;
+          }
+          return false;
+        });
+  }
 }

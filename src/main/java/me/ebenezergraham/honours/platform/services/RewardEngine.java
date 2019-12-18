@@ -46,7 +46,7 @@ public class RewardEngine implements IRewardEngine {
     this.validationCriteria = new HashMap<>();
     this.validationCriteria.put("AUTHORITIES_MUST_BE_REVIEWERS", true);
     this.validationCriteria.put("CONTRIBUTOR_MUST_BE_ASSIGNEE", true);
-    this.validationCriteria.put("AUTHORITIES_CANNOT_BE_ASSIGNEE", false);
+    this.validationCriteria.put("AUTHORITIES_CANNOT_BE_ASSIGNEE", true);
   }
 
   @Override
@@ -129,7 +129,7 @@ public class RewardEngine implements IRewardEngine {
           });
         }
       });
-    }else {
+    } else {
       logger.info("Rejected Pull Request");
     }
   }

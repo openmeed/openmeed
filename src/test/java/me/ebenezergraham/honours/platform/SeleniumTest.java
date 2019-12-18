@@ -1,4 +1,3 @@
-/*
 package me.ebenezergraham.honours.platform;
 
 import me.ebenezergraham.honours.platform.configuration.SeleniumConfig;
@@ -50,11 +49,10 @@ public class SeleniumTest {
     HttpEntity<String> request = new HttpEntity<>(jsonObject.toString(), headers);
     ResponseEntity<String> response = restTemplate.postForEntity("https://api.github.com/repos/ebenezergraham/test/issues", request,String.class);
     assertEquals(response.getStatusCode(), HttpStatus.CREATED);
-
   }
 
 
-  public void createPR(){
+  public void createAndMergePR(){
     RestTemplate restTemplate = new RestTemplate();
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
@@ -81,10 +79,9 @@ public class SeleniumTest {
   @Test
   public void performTypicalUserSurf() throws InterruptedException {
     Date now = new Date();
-    // 2 hours
-    // Date expiryDate = new Date(new Date().getTime()+3699990);
     Date expiryDate = new Date(new Date().getTime() + 240000);
     while (now.before(expiryDate)) {
+      createIssue(now);
       this.config.getDriver().findElement(By.id("login")).click();
 
       if (firstRun) {
@@ -104,11 +101,9 @@ public class SeleniumTest {
           .findElement(By.cssSelector("body > openmeed-root > openmeed-dashboard > div > div:nth-child(2) > div:nth-child(3) > div:nth-child(1) > button > a"));
       issue.isDisplayed();
       issue.click();
-      createIssue(now);
-      createPR();
+      createAndMergePR();
       this.config.getDriver().findElement(By.id("leaderboard")).click();
       Thread.sleep(3000);
-
 
       this.config.getDriver().findElement(By.id("logout")).click();
       Thread.sleep(3000);
@@ -116,4 +111,3 @@ public class SeleniumTest {
   }
 }
 
-*/

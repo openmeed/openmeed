@@ -16,15 +16,16 @@
         <button class="btn btn-full"><a target="_blank" href="{{issueEntity.html_url}}">View Issue Details</a></button>
       </div>
       <div class="col">
-      <form *ngIf="admin">
-        <div  class="form-group">
-          <input id="{{issueEntity.id}}" [attr.data-url]=issueEntity.html_url (change)="allocateIncentiveToIssue($event)" type="text" class="form-control"
-                 aria-describedby="Enter Reward" placeholder="Enter reward">
-          <label for="{{issueEntity.id}}">Enter Reward</label>
+        <form *ngIf="admin">
+          <div class="form-group">
+            <input id="{{issueEntity.id}}" [attr.data-url]=issueEntity.html_url
+                   (change)="allocateIncentiveToIssue($event)" type="text" class="form-control"
+                   aria-describedby="Enter Reward" placeholder="Enter reward">
+            <label for="{{issueEntity.id}}">Enter Reward</label>
 
-          <small id="help" class="form-text text-muted">Press enter to submit</small>
-        </div>
-      </form>
+            <small id="help" class="form-text text-muted">Press enter to submit</small>
+          </div>
+        </form>
       </div>
     </div>
   </div>

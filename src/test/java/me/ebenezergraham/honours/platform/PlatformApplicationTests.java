@@ -1,4 +1,3 @@
-/*
 
 package me.ebenezergraham.honours.platform;
 
@@ -16,13 +15,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
-import org.springframework.context.annotation.Bean;
-import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -104,7 +97,7 @@ public class PlatformApplicationTests {
     payloadJsonObject.put("sender", senderJsonObject);
     payloadJsonObject.put("action", "closed");
 
-    rewardEngine.process(gson.fromJson(payloadJsonObject.toJSONString(),Payload.class));
+    rewardEngine.process(gson.fromJson(payloadJsonObject.toJSONString(), Payload.class));
 
     Optional<User> user = userRepository.findByUsername(testUser);
 
@@ -113,7 +106,6 @@ public class PlatformApplicationTests {
     // The incentive should exist after it has been transferred to the contributor
     Optional<Reward> redeemReward = rewardRepository.findRewardByIssueId(issueEntityResult.getUrl());
     assertFalse(redeemReward.isPresent());
-
   }
 
   @Test
@@ -154,7 +146,7 @@ public class PlatformApplicationTests {
     payloadJsonObject.put("sender", senderJsonObject);
     payloadJsonObject.put("action", "closed");
 
-    rewardEngine.process(gson.fromJson(payloadJsonObject.toJSONString(),Payload.class));
+    rewardEngine.process(gson.fromJson(payloadJsonObject.toJSONString(), Payload.class));
 
     Optional<User> user = userRepository.findByUsername(testUser);
 
@@ -163,7 +155,6 @@ public class PlatformApplicationTests {
     // The incentive should exist after it has been transferred to the contributor
     Optional<Reward> redeemReward = rewardRepository.findRewardByIssueId(issueEntityResult.getUrl());
     assertTrue(redeemReward.isPresent());
-
   }
 
   @Test
@@ -233,7 +224,7 @@ public class PlatformApplicationTests {
     payloadJsonObject.put("sender", senderJsonObject);
     payloadJsonObject.put("action", "closed");
 
-    rewardEngine.process(gson.fromJson(payloadJsonObject.toJSONString(),Payload.class));
+    rewardEngine.process(gson.fromJson(payloadJsonObject.toJSONString(), Payload.class));
 
     Optional<User> user = userRepository.findByUsername(testUser);
 
@@ -242,7 +233,6 @@ public class PlatformApplicationTests {
     // The incentive should exist after it has been transferred to the contributor
     Optional<Reward> redeemReward = rewardRepository.findRewardByIssueId(issueEntityResult.getUrl());
     assertTrue(redeemReward.isPresent());
-
   }
 
   @Test
@@ -286,7 +276,7 @@ public class PlatformApplicationTests {
     payloadJsonObject.put("sender", senderJsonObject);
     payloadJsonObject.put("action", "closed");
 
-    rewardEngine.process(gson.fromJson(payloadJsonObject.toJSONString(),Payload.class));
+    rewardEngine.process(gson.fromJson(payloadJsonObject.toJSONString(), Payload.class));
 
     Optional<User> user = userRepository.findByUsername(testUser);
 
@@ -295,7 +285,6 @@ public class PlatformApplicationTests {
     // The incentive should exist after it has been transferred to the contributor
     Optional<Reward> redeemReward = rewardRepository.findRewardByIssueId(issueEntityResult.getUrl());
     assertTrue(redeemReward.isPresent());
-
   }
 
   @Test
@@ -337,7 +326,7 @@ public class PlatformApplicationTests {
     payloadJsonObject.put("sender", senderJsonObject);
     payloadJsonObject.put("action", "closed");
 
-    rewardEngine.process(gson.fromJson(payloadJsonObject.toJSONString(),Payload.class));
+    rewardEngine.process(gson.fromJson(payloadJsonObject.toJSONString(), Payload.class));
 
     Optional<User> user = userRepository.findByUsername(testUser);
 
@@ -359,7 +348,6 @@ public class PlatformApplicationTests {
 
     userRepository.save(sampleOAuth2User);
 
-
     JSONObject payloadJsonObject = new JSONObject();
     JSONObject prJsonObject = new JSONObject();
     prJsonObject.put("merged", true);
@@ -370,7 +358,7 @@ public class PlatformApplicationTests {
     payloadJsonObject.put("sender", senderJsonObject);
     payloadJsonObject.put("action", "closed");
 
-    rewardEngine.process(gson.fromJson(payloadJsonObject.toJSONString(),Payload.class));
+    rewardEngine.process(gson.fromJson(payloadJsonObject.toJSONString(), Payload.class));
 
     Optional<User> user = userRepository.findByUsername(testUser);
 
@@ -378,4 +366,3 @@ public class PlatformApplicationTests {
   }
 }
 
-*/
