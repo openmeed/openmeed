@@ -33,6 +33,7 @@ export class DashboardComponent implements OnInit {
           if (data.length > 0) {
             this.issues.concat(data);
           }
+          this.issues = data;
           this.http.getIssuesIncentives().subscribe(res => {
             res.forEach(entry => {
               document.getElementById(entry.issueId).innerText = entry.value.concat('pts')
