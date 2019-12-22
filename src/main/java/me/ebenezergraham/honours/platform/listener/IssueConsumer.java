@@ -22,7 +22,7 @@ public class IssueConsumer {
         this.rewardRepository = rewardRepository;
     }
 
-    @JmsListener(destination = ASSIGNED_EVENT)
+    @JmsListener(destination = ISSUE_EVENT_TYPE)
     public void assignedIssueListener( Payload message){
         logger.info("Processing {} event from GitHub", message.getAction());
         if(rewardRepository.findRewardByIssueId(message.getIssue().getUrl()).isPresent()){

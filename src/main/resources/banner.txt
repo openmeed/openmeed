@@ -7,4 +7,4 @@
                                                         |__/
 
 
-Developed by Ebenezer Graham
+Developed by Ebenezer Graham ${spring-boot.version} | Deploying ${spring.profiles.active}

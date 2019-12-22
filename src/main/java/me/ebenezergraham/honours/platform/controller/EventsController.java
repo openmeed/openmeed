@@ -30,11 +30,11 @@ public class EventsController {
   public ResponseEntity<String> publish(@RequestBody final Payload payload) {
 
     if (payload.getPull_request() != null) {
-      logger.info("Sending Assigned Message", payload.getIssue().toString());
-      jmsTemplate.convertAndSend(ASSIGNED_EVENT, payload);
-    } else if (payload.getIssue() != null) {
-      logger.info("Sending Closed Message", payload.getPull_request().toString());
+      logger.info("Sending Pull Request Payload", payload.getPull_request().toString());
       jmsTemplate.convertAndSend(CLOSED_PULL_REQUEST, payload);
+    } else if (payload.getIssue() != null) {
+      logger.info("Sending Issue Payload", payload.getIssue().toString());
+      jmsTemplate.convertAndSend(ISSUE_EVENT_TYPE, payload);
     }else if (payload.getRepository() != null && payload.getIssue()==null && payload.getPull_request()==null) {
       logger.info("Project event ", payload.getRepository().getName());
       jmsTemplate.convertAndSend(PROJECT_EVENT_TYPE, payload);
