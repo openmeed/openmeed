@@ -1,8 +1,6 @@
 package me.ebenezergraham.honours.platform.repository;
 
 import me.ebenezergraham.honours.platform.model.Reward;
-import me.ebenezergraham.honours.platform.model.Role;
-import me.ebenezergraham.honours.platform.model.RoleName;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

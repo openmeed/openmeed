@@ -6,8 +6,6 @@ import me.ebenezergraham.honours.platform.repository.RewardRepository;
 import me.ebenezergraham.honours.platform.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
-
 /**
  * @author Ebenezer Graham
  * Created on 9/30/19
@@ -42,12 +40,4 @@ public class IncentiveService {
     }
   }
 
-  private void notifyAdministrator(Map<String, String> details) {
-    emailService.sendSimpleMessage(
-        details.get("EMAIL"),
-        details.get("PR_TITLE"),
-        "Congratulations " + details.get("NAME") +
-            ",\n\nYou have been award the prize for issue: " + details.get("ISSUE_URL")
-            + "Regards,\nOpenMeed");
-  }
 }

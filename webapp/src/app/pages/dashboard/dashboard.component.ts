@@ -1,7 +1,7 @@
 import {Component, OnChanges, OnInit} from '@angular/core';
 import {ApiService} from "../../core/api.service";
 import api from "@fortawesome/fontawesome";
-import {Reward} from "../../shared/model/Model";
+import {Issue, Reward} from "../../shared/model/Model";
 
 @Component({
   selector: 'openmeed-dashboard',
@@ -10,7 +10,7 @@ import {Reward} from "../../shared/model/Model";
 })
 export class DashboardComponent implements OnInit {
 
-  issues = [];
+  issues: Issue[] =[];
   repositories = [];
   assignedIssues = [];
   admin = false;
@@ -29,11 +29,15 @@ export class DashboardComponent implements OnInit {
       this.repositories.reverse();
 
       this.repositories.forEach(entry => {
-        this.http.getIssues(entry.fullName).subscribe((data) => {
-          if (data.length > 0) {
-            this.issues.concat(data);
-          }
-          this.issues = data;
+        this.http.getIssues(entry.fullName).subscribe((data:Issue[]) => {
+          console.log(this.issues.length)
+          data.forEach(value=>{
+            this.issues.push(value)
+          })
+            //this.issues.concat(data);
+            console.log(data)
+          console.log(this.issues.length)
+
           this.http.getIssuesIncentives().subscribe(res => {
             res.forEach(entry => {
               document.getElementById(entry.issueId).innerText = entry.value.concat('pts')
@@ -51,6 +55,9 @@ export class DashboardComponent implements OnInit {
     reward.issueId = event.target.dataset.url;
     reward.type = "pts";
 
+    let claimConstraints = new Map();
+    claimConstraints.set("completionDate",new Date((new Date()).getTime() + (10 * 86400000)))
+    reward.claimConstraints=claimConstraints;
     this.http.assignReward(reward).subscribe(result => {
         document.getElementById(event.target.dataset.url).innerText = reward.value.concat(" pts");
       }

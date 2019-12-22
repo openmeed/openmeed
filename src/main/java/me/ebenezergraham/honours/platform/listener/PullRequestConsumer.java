@@ -7,9 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 
-import static me.ebenezergraham.honours.platform.util.Constants.ASSIGNED_EVENT;
-import static me.ebenezergraham.honours.platform.util.Constants.CLOSED_PULL_REQUEST;
-import static me.ebenezergraham.honours.platform.util.Constants.OPENED_PULL_REQUEST;
+import static me.ebenezergraham.honours.platform.util.Constants.*;
 
 @Component
 public class PullRequestConsumer {

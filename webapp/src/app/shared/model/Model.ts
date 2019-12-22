@@ -32,8 +32,27 @@ export class RegisterRequest {
 export class Reward {
   issueId: string = null;
   value: string = null;
-  reviewer: string = null;
+  authorizer: string = null;
   type: string = "pts";
+  claimConstraints: Map<string, object>;
+
+  constructor() {
+  }
+}
+
+export class Issue {
+  url: string;
+  id: number;
+  html_url: string;
+  state: string;
+  number: number;
+  title: string;
+  created_at: Date;
+  updated_at: Date;
+  locked: boolean;
+  assignees: object;
+  labels: [];
+  author_association: string;
 
   constructor() {
   }

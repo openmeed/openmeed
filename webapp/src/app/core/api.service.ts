@@ -3,6 +3,7 @@ import {Observable, of, throwError} from 'rxjs';
 import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams, HttpRequest} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {catchError, retry, tap} from 'rxjs/operators';
+import {Issue} from "../shared/model/Model";
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -43,9 +44,9 @@ export class ApiService {
     };
   }
 
-  getIssues(repo ): Observable<any> {
+  getIssues(repo ): Observable<Issue[]> {
     const endpoint = `${this.githubbase}/repos/${repo}/issues`;
-    return this.http.get(endpoint).pipe(
+    return this.http.get<Issue[]>(endpoint).pipe(
       tap(x => console.log(`fetched issues data`)),
       catchError(this.handleError('Issues', []))
     );
@@ -99,7 +100,7 @@ export class ApiService {
   }
 
   getUserProfile(email): Observable<any> {
-    const endpoint = `${this.base}/user`;
+    const endpoint = `${this.base}/user/rewards`;
     return this.http.get(endpoint,ApiService.backendHeaderWithCredentials()).pipe(
       tap(x => console.log(`fetched user profile data`)),
       catchError(this.handleError('Issues', []))

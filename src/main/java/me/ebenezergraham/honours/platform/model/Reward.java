@@ -1,11 +1,10 @@
 package me.ebenezergraham.honours.platform.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import me.ebenezergraham.honours.platform.model.audit.DateAudit;
-import org.hamcrest.core.Is;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Ebenezer Graham
@@ -28,11 +27,18 @@ public class Reward extends DateAudit {
   private Issue issue;
 
   private String type;
+
   @Column(nullable = false)
   private String value;
 
   @ElementCollection
   private List<String> authorizer;
+
+  @ElementCollection
+  private List<String> receipients;
+
+  @ElementCollection
+  private Map<String,String> claimConstraints;
 
   public Reward() {
 
@@ -85,6 +91,22 @@ public class Reward extends DateAudit {
 
   public void setIssue(Issue issue) {
     this.issue = issue;
+  }
+
+  public List<String> getReceipients() {
+    return receipients;
+  }
+
+  public void setReceipients(List<String> receipients) {
+    this.receipients = receipients;
+  }
+
+  public Map<String, String> getClaimConstraints() {
+    return claimConstraints;
+  }
+
+  public void setClaimConstraints(Map<String, String> claimConstraints) {
+    this.claimConstraints = claimConstraints;
   }
 }
 

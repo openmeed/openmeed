@@ -18,6 +18,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
@@ -358,6 +360,40 @@ public class PlatformApplicationTests {
     payloadJsonObject.put("sender", senderJsonObject);
     payloadJsonObject.put("action", "closed");
 
+    rewardEngine.process(gson.fromJson(payloadJsonObject.toJSONString(), Payload.class));
+
+    Optional<User> user = userRepository.findByUsername(testUser);
+
+    assertEquals(user.get().getPoints(), 0);
+  }
+
+  @Test
+  public void invalidCriteria() {
+
+    User sampleOAuth2User = new User();
+    sampleOAuth2User.setName("Hermes Ananse");
+    sampleOAuth2User.setEmail("hermes@openmeed.com");
+    sampleOAuth2User.setUsername(testUser);
+    sampleOAuth2User.setProvider(AuthProvider.github);
+
+    userRepository.save(sampleOAuth2User);
+
+    JSONObject payloadJsonObject = new JSONObject();
+    JSONObject prJsonObject = new JSONObject();
+    prJsonObject.put("merged", true);
+    prJsonObject.put("issue_url", testIssue);
+    JSONObject senderJsonObject = new JSONObject();
+    senderJsonObject.put("login", "hermes");
+    payloadJsonObject.put("pull_request", prJsonObject);
+    payloadJsonObject.put("sender", senderJsonObject);
+    payloadJsonObject.put("action", "closed");
+
+    Map<String,Boolean> validationCriteria = new HashMap<>();
+    validationCriteria.put("AUTHORITIES_MUST_BE_REVIEWERS", true);
+    validationCriteria.put("CONTRIBUTOR_MUST_BE_ASSIGNEE", true);
+    validationCriteria.put("AUTHORITIES_CANNOT_BE_ASSIGNEE", true);
+
+    rewardEngine.validationCriteria(validationCriteria);
     rewardEngine.process(gson.fromJson(payloadJsonObject.toJSONString(), Payload.class));
 
     Optional<User> user = userRepository.findByUsername(testUser);

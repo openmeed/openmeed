@@ -31,8 +31,9 @@ public class UserPrincipal implements OAuth2User, UserDetails, Principal {
     }
 
     public static UserPrincipal create(User user) {
+
         List<GrantedAuthority> authorities = Collections.
-                singletonList(new SimpleGrantedAuthority("ROLE_USER"));
+                singletonList(new SimpleGrantedAuthority(user.getRoles().name()));
 
         return new UserPrincipal(
                 user.getId(),

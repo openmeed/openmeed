@@ -14,10 +14,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
-import static me.ebenezergraham.honours.platform.util.Constants.CLOSED_EVENT;
-import static me.ebenezergraham.honours.platform.util.Constants.OPENED_EVENT;
 import static me.ebenezergraham.honours.platform.util.Constants.SEND_EMAIL;
 
 /**
@@ -46,21 +47,39 @@ public class RewardEngine implements IRewardEngine {
     this.validationCriteria = new HashMap<>();
     this.validationCriteria.put("AUTHORITIES_MUST_BE_REVIEWERS", true);
     this.validationCriteria.put("CONTRIBUTOR_MUST_BE_ASSIGNEE", true);
-    this.validationCriteria.put("AUTHORITIES_CANNOT_BE_ASSIGNEE", true);
+    this.validationCriteria.put("AUTHORITIES_CANNOT_BE_ASSIGNEE", false);
   }
 
   @Override
   public void process(Payload payload) {
-    switch (payload.getAction()) {
-      case CLOSED_EVENT:
-        closed(payload);
-        break;
-      case OPENED_EVENT:
-        opened(payload);
-        break;
-      default:
-        logger.info("Option {} is not supported!", payload.getAction());
-        break;
+    // Check if successfully merged
+    if (payload.getPull_request().isMerged()) {
+      // Then retrieve the reward linked to the issue this request solves
+      Optional<Reward> result = rewardRepository.findRewardByIssueId(payload.getPull_request().getIssue_url());
+      // If an incentive exists for it then proceed to validate
+      result.ifPresent(reward -> {
+        // If the payload satisfies the criteria to transfer incentive
+        if (validate(payload, reward)) {
+          // Fetch the user who has to receive this
+          Optional<User> user = userRepository.findByUsername(payload.getSender().getLogin());
+          reward.getReceipients().add(payload.getSender().getLogin());
+          rewardRepository.save(reward);
+          user.ifPresent(value -> {
+            value.setPoints(Integer.parseInt(result.get().getValue()));
+            userRepository.save(value);
+            Map<String, String> notificationDetails = new HashMap<>();
+            notificationDetails.put("EMAIL", user.get().getEmail());
+            notificationDetails.put("PR_TITLE", payload.getPull_request().getTitle());
+            notificationDetails.put("ISSUE_URL", payload.getPull_request().getIssue_url());
+            notificationDetails.put("REWARD", reward.getValue());
+            notificationDetails.put("NAME", user.get().getName());
+            jmsTemplate.convertAndSend(SEND_EMAIL, notificationDetails);
+            rewardRepository.delete(result.get());
+          });
+        }
+      });
+    } else {
+      logger.info("Rejected Pull Request");
     }
   }
 
@@ -105,33 +124,7 @@ public class RewardEngine implements IRewardEngine {
    * Reward the user who submitted the pull request
    */
   private void closed(Payload payload) {
-    // Check if successfully merged
-    if (payload.getPull_request().isMerged()) {
-      // Then retrieve the reward linked to the issue this request solves
-      Optional<Reward> result = rewardRepository.findRewardByIssueId(payload.getPull_request().getIssue_url());
-      // If an incentive exists for it then proceed to validate
-      result.ifPresent(reward -> {
-        // If the payload satisfies the criteria to transfer incentive
-        if (validate(payload, reward)) {
-          // Fetch the user who has to receive this
-          Optional<User> user = userRepository.findByUsername(payload.getSender().getLogin());
-          user.ifPresent(value -> {
-            value.setPoints(Integer.parseInt(result.get().getValue()));
-            userRepository.save(value);
-            Map<String, String> notificationDetails = new HashMap<>();
-            notificationDetails.put("EMAIL", user.get().getEmail());
-            notificationDetails.put("PR_TITLE", payload.getPull_request().getTitle());
-            notificationDetails.put("ISSUE_URL", payload.getPull_request().getIssue_url());
-            notificationDetails.put("REWARD", reward.getValue());
-            notificationDetails.put("NAME", user.get().getName());
-            jmsTemplate.convertAndSend(SEND_EMAIL, notificationDetails);
-            rewardRepository.delete(result.get());
-          });
-        }
-      });
-    } else {
-      logger.info("Rejected Pull Request");
-    }
+
   }
 
   private void opened(Payload payload) {

@@ -1,35 +1,21 @@
 package me.ebenezergraham.honours.platform.controller;
 
-import me.ebenezergraham.honours.platform.model.*;
-import me.ebenezergraham.honours.platform.payload.ApiResponse;
-import me.ebenezergraham.honours.platform.payload.LoginRequest;
-import me.ebenezergraham.honours.platform.payload.SignUpRequest;
+import me.ebenezergraham.honours.platform.model.Issue;
+import me.ebenezergraham.honours.platform.model.TwoFactor;
+import me.ebenezergraham.honours.platform.model.User;
 import me.ebenezergraham.honours.platform.repository.AllocatedIssueRepository;
 import me.ebenezergraham.honours.platform.repository.AuthenticationRepository;
 import me.ebenezergraham.honours.platform.repository.RewardRepository;
 import me.ebenezergraham.honours.platform.repository.UserRepository;
-import me.ebenezergraham.honours.platform.security.CurrentUser;
 import me.ebenezergraham.honours.platform.security.UserPrincipal;
 import me.ebenezergraham.honours.platform.services.EmailService;
-import me.ebenezergraham.honours.platform.exception.AppException;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
-import org.springframework.security.oauth2.client.annotation.RegisteredOAuth2AuthorizedClient;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-import java.net.URI;
-import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -89,7 +75,7 @@ public class UserController {
     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
   }
 
-  @GetMapping("/user")
+  @GetMapping("/user/rewards")
   public ResponseEntity<Map<String,Object>> fetchPoint(Authentication authentication) {
     Optional<User> user = userRepository.findByEmail(((UserPrincipal)authentication.getPrincipal()).getEmail());
 

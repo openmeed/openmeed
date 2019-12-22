@@ -5,11 +5,7 @@ import me.ebenezergraham.honours.platform.model.audit.DateAudit;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * @author Ebenezer Graham
@@ -18,7 +14,8 @@ import java.util.Set;
 @Entity
 @Table(name = "users", uniqueConstraints = {
     @UniqueConstraint(columnNames = {
-        "email"
+        "email",
+        "username"
     })
 })
 public class User extends DateAudit {
@@ -48,6 +45,9 @@ public class User extends DateAudit {
   private AuthProvider provider;
 
   private String providerId;
+
+  @Enumerated(EnumType.STRING)
+  private RoleName roles;
 
   private int points;
 
@@ -132,6 +132,22 @@ public class User extends DateAudit {
 
   public void setPoints(int points) {
     this.points = points + this.points;
+  }
+
+  public Boolean getEmailVerified() {
+    return emailVerified;
+  }
+
+  public void setEmailVerified(Boolean emailVerified) {
+    this.emailVerified = emailVerified;
+  }
+
+  public RoleName getRoles() {
+    return roles;
+  }
+
+  public void setRoles(RoleName roles) {
+    this.roles = roles;
   }
 }
 

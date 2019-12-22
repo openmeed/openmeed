@@ -2,6 +2,7 @@ package me.ebenezergraham.honours.platform.security.oauth2;
 
 import me.ebenezergraham.honours.platform.exception.OAuth2AuthenticationProcessingException;
 import me.ebenezergraham.honours.platform.model.AuthProvider;
+import me.ebenezergraham.honours.platform.model.RoleName;
 import me.ebenezergraham.honours.platform.model.User;
 import me.ebenezergraham.honours.platform.repository.UserRepository;
 import me.ebenezergraham.honours.platform.security.UserPrincipal;
@@ -42,11 +43,16 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
   private OAuth2User processOAuthRequest(OAuth2UserRequest oAuth2UserRequest, OAuth2User oAuth2User) {
     oAuth2UserRequest.getAccessToken().getTokenValue();
     OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(oAuth2UserRequest.getClientRegistration().getRegistrationId(), oAuth2User.getAttributes());
-    if (StringUtils.isEmpty(oAuth2UserInfo.getEmail())) {
-      throw new OAuth2AuthenticationProcessingException("Email not found from OAuth2 provider");
+    if (StringUtils.isEmpty(oAuth2UserInfo.getUserName())) {
+      throw new OAuth2AuthenticationProcessingException("Weird!, There is no username on your account");
     }
 
-    Optional<User> storedUser = userRepository.findByEmail(oAuth2UserInfo.getEmail());
+    if (StringUtils.isEmpty(oAuth2UserInfo.getEmail())) {
+      //Should emails be optional
+      throw new OAuth2AuthenticationProcessingException("Set a public email address for your account");
+    }
+
+    Optional<User> storedUser = userRepository.findByUsername(oAuth2UserInfo.getUserName());
     User user;
     if (storedUser.isPresent()) {
       user = storedUser.get();
@@ -72,12 +78,24 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     user.setUsername(oAuth2UserInfo.getUserName());
     user.setEmail(oAuth2UserInfo.getEmail());
     user.setImageUrl(oAuth2UserInfo.getImageUrl());
+    if(Boolean.valueOf(String.valueOf(oAuth2UserInfo.getAttributes().get("site_admin")))){
+      user.setRoles(RoleName.ROLE_ADMIN);
+    }else {
+      user.setRoles(RoleName.ROLE_USER);
+    }
     return userRepository.save(user);
   }
 
   private User updateExistingUser(User existingUser, OAuth2UserInfo oAuth2UserInfo) {
     existingUser.setName(oAuth2UserInfo.getName());
+    existingUser.setUsername(oAuth2UserInfo.getUserName());
+    existingUser.setEmail(oAuth2UserInfo.getEmail());
     existingUser.setImageUrl(oAuth2UserInfo.getImageUrl());
+    if(Boolean.valueOf(String.valueOf(oAuth2UserInfo.getAttributes().get("site_admin")))){
+      existingUser.setRoles(RoleName.ROLE_ADMIN);
+    }else {
+      existingUser.setRoles(RoleName.ROLE_USER);
+    }
     return userRepository.save(existingUser);
   }
 
