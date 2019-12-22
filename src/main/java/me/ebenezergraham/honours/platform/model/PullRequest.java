@@ -19,8 +19,8 @@ public class PullRequest implements Serializable {
     String issue_url;
     Date merged_at;
     String merge_commit_sha;
-    String assignee;
-    String[] assignees;
+    GitHubUser assignee;
+    GitHubUser[] assignees;
     String[] requested_reviewers;
     String[] requested_teams;
     String [] labels;
@@ -132,19 +132,19 @@ public class PullRequest implements Serializable {
         this.merge_commit_sha = merge_commit_sha;
     }
 
-    public String getAssignee() {
+    public GitHubUser getAssignee() {
         return assignee;
     }
 
-    public void setAssignee(String assignee) {
+    public void setAssignee(GitHubUser assignee) {
         this.assignee = assignee;
     }
 
-    public String[] getAssignees() {
+    public GitHubUser[] getAssignees() {
         return assignees;
     }
 
-    public void setAssignees(String[] assignees) {
+    public void setAssignees(GitHubUser[] assignees) {
         this.assignees = assignees;
     }
 

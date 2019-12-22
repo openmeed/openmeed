@@ -1,7 +1,9 @@
 package me.ebenezergraham.honours.platform.model;
 
+import javax.persistence.Embeddable;
 import java.io.Serializable;
 
+@Embeddable
 public class Labels implements Serializable {
 
   int id;
@@ -9,6 +11,9 @@ public class Labels implements Serializable {
   String url;
   String name;
   String color;
+
+  public Labels() {
+  }
 
   public int getId() {
     return id;

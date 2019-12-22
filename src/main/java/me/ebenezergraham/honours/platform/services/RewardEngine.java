@@ -2,10 +2,7 @@ package me.ebenezergraham.honours.platform.services;
 
 import com.google.common.collect.Lists;
 import me.ebenezergraham.honours.platform.interfaces.IRewardEngine;
-import me.ebenezergraham.honours.platform.model.Issue;
-import me.ebenezergraham.honours.platform.model.Payload;
-import me.ebenezergraham.honours.platform.model.Reward;
-import me.ebenezergraham.honours.platform.model.User;
+import me.ebenezergraham.honours.platform.model.*;
 import me.ebenezergraham.honours.platform.repository.AllocatedIssueRepository;
 import me.ebenezergraham.honours.platform.repository.RewardRepository;
 import me.ebenezergraham.honours.platform.repository.UserRepository;
@@ -45,13 +42,14 @@ public class RewardEngine implements IRewardEngine {
     this.rewardRepository = rewardRepository;
     this.jmsTemplate = jmsTemplate;
     this.validationCriteria = new HashMap<>();
-    this.validationCriteria.put("AUTHORITIES_MUST_BE_REVIEWERS", true);
-    this.validationCriteria.put("CONTRIBUTOR_MUST_BE_ASSIGNEE", true);
+    this.validationCriteria.put("AUTHORITIES_MUST_BE_REVIEWERS", false);
+    this.validationCriteria.put("CONTRIBUTOR_MUST_BE_ASSIGNEE", false);
     this.validationCriteria.put("AUTHORITIES_CANNOT_BE_ASSIGNEE", false);
   }
 
   @Override
   public void process(Payload payload) {
+    logger.info("Processing claim to {}", payload.getPull_request().getIssue_url());
     // Check if successfully merged
     if (payload.getPull_request().isMerged()) {
       // Then retrieve the reward linked to the issue this request solves
@@ -62,10 +60,12 @@ public class RewardEngine implements IRewardEngine {
         if (validate(payload, reward)) {
           // Fetch the user who has to receive this
           Optional<User> user = userRepository.findByUsername(payload.getSender().getLogin());
+          logger.info("Updating recipient of reward");
           reward.getReceipients().add(payload.getSender().getLogin());
           rewardRepository.save(reward);
           user.ifPresent(value -> {
             value.setPoints(Integer.parseInt(result.get().getValue()));
+            logger.info("Awarding user {} with incentive {}",user.get().getName(),reward.getValue());
             userRepository.save(value);
             Map<String, String> notificationDetails = new HashMap<>();
             notificationDetails.put("EMAIL", user.get().getEmail());
@@ -90,6 +90,7 @@ public class RewardEngine implements IRewardEngine {
 
   @Override
   public boolean validate(Payload payload, Reward reward) {
+    logger.info("validating PR associated to issue: {}", payload.getPull_request().getIssue_url());
     try {
       if (validationCriteria.get("AUTHORITIES_MUST_BE_REVIEWERS")) {
         // Verify that the necessary authorities have reviewed submission
@@ -108,26 +109,14 @@ public class RewardEngine implements IRewardEngine {
       }
       //Verify that the maintainer who assigned the reward is not redeeming it.
       if (validationCriteria.get("AUTHORITIES_CANNOT_BE_ASSIGNEE")) {
-        if (reward.getAuthorizer().contains(payload.getPull_request().getAssignee())) return false;
+        for(GitHubUser assignee: payload.getPull_request().getAssignees()){
+          if (reward.getAuthorizer().contains(assignee.getLogin())) return false;
+        }
       }
     } catch (Exception e) {
-      logger.error("{}", e.getMessage());
+      logger.error("Error during validation{}", e.getLocalizedMessage());
       return false;
     }
     return true;
   }
-
-
-  /**
-   * Check if Pull Request's issue has an issue associated
-   * If a reward is present for the specific pull request's issue,
-   * Reward the user who submitted the pull request
-   */
-  private void closed(Payload payload) {
-
-  }
-
-  private void opened(Payload payload) {
-  }
-
 }

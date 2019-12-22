@@ -84,7 +84,7 @@ public class Reward extends DateAudit {
     this.authorizer = authorizer;
   }
 
-//  @JoinColumn(name = "issue_url")
+  @JoinColumn(name = "issue_url")
   public Issue getIssue() {
     return issue;
   }

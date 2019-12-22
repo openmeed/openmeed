@@ -1,7 +1,9 @@
 package me.ebenezergraham.honours.platform.model;
 
+import javax.persistence.Embeddable;
 import java.io.Serializable;
 
+@Embeddable
 public class GitHubUser implements Serializable {
     int id;
     String login;
