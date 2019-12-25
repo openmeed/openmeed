@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-import static me.ebenezergraham.honours.platform.util.Constants.SEND_EMAIL;
+import static me.ebenezergraham.honours.platform.util.Constants.EMAIL_EVENT_CLAIMED_ACTION_SELECTOR;
 
 @Component
 public class MessageConsumer {
@@ -19,7 +19,7 @@ public class MessageConsumer {
         this.emailService = emailService;
     }
 
-    @JmsListener(destination = SEND_EMAIL)
+    @JmsListener(destination = EMAIL_EVENT_CLAIMED_ACTION_SELECTOR)
     private void notifyContributor(Map<String, String> details) {
         logger.info("Sending message");
         emailService.sendSimpleMessage(

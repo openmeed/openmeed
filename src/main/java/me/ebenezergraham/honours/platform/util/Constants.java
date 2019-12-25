@@ -1,13 +1,20 @@
 package me.ebenezergraham.honours.platform.util;
 
 public interface Constants {
-  String CLOSED_EVENT = "closed";
-  String OPENED_EVENT = "opened";
-  String ASSIGNED_EVENT = "assigned";
-  String SEND_EMAIL = "email";
+  String CLOSED_ACTION = "closed";
+  String OPENED_ACTION = "opened";
+  String ASSIGNED_ACTION = "assigned";
+  String CLAIMED_ACTION = "claimed";
+  String DELETED_ACTION = "deleted";
 
-  String ISSUE_EVENT_TYPE = "assigned-issue";
-  String CLOSED_PULL_REQUEST = "closed-pull-request";
-  String OPENED_PULL_REQUEST = "opened-pull-request";
-  String PROJECT_EVENT_TYPE = "PROJECT";
+  String EMAIL_EVENT = "email";
+  String ISSUE_EVENT = "issue";
+  String PULL_REQUEST_EVENT = "pull-request";
+  String PROJECT_EVENT = "project";
+
+  String PULL_REQUEST_EVENT_CLOSED_ACTION_SELECTOR = PULL_REQUEST_EVENT+"_"+CLOSED_ACTION;
+  String ISSUE_EVENT_ASSIGNED_ACTION_SELECTOR = ISSUE_EVENT+"_"+ASSIGNED_ACTION;
+  String PROJECT_EVENT_DELETED_ACTION_SELECTOR = PROJECT_EVENT+"_"+ DELETED_ACTION;
+  String EMAIL_EVENT_CLAIMED_ACTION_SELECTOR = EMAIL_EVENT+"_"+CLAIMED_ACTION;
+
 }

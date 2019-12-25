@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static me.ebenezergraham.honours.platform.util.Constants.SEND_EMAIL;
+import static me.ebenezergraham.honours.platform.util.Constants.EMAIL_EVENT_CLAIMED_ACTION_SELECTOR;
 
 /**
  * @author Ebenezer Graham
@@ -42,18 +42,18 @@ public class RewardEngine implements IRewardEngine {
     this.rewardRepository = rewardRepository;
     this.jmsTemplate = jmsTemplate;
     this.validationCriteria = new HashMap<>();
-    this.validationCriteria.put("AUTHORITIES_MUST_BE_REVIEWERS", false);
-    this.validationCriteria.put("CONTRIBUTOR_MUST_BE_ASSIGNEE", false);
-    this.validationCriteria.put("AUTHORITIES_CANNOT_BE_ASSIGNEE", false);
+    this.validationCriteria.put("BENEFACTORS_MUST_BE_PR_REVIEWERS", false);
+    this.validationCriteria.put("CONTRIBUTOR_MUST_BE_PR_ASSIGNEE", false);
+    this.validationCriteria.put("BENEFACTORS_CANNOT_REDEEM_REWARD", false);
   }
 
   @Override
   public void process(Payload payload) {
-    logger.info("Processing claim to {}", payload.getPull_request().getIssue_url());
+    logger.info("Processing claim to {}", payload.getPull_request().getHtml_url());
     // Check if successfully merged
     if (payload.getPull_request().isMerged()) {
       // Then retrieve the reward linked to the issue this request solves
-      Optional<Reward> result = rewardRepository.findRewardByIssueId(payload.getPull_request().getIssue_url());
+      Optional<Reward> result = rewardRepository.findRewardByIssueId(payload.getPull_request().getHtml_url());
       // If an incentive exists for it then proceed to validate
       result.ifPresent(reward -> {
         // If the payload satisfies the criteria to transfer incentive
@@ -70,10 +70,10 @@ public class RewardEngine implements IRewardEngine {
             Map<String, String> notificationDetails = new HashMap<>();
             notificationDetails.put("EMAIL", user.get().getEmail());
             notificationDetails.put("PR_TITLE", payload.getPull_request().getTitle());
-            notificationDetails.put("ISSUE_URL", payload.getPull_request().getIssue_url());
+            notificationDetails.put("ISSUE_URL", payload.getPull_request().getHtml_url());
             notificationDetails.put("REWARD", reward.getValue());
             notificationDetails.put("NAME", user.get().getName());
-            jmsTemplate.convertAndSend(SEND_EMAIL, notificationDetails);
+            jmsTemplate.convertAndSend(EMAIL_EVENT_CLAIMED_ACTION_SELECTOR, notificationDetails);
             rewardRepository.delete(result.get());
           });
         }
@@ -92,7 +92,7 @@ public class RewardEngine implements IRewardEngine {
   public boolean validate(Payload payload, Reward reward) {
     logger.info("validating PR associated to issue: {}", payload.getPull_request().getIssue_url());
     try {
-      if (validationCriteria.get("AUTHORITIES_MUST_BE_REVIEWERS")) {
+      if (validationCriteria.get("BENEFACTORS_MUST_BE_PR_REVIEWERS")) {
         // Verify that the necessary authorities have reviewed submission
         ArrayList<String> requestedReviewers = Lists.newArrayList(payload.getPull_request().getRequested_reviewers());
         for (String authority : reward.getAuthorizer()) {
@@ -100,15 +100,15 @@ public class RewardEngine implements IRewardEngine {
         }
       }
       //Verify that contributor assigned the issue is the same entity that sent the solution
-      if (validationCriteria.get("CONTRIBUTOR_MUST_BE_ASSIGNEE")) {
+      if (validationCriteria.get("CONTRIBUTOR_MUST_BE_PR_ASSIGNEE")) {
         // Verify contributor was assigned the responsibility to resolve issue
-        Optional<Issue> issue = allocatedIssueRepository.findIssueByUrl(payload.getPull_request().getIssue_url());
+        Optional<Issue> issue = allocatedIssueRepository.findIssueByHtmlUrl(payload.getPull_request().getIssue_url());
         if (issue.isPresent()) {
           if (!payload.getSender().getLogin().equals(issue.get().getAssigneeName())) return false;
         }
       }
       //Verify that the maintainer who assigned the reward is not redeeming it.
-      if (validationCriteria.get("AUTHORITIES_CANNOT_BE_ASSIGNEE")) {
+      if (validationCriteria.get("BENEFACTORS_CANNOT_REDEEM_REWARD")) {
         for(GitHubUser assignee: payload.getPull_request().getAssignees()){
           if (reward.getAuthorizer().contains(assignee.getLogin())) return false;
         }

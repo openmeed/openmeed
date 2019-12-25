@@ -31,30 +31,15 @@ public class EventsController {
 
     if (payload.getPull_request() != null) {
       logger.info("Sending Pull Request Payload", payload.getPull_request().toString());
-      jmsTemplate.convertAndSend(CLOSED_PULL_REQUEST, payload);
+      jmsTemplate.convertAndSend(PULL_REQUEST_EVENT.concat("_").concat(payload.getAction()), payload);
     } else if (payload.getIssue() != null) {
       logger.info("Sending Issue Payload", payload.getIssue().toString());
-      jmsTemplate.convertAndSend(ISSUE_EVENT_TYPE, payload);
+      jmsTemplate.convertAndSend(ISSUE_EVENT.concat("_").concat(payload.getAction()), payload);
+
     }else if (payload.getRepository() != null && payload.getIssue()==null && payload.getPull_request()==null) {
       logger.info("Project event ", payload.getRepository().getName());
-      jmsTemplate.convertAndSend(PROJECT_EVENT_TYPE, payload);
+      jmsTemplate.convertAndSend(PROJECT_EVENT.concat("_").concat(payload.getAction()), payload);
     }
-    /*switch (payload.getAction()) {
-      case ASSIGNED_EVENT:
-        logger.info("Sending Assigned Message", payload.getIssue().toString());
-        jmsTemplate.convertAndSend(ASSIGNED_EVENT, payload);
-        break;
-      case OPENED_EVENT:
-        logger.info("Sending Opened Message", payload.getPull_request().toString());
-        jmsTemplate.convertAndSend(OPENED_PULL_REQUEST, payload);
-        break;
-      case CLOSED_EVENT:
-        logger.info("Sending Closed Message", payload.getPull_request().toString());
-        jmsTemplate.convertAndSend(CLOSED_PULL_REQUEST, payload);
-        break;
-      default:
-        return new ResponseEntity(HttpStatus.NOT_MODIFIED);
-    }*/
     return new ResponseEntity(HttpStatus.OK);
 }
 

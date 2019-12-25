@@ -5,24 +5,31 @@
     <h2>All issues</h2>
   </div>
   <div *ngFor="let issueEntity of issues" class="card m-4">
-    <div class="row">
-      <h3>{{issueEntity.title}}</h3>
-    </div>
-    <div class="row">
-      Reward: <p class="px-3" id="{{issueEntity.html_url}}">No Incentive</p>
-    </div>
-    <div class="row">
+    <div class="ml-2 row">
       <div class="col">
-        <button class="btn btn-full"><a target="_blank" href="{{issueEntity.html_url}}">View Issue Details</a></button>
+        <div class="row">
+          <h3>{{issueEntity.title}}</h3>
+        </div>
+        <div class="row">
+          Reward: <p class="px-3" id="{{issueEntity.html_url}}">No Incentive</p>
+        </div>
+
+
+        <div class="row mb-2">
+          <a class="btn btn-full" target="_blank" href="{{issueEntity.html_url}}">View Issue Details</a>
+        </div>
       </div>
       <div class="col">
+        <div>
+          <ol id="{{issueEntity.html_url}}-claim-conditions">
+          </ol>
+        </div>
         <form *ngIf="admin">
-          <div class="form-group">
+          <div id="{{issueEntity.html_url}}-form" class="form-group">
             <input id="{{issueEntity.id}}" [attr.data-url]=issueEntity.html_url
                    (change)="allocateIncentiveToIssue($event)" type="text" class="form-control"
                    aria-describedby="Enter Reward" placeholder="Enter reward">
             <label for="{{issueEntity.id}}">Enter Reward</label>
-
             <small id="help" class="form-text text-muted">Press enter to submit</small>
           </div>
         </form>

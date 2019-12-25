@@ -3,7 +3,7 @@ import {Observable, of, throwError} from 'rxjs';
 import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams, HttpRequest} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {catchError, retry, tap} from 'rxjs/operators';
-import {Issue} from "../shared/model/Model";
+import {Issue, Reward} from "../shared/model/Model";
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -75,9 +75,9 @@ export class ApiService {
       catchError(this.handleError('Issues', []))
     );
   }
-  getIssuesIncentives(): Observable<any[]> {
-    const endpoint = `${this.base}/issues`;
-    return this.http.get<any[]>(endpoint,ApiService.backendHeaderWithCredentials()).pipe(
+  getIssuesIncentives(): Observable<Reward[]> {
+    const endpoint = `${this.base}/issue/incentive`;
+    return this.http.get<Reward[]>(endpoint,ApiService.backendHeaderWithCredentials()).pipe(
       tap(x => console.log(`fetched issues incentive data`)),
       catchError(this.handleError('Issues', []))
     );
@@ -99,19 +99,11 @@ export class ApiService {
     );
   }
 
-  getUserProfile(email): Observable<any> {
+  getUserProfile(): Observable<any> {
     const endpoint = `${this.base}/user/rewards`;
     return this.http.get(endpoint,ApiService.backendHeaderWithCredentials()).pipe(
       tap(x => console.log(`fetched user profile data`)),
       catchError(this.handleError('Issues', []))
-    );
-  }
-
-  setUserIssue(repositoryId): Observable<any> {
-    const endpoint = `${this.base}/issue`;
-    return this.http.post<any>(endpoint, repositoryId, ApiService.backendHeaderWithCredentials()).pipe(
-      tap(x => console.log(`posted set issue for user`)),
-      catchError(this.handleError('SetIssue', []))
     );
   }
 
@@ -123,11 +115,11 @@ export class ApiService {
     );
   }
 
-  assignReward(reward): Observable<any> {
+  assignReward(reward): Observable<Reward> {
     const endpoint = `${this.base}/issue/incentive`;
-      return this.http.post<any>(endpoint, reward, ApiService.backendHeaderWithCredentials()).pipe(
+      return this.http.post<Reward>(endpoint, reward, ApiService.backendHeaderWithCredentials()).pipe(
       tap(x => console.log(`posted issue incentive`)),
-      catchError(this.handleError('PostIncentive', []))
+      catchError(this.handleError('PostIncentive', null))
     );
   }
 

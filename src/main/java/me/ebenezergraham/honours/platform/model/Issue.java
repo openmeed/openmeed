@@ -1,5 +1,7 @@
 package me.ebenezergraham.honours.platform.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -16,8 +18,8 @@ public class Issue implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   Long id;
   @Column(name = "issue_url")
-  String url;
-  String html_url;
+  @JsonProperty("html_url")
+  String htmlUrl;
   String state;
   int number;
   String title;
@@ -36,13 +38,6 @@ public class Issue implements Serializable {
   String author_association;
   String assigneeName;
 
-  public String getUrl() {
-    return url;
-  }
-
-  public void setUrl(String url) {
-    this.url = url;
-  }
 
   public Long getId() {
     return id;
@@ -52,12 +47,12 @@ public class Issue implements Serializable {
     this.id = id;
   }
 
-  public String getHtml_url() {
-    return html_url;
+  public String getHtmlUrl() {
+    return htmlUrl;
   }
 
-  public void setHtml_url(String html_url) {
-    this.html_url = html_url;
+  public void setHtmlUrl(String htmlUrl) {
+    this.htmlUrl = htmlUrl;
   }
 
   public String getState() {
@@ -136,7 +131,6 @@ public class Issue implements Serializable {
   public void setAssigneeName(String assigneeName) {
     this.assigneeName = assigneeName;
     if (assignee != null) this.assigneeName = assignee.getLogin();
-
   }
 
   public void setAssignee(GitHubUser assignee) {

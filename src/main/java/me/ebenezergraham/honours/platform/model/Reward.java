@@ -3,6 +3,7 @@ package me.ebenezergraham.honours.platform.model;
 import me.ebenezergraham.honours.platform.model.audit.DateAudit;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -38,10 +39,12 @@ public class Reward extends DateAudit {
   private List<String> receipients;
 
   @ElementCollection
-  private Map<String,String> claimConstraints;
+  private Map<String, Boolean> claimConstraints;
+
+  @ElementCollection
+  private Map<String, Date> timeConstraints;
 
   public Reward() {
-
   }
 
   public Long getId() {
@@ -101,12 +104,20 @@ public class Reward extends DateAudit {
     this.receipients = receipients;
   }
 
-  public Map<String, String> getClaimConstraints() {
+  public Map<String, Boolean> getClaimConstraints() {
     return claimConstraints;
   }
 
-  public void setClaimConstraints(Map<String, String> claimConstraints) {
+  public void setClaimConstraints(Map<String, Boolean> claimConstraints) {
     this.claimConstraints = claimConstraints;
+  }
+
+  public Map<String, Date> getTimeConstraints() {
+    return timeConstraints;
+  }
+
+  public void setTimeConstraints(Map<String, Date> timeConstraints) {
+    this.timeConstraints = timeConstraints;
   }
 }
 

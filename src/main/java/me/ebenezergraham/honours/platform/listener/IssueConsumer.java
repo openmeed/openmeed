@@ -11,8 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
-import static me.ebenezergraham.honours.platform.util.Constants.ASSIGNED_EVENT;
-import static me.ebenezergraham.honours.platform.util.Constants.ISSUE_EVENT_TYPE;
+import static me.ebenezergraham.honours.platform.util.Constants.ISSUE_EVENT_ASSIGNED_ACTION_SELECTOR;
 
 @Component
 public class IssueConsumer {
@@ -26,21 +25,13 @@ public class IssueConsumer {
     this.rewardRepository = rewardRepository;
   }
 
-  @JmsListener(destination = ISSUE_EVENT_TYPE)
+  @JmsListener(destination = ISSUE_EVENT_ASSIGNED_ACTION_SELECTOR)
   public void assignedIssueListener(Payload message) {
-    logger.info("Processing Issue event {}", message.getIssue().getUrl());
-
-    switch (message.getAction()) {
-      case ASSIGNED_EVENT:
-        Optional<Reward> reward = rewardRepository.findRewardByIssueId(message.getIssue().getHtml_url());
-        reward.ifPresent(value->{
-          logger.info("Saving issue in to issues {}", message.getAction());
-          allocatedIssueRepository.save(message.getIssue());
-        });
-        break;
-      default:
-        logger.info("Action {} not supported yet", message.getAction());
-    }
-
+    logger.info("Processing Issue event {}", message.getIssue().getHtmlUrl());
+    Optional<Reward> reward = rewardRepository.findRewardByIssueId(message.getIssue().getHtmlUrl());
+    reward.ifPresent(value -> {
+      logger.info("Saving issue in to rewards {}", message.getAction());
+      allocatedIssueRepository.save(message.getIssue());
+    });
   }
 }

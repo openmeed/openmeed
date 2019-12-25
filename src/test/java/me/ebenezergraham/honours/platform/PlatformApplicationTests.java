@@ -47,7 +47,7 @@ public class PlatformApplicationTests {
 
   }
 
-  private String testIssue = "https://github.com/openmeed/rewarder/issues/20";
+  private String testIssue = "https://github.com/openmeed/rewarder/rewards/20";
   private String githubEventEndpoint = "http://localhost:/api/v1/github/events";
   private String testUser = "hermes";
 
@@ -82,7 +82,7 @@ public class PlatformApplicationTests {
 
     //Simulate user selecting issueEntity
     Issue issue = new Issue();
-    issue.setUrl(testIssue);
+    issue.setHtmlUrl(testIssue);
     issue.setAssigneeName(testUser);
     Issue issueEntityResult = allocatedIssueRepository.save(issue);
     assertNotNull(issueEntityResult);
@@ -106,7 +106,7 @@ public class PlatformApplicationTests {
     assertEquals(user.get().getPoints(), Integer.parseInt(rewardValue));
 
     // The incentive should exist after it has been transferred to the contributor
-    Optional<Reward> redeemReward = rewardRepository.findRewardByIssueId(issueEntityResult.getUrl());
+    Optional<Reward> redeemReward = rewardRepository.findRewardByIssueId(issueEntityResult.getHtmlUrl());
     assertFalse(redeemReward.isPresent());
   }
 
@@ -133,7 +133,7 @@ public class PlatformApplicationTests {
 
     //Simulate user selecting issueEntity
     Issue issue = new Issue();
-    issue.setUrl(testIssue);
+    issue.setHtmlUrl(testIssue);
     issue.setAssigneeName(testUser);
     Issue issueEntityResult = allocatedIssueRepository.save(issue);
 
@@ -155,7 +155,7 @@ public class PlatformApplicationTests {
     assertEquals(user.get().getPoints(), 0);
 
     // The incentive should exist after it has been transferred to the contributor
-    Optional<Reward> redeemReward = rewardRepository.findRewardByIssueId(issueEntityResult.getUrl());
+    Optional<Reward> redeemReward = rewardRepository.findRewardByIssueId(issueEntityResult.getHtmlUrl());
     assertTrue(redeemReward.isPresent());
   }
 
@@ -165,21 +165,22 @@ public class PlatformApplicationTests {
 
     //Simulate user selecting issueEntity
     Issue issue = new Issue();
-    issue.setUrl(testIssue);
+    issue.setHtmlUrl(testIssue);
     issue.setAssigneeName(testUser);
     Issue issueEntityResult = allocatedIssueRepository.save(issue);
 
     // Assign incentive to issueEntity
     Reward reward = new Reward();
-    reward.setIssueId(issueEntityResult.getUrl());
+    reward.setIssueId(issueEntityResult.getHtmlUrl());
     ArrayList<String> authorities = new ArrayList<>();
     authorities.add("ebenezergraham");
     reward.setAuthorizer(authorities);
     reward.setValue(rewardValue);
     reward.setType("pts");
+
     incentiveService.storeIncentive(reward);
 
-    Optional<Reward> result = rewardRepository.findRewardByIssueId(issueEntityResult.getUrl());
+    Optional<Reward> result = rewardRepository.findRewardByIssueId(issueEntityResult.getHtmlUrl());
     assertNotNull(result);
     assertEquals(result.get().getValue(), rewardValue);
   }
@@ -208,7 +209,7 @@ public class PlatformApplicationTests {
 
     //Simulate user selecting issueEntity
     Issue issue = new Issue();
-    issue.setUrl(testIssue);
+    issue.setHtmlUrl(testIssue);
     issue.setAssigneeName(testUser);
     Issue issueEntityResult = allocatedIssueRepository.save(issue);
     assertNotNull(issueEntityResult);
@@ -233,7 +234,7 @@ public class PlatformApplicationTests {
     assertEquals(user.get().getPoints(), 0);
 
     // The incentive should exist after it has been transferred to the contributor
-    Optional<Reward> redeemReward = rewardRepository.findRewardByIssueId(issueEntityResult.getUrl());
+    Optional<Reward> redeemReward = rewardRepository.findRewardByIssueId(issueEntityResult.getHtmlUrl());
     assertTrue(redeemReward.isPresent());
   }
 
@@ -261,7 +262,7 @@ public class PlatformApplicationTests {
 
     //Simulate user selecting issueEntity
     Issue issue = new Issue();
-    issue.setUrl(testIssue);
+    issue.setHtmlUrl(testIssue);
     issue.setAssigneeName(testUser);
     Issue issueEntityResult = allocatedIssueRepository.save(issue);
     assertNotNull(issueEntityResult);
@@ -285,7 +286,7 @@ public class PlatformApplicationTests {
     assertEquals(user.get().getPoints(), 0);
 
     // The incentive should exist after it has been transferred to the contributor
-    Optional<Reward> redeemReward = rewardRepository.findRewardByIssueId(issueEntityResult.getUrl());
+    Optional<Reward> redeemReward = rewardRepository.findRewardByIssueId(issueEntityResult.getHtmlUrl());
     assertTrue(redeemReward.isPresent());
   }
 
@@ -313,7 +314,7 @@ public class PlatformApplicationTests {
 
     //Simulate user selecting issueEntity
     Issue issue = new Issue();
-    issue.setUrl(testIssue);
+    issue.setHtmlUrl(testIssue);
     issue.setAssigneeName(testUser);
     Issue issueEntityResult = allocatedIssueRepository.save(issue);
     assertNotNull(issueEntityResult);
@@ -335,7 +336,7 @@ public class PlatformApplicationTests {
     assertEquals(user.get().getPoints(), 0);
 
     // The incentive should exist after it has been transferred to the contributor
-    Optional<Reward> redeemReward = rewardRepository.findRewardByIssueId(issueEntityResult.getUrl());
+    Optional<Reward> redeemReward = rewardRepository.findRewardByIssueId(issueEntityResult.getHtmlUrl());
     assertTrue(redeemReward.isPresent());
   }
 

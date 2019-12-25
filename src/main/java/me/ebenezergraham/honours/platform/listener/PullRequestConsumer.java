@@ -18,19 +18,8 @@ public class PullRequestConsumer {
     this.rewardEngine = rewardEngine;
   }
 
-  @JmsListener(destination = CLOSED_PULL_REQUEST)
+  @JmsListener(destination = PULL_REQUEST_EVENT_CLOSED_ACTION_SELECTOR)
   public void closedPrListener(Payload message) {
-    logger.info("Processing {} event from GitHub", message.getAction());
-    rewardEngine.process(message);
-  }
-
-  @JmsListener(destination = ASSIGNED_EVENT)
-  public void assignedIssueListener(Payload message) {
-    logger.info("Processing {} event from GitHub", message.getAction());
-  }
-
-  @JmsListener(destination = OPENED_PULL_REQUEST)
-  public void openedPrlistener(Payload message) {
     logger.info("Processing {} event from GitHub", message.getAction());
     rewardEngine.process(message);
   }

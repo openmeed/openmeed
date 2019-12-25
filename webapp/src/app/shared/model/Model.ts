@@ -29,12 +29,22 @@ export class RegisterRequest {
   }
 }
 
+export class CriteriaDetail {
+  message: string;
+  key: string;
+  value: string;
+
+  constructor() {
+  }
+}
+
 export class Reward {
   issueId: string = null;
   value: string = null;
   authorizer: string = null;
   type: string = "pts";
-  claimConstraints: Map<string, object>;
+  claimConstraints = {};
+  timeConstraints = {};
 
   constructor() {
   }

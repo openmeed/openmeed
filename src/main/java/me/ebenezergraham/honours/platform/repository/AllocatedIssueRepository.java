@@ -14,8 +14,7 @@ import java.util.Optional;
 @Repository
 public interface AllocatedIssueRepository extends JpaRepository<Issue, Long> {
 
-
-    Optional<Issue> findIssueByUrl(String issueUrl);
+    Optional<Issue> findIssueByHtmlUrl(String issueUrl);
 
     Optional<List<Issue>> findIssuesByAssigneeName(String assignee);
 }

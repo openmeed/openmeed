@@ -47,7 +47,7 @@ public class SeleniumTest {
     JSONObject jsonObject = new JSONObject();
     jsonObject.put("title",now.getTime());
     HttpEntity<String> request = new HttpEntity<>(jsonObject.toString(), headers);
-    ResponseEntity<String> response = restTemplate.postForEntity("https://api.github.com/repos/ebenezergraham/test/issues", request,String.class);
+    ResponseEntity<String> response = restTemplate.postForEntity("https://api.github.com/repos/ebenezergraham/test/rewards", request,String.class);
     assertEquals(response.getStatusCode(), HttpStatus.CREATED);
   }
 
@@ -60,7 +60,7 @@ public class SeleniumTest {
     JSONObject jsonObject = new JSONObject();
     jsonObject.put("title","Test Issue");
     HttpEntity<String> request = new HttpEntity<>(jsonObject.toString(), headers);
-    ResponseEntity<String> response = restTemplate.postForEntity("https://api.github.com/repos/ebenezergraham/test/issues", request,String.class);
+    ResponseEntity<String> response = restTemplate.postForEntity("https://api.github.com/repos/ebenezergraham/test/rewards", request,String.class);
     assertEquals(response.getStatusCode(), HttpStatus.CREATED);
   }
 
@@ -72,7 +72,7 @@ public class SeleniumTest {
     JSONObject jsonObject = new JSONObject();
     jsonObject.put("title","Test Issue");
     HttpEntity<String> request = new HttpEntity<>(jsonObject.toString(), headers);
-    ResponseEntity<String> response = restTemplate.postForEntity("https://api.github.com/repos/ebenezergraham/test/issues", request,String.class);
+    ResponseEntity<String> response = restTemplate.postForEntity("https://api.github.com/repos/ebenezergraham/test/rewards", request,String.class);
     assertEquals(response.getStatusCode(), HttpStatus.CREATED);
   }
 
