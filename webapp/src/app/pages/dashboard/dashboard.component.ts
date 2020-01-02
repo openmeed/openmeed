@@ -59,6 +59,8 @@ export class DashboardComponent implements OnInit {
     var reward = new Reward();
     reward.value = event.target.value;
     reward.issueId = event.target.dataset.url;
+    reward.url = event.target.dataset.url;
+    reward.htmlUrl = event.target.dataset.html_url;
     reward.claimConstraints = convertMapsToObjects(this.defaultConditions);
     reward.timeConstraints = convertMapsToObjects(this.dateConditions);
 
@@ -73,7 +75,7 @@ export class DashboardComponent implements OnInit {
   updateView(entry) {
     document.getElementById(entry.issueId).innerText = entry.value.concat(entry.type);
     document.getElementById(entry.issueId.concat('-form')).style.display = "none";
-    let conditionsElement = document.getElementById(entry.issueId.concat('-claim-conditions'));
+    let conditionsElement = document.getElementById(entry.html_url.concat('-claim-conditions'));
     let p = document.createElement("p");
     p.style.fontWeight = '700';
     p.innerText = "REWARD CONDITIONS";

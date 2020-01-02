@@ -40,6 +40,8 @@ export class CriteriaDetail {
 
 export class Reward {
   issueId: string = null;
+  url: string = null;
+  htmlUrl: string = null;
   value: string = null;
   authorizer: string = null;
   type: string = "pts";
