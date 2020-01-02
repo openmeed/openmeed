@@ -28,7 +28,7 @@ public class IssueConsumer {
   @JmsListener(destination = ISSUE_EVENT_ASSIGNED_ACTION_SELECTOR)
   public void assignedIssueListener(Payload message) {
     logger.info("Processing Issue event {}", message.getIssue().getHtmlUrl());
-    Optional<Reward> reward = rewardRepository.findRewardByIssueId(message.getIssue().getHtmlUrl());
+    Optional<Reward> reward = rewardRepository.findRewardByIssueId(message.getIssue().getUrl());
     reward.ifPresent(value -> {
       logger.info("Saving issue in to rewards {}", message.getAction());
       allocatedIssueRepository.save(message.getIssue());

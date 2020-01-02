@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 import static me.ebenezergraham.honours.platform.util.Constants.*;
 
 @RestController
@@ -27,14 +29,14 @@ public class EventsController {
   private final Logger logger = LoggerFactory.getLogger(EventsController.class);
 
   @PostMapping("github/events")
-  public ResponseEntity<String> publish(@RequestBody final Payload payload) {
-
+  public ResponseEntity<String> publish(@RequestBody final Payload payload, @RequestHeader(X_GitHub_Event) String eventType, final @RequestHeader Map<String,String> header) {
+    logger.info(eventType);
     if (payload.getPull_request() != null) {
       logger.info("Sending Pull Request Payload", payload.getPull_request().toString());
       jmsTemplate.convertAndSend(PULL_REQUEST_EVENT.concat("_").concat(payload.getAction()), payload);
     } else if (payload.getIssue() != null) {
       logger.info("Sending Issue Payload", payload.getIssue().toString());
-      jmsTemplate.convertAndSend(ISSUE_EVENT.concat("_").concat(payload.getAction()), payload);
+      jmsTemplate.convertAndSend(ISSUES_EVENT.concat("_").concat(payload.getAction()), payload);
 
     }else if (payload.getRepository() != null && payload.getIssue()==null && payload.getPull_request()==null) {
       logger.info("Project event ", payload.getRepository().getName());
