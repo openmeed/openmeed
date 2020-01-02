@@ -20,6 +20,7 @@ public class Issue implements Serializable {
   @Column(name = "issue_url")
   @JsonProperty("html_url")
   String htmlUrl;
+  String url;
   String state;
   int number;
   String title;
@@ -159,5 +160,13 @@ public class Issue implements Serializable {
 
   public void setAuthor_association(String author_association) {
     this.author_association = author_association;
+  }
+
+  public String getUrl() {
+    return url;
+  }
+
+  public void setUrl(String url) {
+    this.url = url;
   }
 }

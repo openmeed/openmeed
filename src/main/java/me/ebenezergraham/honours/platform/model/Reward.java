@@ -14,7 +14,8 @@ import java.util.Map;
 @Entity
 @Table(name = "rewards", uniqueConstraints = {
     @UniqueConstraint(columnNames = {
-        "issueId"
+        "issueId",
+        "url"
     })
 })
 public class Reward extends DateAudit {
@@ -23,6 +24,8 @@ public class Reward extends DateAudit {
   private Long id;
 
   private String issueId;
+  private String htmlUrl;
+  private String url;
 
   @Transient
   private Issue issue;
@@ -118,6 +121,22 @@ public class Reward extends DateAudit {
 
   public void setTimeConstraints(Map<String, Date> timeConstraints) {
     this.timeConstraints = timeConstraints;
+  }
+
+  public String getHtmlUrl() {
+    return htmlUrl;
+  }
+
+  public void setHtmlUrl(String htmlUrl) {
+    this.htmlUrl = htmlUrl;
+  }
+
+  public String getUrl() {
+    return url;
+  }
+
+  public void setUrl(String url) {
+    this.url = url;
   }
 }
 

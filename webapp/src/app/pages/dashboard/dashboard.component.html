@@ -11,7 +11,7 @@
           <h3>{{issueEntity.title}}</h3>
         </div>
         <div class="row">
-          Reward: <p class="px-3" id="{{issueEntity.html_url}}">No Incentive</p>
+          Reward: <p class="px-3" id="{{issueEntity.url}}">No Incentive</p>
         </div>
 
 
@@ -21,11 +21,11 @@
       </div>
       <div class="col">
         <div>
-          <ol id="{{issueEntity.html_url}}-claim-conditions">
+          <ol id="{{issueEntity.url}}-claim-conditions">
           </ol>
         </div>
         <form *ngIf="admin">
-          <div id="{{issueEntity.html_url}}-form" class="form-group">
+          <div id="{{issueEntity.url}}-form" class="form-group">
             <input id="{{issueEntity.id}}" [attr.data-html_url]=issueEntity.html_url [attr.data-url]=issueEntity.url
                    (change)="allocateIncentiveToIssue($event)" type="text" class="form-control"
                    aria-describedby="Enter Reward" placeholder="Enter reward">

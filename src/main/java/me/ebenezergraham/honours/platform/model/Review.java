@@ -1,15 +1,17 @@
 package me.ebenezergraham.honours.platform.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
-public class GithubRepository implements Serializable {
+public class Review implements Serializable {
     int id;
-    String name;
-    String full_name;
-    boolean Private;
-    GitHubUser owner;
-    boolean fork;
-    String description;
+    String node_id;
+    GitHubUser user;
+    String body;
+    String state;
+    Date submitted_at;
+    String pull_request_url;
+    String author_association;
 
     public int getId() {
         return id;
@@ -19,51 +21,59 @@ public class GithubRepository implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getNode_id() {
+        return node_id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNode_id(String node_id) {
+        this.node_id = node_id;
     }
 
-    public String getFull_name() {
-        return full_name;
+    public GitHubUser getUser() {
+        return user;
     }
 
-    public void setFull_name(String full_name) {
-        this.full_name = full_name;
+    public void setUser(GitHubUser user) {
+        this.user = user;
     }
 
-    public boolean isPrivate() {
-        return Private;
+    public String getBody() {
+        return body;
     }
 
-    public void setPrivate(boolean aPrivate) {
-        Private = aPrivate;
+    public void setBody(String body) {
+        this.body = body;
     }
 
-    public GitHubUser getOwner() {
-        return owner;
+    public String getState() {
+        return state;
     }
 
-    public void setOwner(GitHubUser owner) {
-        this.owner = owner;
+    public void setState(String state) {
+        this.state = state;
     }
 
-    public boolean isFork() {
-        return fork;
+    public Date getSubmitted_at() {
+        return submitted_at;
     }
 
-    public void setFork(boolean fork) {
-        this.fork = fork;
+    public void setSubmitted_at(Date submitted_at) {
+        this.submitted_at = submitted_at;
     }
 
-    public String getDescription() {
-        return description;
+    public String getPull_request_url() {
+        return pull_request_url;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setPull_request_url(String pull_request_url) {
+        this.pull_request_url = pull_request_url;
+    }
+
+    public String getAuthor_association() {
+        return author_association;
+    }
+
+    public void setAuthor_association(String author_association) {
+        this.author_association = author_association;
     }
 }

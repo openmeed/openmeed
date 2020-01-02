@@ -11,6 +11,7 @@ public class PullRequest implements Serializable {
     String state;
     int number;
     String title;
+    // PR creator
     GitHubUser user;
     String body;
     Date created_at;
@@ -26,6 +27,7 @@ public class PullRequest implements Serializable {
     String [] labels;
     boolean merged;
     GithubRepository repo;
+    // PR action performed this user
     GitHubUser sender;
 
     public String getUrl() {

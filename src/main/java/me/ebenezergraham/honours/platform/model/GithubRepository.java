@@ -3,6 +3,7 @@ package me.ebenezergraham.honours.platform.model;
 import java.io.Serializable;
 
 public class GithubRepository implements Serializable {
+
     int id;
     String name;
     String full_name;

@@ -49,11 +49,11 @@ public class RewardEngine implements IRewardEngine {
 
   @Override
   public void process(Payload payload) {
-    logger.info("Processing claim to {}", payload.getPull_request().getHtml_url());
+    logger.info("Processing claim to {}", payload.getPull_request().getIssue_url());
     // Check if successfully merged
     if (payload.getPull_request().isMerged()) {
       // Then retrieve the reward linked to the issue this request solves
-      Optional<Reward> result = rewardRepository.findRewardByIssueId(payload.getPull_request().getHtml_url());
+      Optional<Reward> result = rewardRepository.findRewardByUrl(payload.getPull_request().getIssue_url());
       // If an incentive exists for it then proceed to validate
       result.ifPresent(reward -> {
         // If the payload satisfies the criteria to transfer incentive
@@ -65,7 +65,7 @@ public class RewardEngine implements IRewardEngine {
           rewardRepository.save(reward);
           user.ifPresent(value -> {
             value.setPoints(Integer.parseInt(result.get().getValue()));
-            logger.info("Awarding user {} with incentive {}",user.get().getName(),reward.getValue());
+            logger.info("Awarding user {} with incentive {}", user.get().getName(), reward.getValue());
             userRepository.save(value);
             Map<String, String> notificationDetails = new HashMap<>();
             notificationDetails.put("EMAIL", user.get().getEmail());
@@ -109,7 +109,7 @@ public class RewardEngine implements IRewardEngine {
       }
       //Verify that the maintainer who assigned the reward is not redeeming it.
       if (validationCriteria.get("BENEFACTORS_CANNOT_REDEEM_REWARD")) {
-        for(GitHubUser assignee: payload.getPull_request().getAssignees()){
+        for (GitHubUser assignee : payload.getPull_request().getAssignees()) {
           if (reward.getAuthorizer().contains(assignee.getLogin())) return false;
         }
       }

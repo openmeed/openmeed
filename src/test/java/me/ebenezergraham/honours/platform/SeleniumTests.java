@@ -1,3 +1,4 @@
+
 package me.ebenezergraham.honours.platform;
 
 import me.ebenezergraham.honours.platform.configuration.SeleniumConfig;
@@ -18,12 +19,12 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class SeleniumTest {
+public class SeleniumTests {
 
   private SeleniumConfig config;
   private String url = "https://openmeed.netlify.com/login";
 
-  public SeleniumTest() {
+  public SeleniumTests() {
     config = new SeleniumConfig();
     config.getDriver().get(url);
   }

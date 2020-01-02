@@ -9,6 +9,7 @@ public class Payload implements Serializable {
     PullRequest pull_request;
     Issue issue;
     GithubRepository repository;
+    Review review;
     GitHubUser sender;
 
     public String getAction() {

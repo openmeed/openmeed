@@ -36,8 +36,6 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     this.http.getRepositories().subscribe((repos) => {
       this.repositories = repos;
-      console.log(this.repositories)
-      this.repositories.reverse();
 
       this.repositories.forEach(entry => {
         this.http.getIssues(entry.fullName).subscribe((data: Issue[]) => {
@@ -47,6 +45,7 @@ export class DashboardComponent implements OnInit {
 
           this.http.getIssuesIncentives().subscribe(res => {
             res.forEach(entry => {
+              console.log(entry);
               this.updateView(entry);
             })
           });
@@ -75,7 +74,7 @@ export class DashboardComponent implements OnInit {
   updateView(entry) {
     document.getElementById(entry.issueId).innerText = entry.value.concat(entry.type);
     document.getElementById(entry.issueId.concat('-form')).style.display = "none";
-    let conditionsElement = document.getElementById(entry.html_url.concat('-claim-conditions'));
+    let conditionsElement = document.getElementById(entry.url.concat('-claim-conditions'));
     let p = document.createElement("p");
     p.style.fontWeight = '700';
     p.innerText = "REWARD CONDITIONS";
